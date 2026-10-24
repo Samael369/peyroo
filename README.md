@@ -6,9 +6,11 @@
 </p>
 
 <p align="center">
-  <a href="#features">Features</a> •
+  <a href="#overview">Overview</a> •
+  <a href="#key-features">Features</a> •
   <a href="#tech-stack">Tech Stack</a> •
   <a href="#system-architecture">Architecture</a> •
+  <a href="#documentation">Documentation</a> •
   <a href="#getting-started">Getting Started</a> •
   <a href="#roadmap">Roadmap</a> •
   <a href="#contributing">Contributing</a> •
@@ -18,189 +20,195 @@
 <p align="center">
   <img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="License" />
   <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" alt="PRs Welcome" />
-  <img src="https://img.shields.io/badge/Status-In%20Active%20Development-orange?style=flat-square" alt="Status" />
-  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white" alt="Next.js" />
+  <img src="https://img.shields.io/badge/Status-Scaffold%20Initialized-orange?style=flat-square" alt="Status" />
+  <img src="https://img.shields.io/badge/TypeScript-Strict%205.6-007ACC?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React" />
+  <img src="https://img.shields.io/badge/Express-REST%20API-000000?style=flat-square&logo=express&logoColor=white" alt="Express" />
+  <img src="https://img.shields.io/badge/Prisma-PostgreSQL-2D3748?style=flat-square&logo=prisma&logoColor=white" alt="Prisma" />
 </p>
 
 ---
 
 ## 📖 Overview
 
-**Peyroo (پیرو)** is an open-source mentorship platform built to democratize knowledge sharing and career guidance. Rooted in the Persian word *پیرو* (signifying a seeker of guidance, learner, or follower on the path of growth), the platform connects ambitious learners and professionals with experienced industry mentors for impactful 1-on-1 sessions, portfolio reviews, and career coaching.
+**Peyroo (پیرو)** is an open-source mentorship platform built to democratize knowledge sharing and career guidance. Rooted in the Persian word _پیرو_ (signifying a seeker of guidance, learner, or follower on the path of growth), the platform connects ambitious learners and professionals with experienced industry mentors for impactful 1-on-1 sessions, portfolio reviews, and career coaching.
+
+This project is developed as a university Software Analysis and Design project, demonstrating rigorous decoupled software architecture, defensive engineering, and modern full-stack TypeScript tooling.
 
 ---
 
-## ✨ Key Features
+## ✨ Key Features (Proposed System Scope)
 
 ### 🔍 Discovery & Profiles
+
 - **Smart Mentor Search & Filters:** Filter mentors by domain (Design, Engineering, Product, Marketing), skills, company, language, and seniority.
-- **Rich Profiles:** Show experience, portfolio links, social handles, verified badges, and mentor bios.
-- **Topic-Based Bookings:** Mentors define specific session types (e.g., *Portfolio Review*, *Mock Interview*, *Career Transition Advice*).
+- **Rich Profiles:** Experience, portfolio links, social handles, verified badges, and mentor bios.
+- **Topic-Based Bookings:** Mentors define specific session types (e.g., _Portfolio Review_, _Mock Interview_, _Career Transition Advice_).
 
 ### 📅 Seamless Scheduling & Booking
+
 - **Timezone Intelligence:** Automatic timezone conversion for cross-border scheduling.
-- **Calendar Sync:** Integration with Google Calendar, Outlook, and Apple Calendar via iCal.
+- **Availability Management:** Mentor-defined weekly recurring windows and buffer intervals.
 - **Booking Flow:** Pre-session questions to ensure high-value conversations.
 
 ### 📹 Video & Interaction
-- **Integrated Video Meetings:** Launch 1-on-1 video rooms natively or sync with Google Meet/Zoom.
-- **In-App Messaging & Notes:** Exchange notes, agenda items, and follow-ups before and after sessions.
+
+- **Integrated Video Meetings:** Mentors provide session meeting URLs (Google Meet / Zoom) or launch connected rooms.
+- **In-App Messaging & Notes:** Exchange agenda items and notes before and after sessions.
 
 ### ⭐ Community & Social Proof
+
 - **Ratings & Testimonials:** Mentees leave genuine endorsements and feedback.
-- **Group Sessions & Masterclasses:** Host group webinars and portfolio teardowns for multiple participants.
-- **Impact Metrics:** Mentors can track hours mentored, sessions completed, and community impact.
+- **Impact Metrics:** Mentors track hours mentored, sessions completed, and community impact.
 
 ---
 
 ## 🛠 Tech Stack
 
-Peyroo is built with a modern, performant, and scalable tech stack:
+Peyroo adopts a **Decoupled Modular Monolith** with clear architectural boundaries:
 
-| Layer | Technology |
-| :--- | :--- |
-| **Frontend** | [Next.js](https://nextjs.org/) (App Router), React, [Tailwind CSS](https://tailwindcss.com/), Radix UI / shadcn/ui |
-| **Language** | [TypeScript](https://www.typescriptlang.org/) |
-| **Backend & API** | Next.js Server Actions / Route Handlers (or Node.js NestJS) |
-| **Database & ORM** | [PostgreSQL](https://www.postgresql.org/) with [Prisma](https://www.prisma.io/) or [Drizzle ORM](https://orm.drizzle.team/) |
-| **Authentication** | [NextAuth.js (Auth.js)](https://authjs.dev/) / Supabase Auth / Clerk |
-| **Video / Calling** | [Daily.co](https://www.daily.co/) / [LiveKit](https://livekit.io/) / WebRTC |
-| **Storage & Emails** | Cloudinary / AWS S3 (Avatars & Attachments), [Resend](https://resend.com/) (Transactional Emails) |
+| Layer                          | Technology                                 | Purpose                                                                                  |
+| :----------------------------- | :----------------------------------------- | :--------------------------------------------------------------------------------------- |
+| **Frontend (`apps/web`)**      | React 18, Vite, TypeScript, Tailwind CSS   | High-performance Single Page Application (SPA) with responsive styling.                  |
+| **Backend (`apps/api`)**       | Node.js (LTS), Express, TypeScript, Zod    | Authoritative REST API enforcing business rules, validation, and security headers.       |
+| **Database Tier (`prisma/`)**  | PostgreSQL, Prisma ORM                     | Relational database schema, migrations, and type-safe query generation.                  |
+| **Shared (`packages/shared`)** | TypeScript                                 | Shared DTOs, API envelope contracts, and domain enums.                                   |
+| **Monorepo & Tooling**         | npm workspaces, ESLint 9, Prettier, Vitest | Coordinated workspace dependency management, automated formatting, linting, and testing. |
 
 ---
 
-## 🏗 Architecture Preview
+## 🏗 System Architecture
 
 ```text
 peyroo/
 ├── apps/
-│   └── web/                   # Next.js frontend application
-│       ├── app/               # Next.js App Router (pages & layouts)
-│       │   ├── (auth)/        # Login, Register, Onboarding
-│       │   ├── (dashboard)/   # Mentee & Mentor Dashboards
-│       │   ├── mentors/       # Directory & Profile pages
-│       │   └── booking/       # Booking flow & checkout/confirmation
-│       ├── components/        # Reusable UI components
-│       ├── lib/               # Utility functions & API clients
-│       └── hooks/             # Custom React hooks
+│   ├── web/                   # React + Vite + Tailwind CSS frontend SPA
+│   └── api/                   # Express + TypeScript + Zod backend REST API
 ├── packages/
-│   ├── database/              # Prisma / Drizzle schemas and migrations
-│   ├── email/                 # Email templates (React Email)
-│   └── config/                # Shared ESLint, Prettier, and TS configs
-├── .env.example               # Template environment configuration
-├── package.json
+│   └── shared/                # Shared API contracts, DTOs, and enums
+├── prisma/
+│   └── schema.prisma          # PostgreSQL database schema configuration
+├── docs/                      # Architectural & requirements documentation
+├── tests/                     # Test organization and guides
+├── AGENTS.md                  # Persistent AI and developer rules
+├── .env.example               # Sanitized environment variable template
+├── package.json               # Root npm workspace configuration
 └── README.md
 ```
 
 ---
 
-## 🚀 Getting Started
+## 📚 Documentation
 
-Follow these instructions to get a local copy up and running for development.
+Detailed architecture and design specifications are maintained in the [`docs/`](docs/) directory:
+
+- [Project Overview](docs/PROJECT_OVERVIEW.md) — Purpose, target users, scope, and system boundaries.
+- [Requirements Specification](docs/REQUIREMENTS.md) — Functional, non-functional, and security requirements.
+- [System Architecture](docs/ARCHITECTURE.md) — Modular monolith design, layers, communication, and Mermaid diagram.
+- [Database Design](docs/DATABASE_DESIGN.md) — Domain ERD, preliminary models, constraints, and open decisions.
+- [API Contract](docs/API_CONTRACT.md) — Standard response envelopes, error conventions, status codes, and pagination.
+- [Security Architecture](docs/SECURITY.md) — Threat models, verified vs planned controls, and OWASP mitigations.
+- [Testing Strategy](docs/TESTING_STRATEGY.md) — Unit, API, and component test methodology and quality gates.
+- [Development Workflow](docs/DEVELOPMENT_WORKFLOW.md) — Setup prerequisites, workspace commands, and Git conventions.
+- [Agent Rules](AGENTS.md) — Persistent developer guidelines and boundary rules.
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
-Ensure you have the following installed on your machine:
-- **Node.js**: `v18.x` or higher ([Download](https://nodejs.org/))
-- **pnpm** (recommended), **npm**, or **yarn**
-- **PostgreSQL** instance running locally or via Docker
+Ensure you have the following installed locally:
+
+- **Node.js**: `v20.x` or `v22.x` (LTS recommended, verified on `v22.15.0`)
+- **npm**: `v10.x` or higher
+- **PostgreSQL**: `v15.x` or higher (required for database features in future phases)
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/peyroo.git
+git clone https://github.com/Samael369/peyroo.git
 cd peyroo
 ```
 
-### 2. Install Dependencies
+### 2. Configure Environment Variables
+
+```bash
+cp .env.example .env
+```
+
+Review and adjust variables in `.env` as required (see `.env.example` for reference).
+
+### 3. Install Dependencies
 
 ```bash
 npm install
-# or
-pnpm install
 ```
 
-### 3. Setup Environment Variables
-
-Copy the example environment file and configure your local credentials:
+### 4. Build the Monorepo
 
 ```bash
-cp .env.example .env.local
+npm run build
 ```
 
-Fill in the required keys:
-```env
-# Database
-DATABASE_URL="postgresql://user:password@localhost:5432/peyroo"
-
-# Authentication
-NEXTAUTH_SECRET="your-super-secret-key"
-NEXTAUTH_URL="http://localhost:3000"
-
-# OAuth Providers (Google, GitHub, LinkedIn)
-GOOGLE_CLIENT_ID=""
-GOOGLE_CLIENT_SECRET=""
-
-# Email Service (Resend)
-RESEND_API_KEY=""
-EMAIL_FROM="noreply@peyroo.com"
-
-# Video / Calendar Integration (Optional for MVP)
-DAILY_API_KEY=""
-```
-
-### 4. Run Database Migrations
+### 5. Run Quality Checks
 
 ```bash
-npx prisma migrate dev
-# or
-npx prisma db push
+# Type check all workspaces
+npm run typecheck
+
+# Lint codebase
+npm run lint
+
+# Check code formatting
+npm run format:check
+
+# Run test suites
+npm run test
 ```
 
-### 5. Start the Development Server
+### 6. Start Development Servers
 
 ```bash
-npm run dev
-# or
-pnpm dev
-```
+# Start backend API (http://localhost:5000)
+npm run dev:api
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to view the application.
+# Start frontend application (http://localhost:3000)
+npm run dev:web
+```
 
 ---
 
 ## 🗺 Roadmap
 
-- [x] Initial Architecture & Project Setup
-- [ ] Authentication & User Onboarding (Mentee / Mentor Roles)
-- [ ] Mentor Profile Management & Custom Availability
-- [ ] Search & Exploration with Tag Filters
-- [ ] Cal.com / Google Calendar Synchronization
-- [ ] Direct Messaging & Meeting Room Integration
-- [ ] Review & Recommendation System
-- [ ] Group Sessions & Workshops
-- [ ] AI-Powered Mentor-Mentee Matchmaking
+- [x] Initial Architecture, Monorepo Scaffolding & Specifications
+- [ ] Database Schema Definition & Initial Migration (Prisma)
+- [ ] User Authentication & Role-Based Authorization
+- [ ] Mentor Profile Management & Custom Availability Schedules
+- [ ] Public Mentor Directory & Search with Filters
+- [ ] Session Booking & Management Flow
+- [ ] Post-Session Review & Feedback System
+- [ ] Meeting Link Integrations & Notifications
 
 ---
 
 ## 🤝 Contributing
 
-Contributions make the open-source community an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**!
+Contributions make the open-source community an amazing place to learn, inspire, and create.
 
-1. **Fork the Project**
-2. **Create your Feature Branch** (`git checkout -b feature/AmazingFeature`)
-3. **Commit your Changes** (`git commit -m 'feat: add some AmazingFeature'`)
-4. **Push to the Branch** (`git push origin feature/AmazingFeature`)
-5. **Open a Pull Request**
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feat/amazing-feature`)
+3. Commit your Changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to the Branch (`git push origin feat/amazing-feature`)
+5. Open a Pull Request
 
-Please read our [Contributing Guide](CONTRIBUTING.md) and code conventions before submitting a PR.
+Please review [`AGENTS.md`](AGENTS.md) and [`docs/DEVELOPMENT_WORKFLOW.md`](docs/DEVELOPMENT_WORKFLOW.md) for repository standards.
 
 ---
 
 ## 📄 License
 
-Distributed under the **MIT License**. See `LICENSE` for more information.
+Distributed under the **MIT License**.
 
 ---
 
