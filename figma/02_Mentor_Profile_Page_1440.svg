@@ -1,0 +1,226 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1240" viewBox="0 0 1440 1240" fill="none" style="background:#FAF8F5;">
+  <style>
+    .f-sans { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    .f-bold { font-weight: 700; }
+    .f-semibold { font-weight: 600; }
+    .f-medium { font-weight: 500; }
+  </style>
+
+  <rect width="1440" height="1240" fill="#FAF8F5"/>
+
+  <!-- ========================================================================= -->
+  <!-- 1. TOP GLOBAL NAVIGATION                                                  -->
+  <!-- ========================================================================= -->
+  <g id="Header">
+    <rect width="1440" height="72" fill="#FFFFFF"/>
+    <line x1="0" y1="72" x2="1440" y2="72" stroke="#EAE5DC" stroke-width="1"/>
+
+    <!-- LOGO (Left) -->
+    <g transform="translate(120, 16)">
+      <rect width="40" height="40" rx="12" fill="#16222F"/>
+      <path d="M11 26L20 15L29 26" stroke="#C86D3B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="20" cy="10" r="2" fill="#FAF8F5"/>
+      <circle cx="15" cy="7.5" r="1.5" fill="#FAF8F5"/>
+      <circle cx="25" cy="7.5" r="1.5" fill="#FAF8F5"/>
+      <text x="52" y="27" font-size="20" font-weight="800" fill="#16222F" class="f-sans" text-anchor="start">PEYROO</text>
+    </g>
+
+    <!-- ACTIONS (Right) -->
+    <g transform="translate(1040, 16)">
+      <text x="0" y="25" font-size="13" font-weight="500" fill="#4F5966" class="f-sans" text-anchor="start">← Back to Mentors</text>
+      <rect x="170" y="0" width="110" height="40" rx="20" fill="#16222F"/>
+      <text x="225" y="25" font-size="13" font-weight="600" fill="#FFFFFF" class="f-sans" text-anchor="middle">My Account</text>
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- 2. MENTOR PROFILE HERO BANNER (1200 x 210 at x=120, y=102)                -->
+  <!-- ========================================================================= -->
+  <g id="Profile_Hero" transform="translate(120, 102)">
+    <rect width="1200" height="210" rx="28" fill="#FFFFFF" stroke="#E5DFD5" stroke-width="1"/>
+    
+    <!-- Avatar (Left) -->
+    <g transform="translate(48, 38)">
+      <circle cx="50" cy="50" r="50" fill="#16222F"/>
+      <text x="50" y="58" font-size="26" font-weight="800" fill="#FFFFFF" class="f-sans" text-anchor="middle">AM</text>
+      <!-- Verified Badge -->
+      <circle cx="85" cy="85" r="14" fill="#C86D3B"/>
+      <text x="85" y="90" font-size="13" fill="#FFFFFF" text-anchor="middle">✦</text>
+    </g>
+
+    <!-- Info Column -->
+    <g transform="translate(175, 42)">
+      <g transform="translate(0, 0)">
+        <text x="0" y="24" font-size="24" font-weight="800" fill="#16222F" class="f-sans" text-anchor="start">Arash Moradi</text>
+        <rect x="160" y="4" width="120" height="24" rx="12" fill="#EAF2ED"/>
+        <text x="220" y="20" font-size="10" font-weight="700" fill="#2D5A46" class="f-sans" text-anchor="middle">Verified Mentor</text>
+      </g>
+      <text x="0" y="56" font-size="14" font-weight="600" fill="#4F5966" class="f-sans" text-anchor="start">Principal Systems Architect • Stripe</text>
+      <text x="0" y="80" font-size="12" font-weight="400" fill="#808996" class="f-sans" text-anchor="start">San Francisco, CA • English &amp; Persian • 11+ years guiding high-scale infrastructure</text>
+      
+      <!-- Metrics Row (ADPList Style) -->
+      <g transform="translate(0, 108)">
+        <rect x="0" y="0" width="125" height="30" rx="15" fill="#FAF6F0" stroke="#EBDCCF" stroke-width="1"/>
+        <text x="62" y="19" font-size="11" font-weight="700" fill="#C86D3B" class="f-sans" text-anchor="middle">★ 4.98 (58 reviews)</text>
+
+        <rect x="135" y="0" width="135" height="30" rx="15" fill="#F8F6F1"/>
+        <text x="202" y="19" font-size="11" font-weight="600" fill="#16222F" class="f-sans" text-anchor="middle">Attendance: 99%</text>
+
+        <rect x="280" y="0" width="145" height="30" rx="15" fill="#F8F6F1"/>
+        <text x="352" y="19" font-size="11" font-weight="600" fill="#16222F" class="f-sans" text-anchor="middle">Response: Under 6h</text>
+
+        <rect x="435" y="0" width="140" height="30" rx="15" fill="#F8F6F1"/>
+        <text x="505" y="19" font-size="11" font-weight="600" fill="#16222F" class="f-sans" text-anchor="middle">50+ Hours Mentored</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- 3. MAIN SPLIT BODY (Left Content 780px + Right Calendar 390px)            -->
+  <!-- ========================================================================= -->
+  <g id="Body_Content" transform="translate(120, 336)">
+
+    <!-- LEFT COLUMN: MENTOR DETAILS (780px Width) -->
+    <g id="Mentor_Details" transform="translate(0, 0)">
+      
+      <!-- Card 1: About Me -->
+      <g transform="translate(0, 0)">
+        <rect width="780" height="180" rx="24" fill="#FFFFFF" stroke="#E5DFD5" stroke-width="1"/>
+        <text x="36" y="40" font-size="16" font-weight="800" fill="#16222F" class="f-sans" text-anchor="start">About Me &amp; Mentoring Philosophy</text>
+        <line x1="36" y1="56" x2="744" y2="56" stroke="#F0EBE2" stroke-width="1"/>
+        <text x="36" y="86" font-size="13" font-weight="400" fill="#4F5966" class="f-sans" text-anchor="start">Hello! I'm Arash, a Principal Systems Architect at Stripe. Over the last 11 years, I've designed</text>
+        <text x="36" y="110" font-size="13" font-weight="400" fill="#4F5966" class="f-sans" text-anchor="start">distributed transaction engines, resilient microservices, and managed large-scale monolith migrations.</text>
+        <text x="36" y="138" font-size="13" font-weight="400" fill="#4F5966" class="f-sans" text-anchor="start">My goal in 1-on-1 mentorship is to provide pragmatic, battle-tested feedback on your real architectural challenges.</text>
+      </g>
+
+      <!-- Card 2: Curriculum Offerings -->
+      <g transform="translate(0, 204)">
+        <rect width="780" height="220" rx="24" fill="#FFFFFF" stroke="#E5DFD5" stroke-width="1"/>
+        <text x="36" y="40" font-size="16" font-weight="800" fill="#16222F" class="f-sans" text-anchor="start">Mentorship Topics &amp; Offerings</text>
+        <line x1="36" y1="56" x2="744" y2="56" stroke="#F0EBE2" stroke-width="1"/>
+        
+        <!-- Offering 1 -->
+        <g transform="translate(36, 74)">
+          <rect width="708" height="56" rx="16" fill="#FAF8F5" stroke="#E5DFD5" stroke-width="1"/>
+          <text x="24" y="34" font-size="13" font-weight="700" fill="#16222F" class="f-sans" text-anchor="start">System Design &amp; Architecture Teardown</text>
+          <rect x="600" y="15" width="84" height="26" rx="13" fill="#16222F"/>
+          <text x="642" y="32" font-size="11" font-weight="600" fill="#FFFFFF" class="f-sans" text-anchor="middle">45 min</text>
+        </g>
+
+        <!-- Offering 2 -->
+        <g transform="translate(36, 142)">
+          <rect width="708" height="56" rx="16" fill="#FAF8F5" stroke="#E5DFD5" stroke-width="1"/>
+          <text x="24" y="34" font-size="13" font-weight="700" fill="#16222F" class="f-sans" text-anchor="start">Staff Engineer Career Transition &amp; Leadership</text>
+          <rect x="600" y="15" width="84" height="26" rx="13" fill="#16222F"/>
+          <text x="642" y="32" font-size="11" font-weight="600" fill="#FFFFFF" class="f-sans" text-anchor="middle">30 min</text>
+        </g>
+      </g>
+
+      <!-- Card 3: Experience Timeline -->
+      <g transform="translate(0, 448)">
+        <rect width="780" height="190" rx="24" fill="#FFFFFF" stroke="#E5DFD5" stroke-width="1"/>
+        <text x="36" y="40" font-size="16" font-weight="800" fill="#16222F" class="f-sans" text-anchor="start">Professional Experience</text>
+        <line x1="36" y1="56" x2="744" y2="56" stroke="#F0EBE2" stroke-width="1"/>
+        
+        <g transform="translate(36, 76)">
+          <circle cx="10" cy="12" r="7" fill="#C86D3B"/>
+          <text x="30" y="16" font-size="13" font-weight="700" fill="#16222F" class="f-sans" text-anchor="start">Principal Systems Architect • Stripe</text>
+          <text x="30" y="36" font-size="11" font-weight="400" fill="#808996" class="f-sans" text-anchor="start">2021 — Present • Global payment ledger infrastructure</text>
+        </g>
+
+        <g transform="translate(36, 126)">
+          <circle cx="10" cy="12" r="7" fill="#DDD7CD"/>
+          <text x="30" y="16" font-size="13" font-weight="700" fill="#16222F" class="f-sans" text-anchor="start">Tech Lead Backend • Digikala</text>
+          <text x="30" y="36" font-size="11" font-weight="400" fill="#808996" class="f-sans" text-anchor="start">2018 — 2021 • High-throughput order pipeline &amp; search cluster</text>
+        </g>
+      </g>
+
+      <!-- Card 4: Verified Testimonials (ADPList Style) -->
+      <g transform="translate(0, 662)">
+        <rect width="780" height="160" rx="24" fill="#FFFFFF" stroke="#E5DFD5" stroke-width="1"/>
+        <text x="36" y="40" font-size="16" font-weight="800" fill="#16222F" class="f-sans" text-anchor="start">Mentee Testimonials &amp; Reviews (58 Verified)</text>
+        <line x1="36" y1="56" x2="744" y2="56" stroke="#F0EBE2" stroke-width="1"/>
+        
+        <g transform="translate(36, 76)">
+          <circle cx="20" cy="18" r="16" fill="#F4F1EA"/>
+          <text x="20" y="23" font-size="11" font-weight="700" fill="#16222F" class="f-sans" text-anchor="middle">MH</text>
+          <text x="48" y="16" font-size="12" font-weight="700" fill="#16222F" class="f-sans" text-anchor="start">Michael H. • Senior Backend Engineer</text>
+          <text x="48" y="34" font-size="10" font-weight="400" fill="#808996" class="f-sans" text-anchor="start">System Design Review • 2 weeks ago</text>
+          <text x="48" y="58" font-size="12" font-weight="400" fill="#4F5966" class="f-sans" text-anchor="start">"Arash's session was incredible. In 45 minutes, he pinpointed the exact bottleneck in our event-driven Kafka setup."</text>
+        </g>
+      </g>
+
+    </g>
+
+    <!-- RIGHT COLUMN: STICKY BOOKING CALENDAR (390px Width at x=810) -->
+    <g id="Booking_Widget" transform="translate(810, 0)">
+      <rect width="390" height="520" rx="28" fill="#FFFFFF" stroke="#E5DFD5" stroke-width="1"/>
+      
+      <!-- Header -->
+      <text x="28" y="42" font-size="16" font-weight="800" fill="#16222F" class="f-sans" text-anchor="start">Book a 1-on-1 Session</text>
+      <text x="28" y="66" font-size="11" font-weight="500" fill="#808996" class="f-sans" text-anchor="start">100% Free • Converted to your local timezone</text>
+      <line x1="25" y1="82" x2="365" y2="82" stroke="#F0EBE2" stroke-width="1"/>
+
+      <!-- Month Selector -->
+      <g transform="translate(28, 98)">
+        <text x="0" y="18" font-size="13" font-weight="700" fill="#16222F" class="f-sans" text-anchor="start">November 2026</text>
+        <text x="334" y="18" font-size="12" font-weight="600" fill="#C86D3B" class="f-sans" text-anchor="end">This Week ▾</text>
+      </g>
+
+      <!-- Day Selector Row (3 Days) -->
+      <g transform="translate(25, 134)">
+        <!-- Day 1 (Selected) -->
+        <rect x="0" y="0" width="110" height="64" rx="16" fill="#16222F"/>
+        <text x="55" y="26" font-size="10" font-weight="500" fill="#FAF8F5" class="f-sans" text-anchor="middle">Thu</text>
+        <text x="55" y="48" font-size="14" font-weight="800" fill="#FFFFFF" class="f-sans" text-anchor="middle">Nov 05</text>
+
+        <!-- Day 2 -->
+        <rect x="115" y="0" width="110" height="64" rx="16" fill="#FAF8F5" stroke="#E5DFD5" stroke-width="1"/>
+        <text x="170" y="26" font-size="10" font-weight="500" fill="#808996" class="f-sans" text-anchor="middle">Sat</text>
+        <text x="170" y="48" font-size="14" font-weight="700" fill="#16222F" class="f-sans" text-anchor="middle">Nov 07</text>
+
+        <!-- Day 3 -->
+        <rect x="230" y="0" width="110" height="64" rx="16" fill="#FAF8F5" stroke="#E5DFD5" stroke-width="1"/>
+        <text x="285" y="26" font-size="10" font-weight="500" fill="#808996" class="f-sans" text-anchor="middle">Mon</text>
+        <text x="285" y="48" font-size="14" font-weight="700" fill="#16222F" class="f-sans" text-anchor="middle">Nov 09</text>
+      </g>
+
+      <!-- Available Slot Chips Grid -->
+      <g transform="translate(25, 222)">
+        <text x="0" y="0" font-size="11" font-weight="700" fill="#4F5966" class="f-sans" text-anchor="start">Available slots for Thu, Nov 05:</text>
+        
+        <!-- Slot 1 (Selected) -->
+        <rect x="0" y="14" width="165" height="44" rx="16" fill="#C86D3B"/>
+        <text x="82" y="41" font-size="12" font-weight="700" fill="#FFFFFF" class="f-sans" text-anchor="middle">14:00 — 14:45</text>
+
+        <!-- Slot 2 -->
+        <rect x="175" y="14" width="165" height="44" rx="16" fill="#FAF8F5" stroke="#DDD7CD" stroke-width="1"/>
+        <text x="257" y="41" font-size="12" font-weight="600" fill="#16222F" class="f-sans" text-anchor="middle">15:30 — 16:15</text>
+
+        <!-- Slot 3 -->
+        <rect x="0" y="68" width="165" height="44" rx="16" fill="#FAF8F5" stroke="#DDD7CD" stroke-width="1"/>
+        <text x="82" y="95" font-size="12" font-weight="600" fill="#16222F" class="f-sans" text-anchor="middle">17:00 — 17:45</text>
+
+        <!-- Slot 4 (Taken) -->
+        <rect x="175" y="68" width="165" height="44" rx="16" fill="#F5F2EB"/>
+        <text x="257" y="95" font-size="11" font-weight="500" fill="#A0A8B4" class="f-sans" text-anchor="middle">18:30 (Reserved)</text>
+      </g>
+
+      <!-- Info Callout -->
+      <g transform="translate(25, 370)">
+        <rect width="340" height="48" rx="14" fill="#FAF6F0" stroke="#EBDCCF" stroke-width="1"/>
+        <text x="16" y="24" font-size="10" font-weight="700" fill="#C86D3B" class="f-sans" text-anchor="start">✦ 1-on-1 meeting via Google Meet room</text>
+        <text x="16" y="38" font-size="9" font-weight="400" fill="#697380" class="f-sans" text-anchor="start">Calendar invite &amp; video link delivered instantly upon confirmation.</text>
+      </g>
+
+      <!-- Primary Action CTA Button -->
+      <g transform="translate(25, 436)">
+        <rect width="340" height="52" rx="26" fill="#16222F"/>
+        <text x="170" y="32" font-size="13" font-weight="700" fill="#FFFFFF" class="f-sans" text-anchor="middle">Proceed with Booking (45m) →</text>
+      </g>
+
+    </g>
+
+  </g>
+
+</svg>

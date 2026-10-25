@@ -1,0 +1,208 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1080" viewBox="0 0 1440 1080" fill="none" style="background:#FAF8F5;">
+  <style>
+    .f-sans { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    .f-bold { font-weight: 700; }
+    .f-semibold { font-weight: 600; }
+    .f-medium { font-weight: 500; }
+  </style>
+
+  <rect width="1440" height="1080" fill="#FAF8F5"/>
+
+  <!-- ========================================================================= -->
+  <!-- 1. TOP GLOBAL NAVIGATION                                                  -->
+  <!-- ========================================================================= -->
+  <g id="Header">
+    <rect width="1440" height="72" fill="#FFFFFF"/>
+    <line x1="0" y1="72" x2="1440" y2="72" stroke="#EAE5DC" stroke-width="1"/>
+
+    <!-- LOGO (Left) -->
+    <g transform="translate(120, 16)">
+      <rect width="40" height="40" rx="12" fill="#16222F"/>
+      <path d="M11 26L20 15L29 26" stroke="#C86D3B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="20" cy="10" r="2" fill="#FAF8F5"/>
+      <circle cx="15" cy="7.5" r="1.5" fill="#FAF8F5"/>
+      <circle cx="25" cy="7.5" r="1.5" fill="#FAF8F5"/>
+      <text x="52" y="27" font-size="20" font-weight="800" fill="#16222F" class="f-sans" text-anchor="start">PEYROO</text>
+    </g>
+
+    <!-- Nav Links (Center) -->
+    <g transform="translate(480, 18)">
+      <rect x="0" y="0" width="120" height="36" rx="18" fill="#16222F"/>
+      <text x="60" y="23" font-size="12" font-weight="700" fill="#FFFFFF" class="f-sans" text-anchor="middle">My Sessions</text>
+      
+      <text x="150" y="23" font-size="12" font-weight="500" fill="#4F5966" class="f-sans" text-anchor="start">Browse Mentors</text>
+      <text x="280" y="23" font-size="12" font-weight="500" fill="#4F5966" class="f-sans" text-anchor="start">Messages &amp; Notes</text>
+    </g>
+
+    <!-- User Profile Dropdown (Right) -->
+    <g transform="translate(1160, 16)">
+      <circle cx="20" cy="20" r="18" fill="#C86D3B" opacity="0.15"/>
+      <text x="20" y="25" font-size="11" font-weight="800" fill="#C86D3B" class="f-sans" text-anchor="middle">AR</text>
+      <text x="48" y="24" font-size="12" font-weight="700" fill="#16222F" class="f-sans" text-anchor="start">Amir Rezavi ▾</text>
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- 2. DASHBOARD HERO & METRICS (1200 x 130 at x=120, y=102)                  -->
+  <!-- ========================================================================= -->
+  <g id="Dashboard_Hero" transform="translate(120, 102)">
+    <rect width="1200" height="130" rx="28" fill="#FFFFFF" stroke="#E5DFD5" stroke-width="1"/>
+    
+    <g transform="translate(48, 36)">
+      <text x="0" y="24" font-size="24" font-weight="800" fill="#16222F" class="f-sans" text-anchor="start">My Mentorship Dashboard</text>
+      <text x="0" y="52" font-size="13" font-weight="400" fill="#697380" class="f-sans" text-anchor="start">Manage your scheduled sessions, launch video meetings, and review past learnings.</text>
+    </g>
+
+    <!-- Stats Badges (Right) -->
+    <g transform="translate(860, 36)">
+      <rect x="0" y="0" width="140" height="58" rx="18" fill="#FAF8F5" stroke="#E5DFD5" stroke-width="1"/>
+      <text x="70" y="26" font-size="16" font-weight="800" fill="#16222F" class="f-sans" text-anchor="middle">1 Session</text>
+      <text x="70" y="44" font-size="10" font-weight="500" fill="#697380" class="f-sans" text-anchor="middle">Upcoming &amp; Confirmed</text>
+
+      <rect x="150" y="0" width="140" height="58" rx="18" fill="#FAF8F5" stroke="#E5DFD5" stroke-width="1"/>
+      <text x="220" y="26" font-size="16" font-weight="800" fill="#16222F" class="f-sans" text-anchor="middle">3 Sessions</text>
+      <text x="220" y="44" font-size="10" font-weight="500" fill="#697380" class="f-sans" text-anchor="middle">Completed</text>
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- 3. MAIN DASHBOARD CONTENT (Two Columns)                                   -->
+  <!-- ========================================================================= -->
+  <g id="Dashboard_Body" transform="translate(120, 260)">
+
+    <!-- LEFT COLUMN: SESSIONS LIST (750px Width at x=0) -->
+    <g id="Upcoming_Card" transform="translate(0, 0)">
+      
+      <text x="0" y="0" font-size="16" font-weight="800" fill="#16222F" class="f-sans" text-anchor="start">Your Next Upcoming Session</text>
+      
+      <g transform="translate(0, 20)">
+        <rect width="750" height="340" rx="28" fill="#FFFFFF" stroke="#E5DFD5" stroke-width="1"/>
+        
+        <!-- Left accent pill -->
+        <rect x="0" y="28" width="8" height="64" rx="4" fill="#C86D3B"/>
+
+        <!-- Mentor Summary -->
+        <g transform="translate(36, 36)">
+          <circle cx="26" cy="20" r="26" fill="#16222F"/>
+          <text x="26" y="27" font-size="14" font-weight="800" fill="#FFFFFF" class="f-sans" text-anchor="middle">AM</text>
+          
+          <text x="68" y="18" font-size="16" font-weight="800" fill="#16222F" class="f-sans" text-anchor="start">Mentorship Session with Arash Moradi</text>
+          <text x="68" y="38" font-size="12" font-weight="500" fill="#4F5966" class="f-sans" text-anchor="start">Topic: System Design &amp; Architecture Teardown (45 min)</text>
+          
+          <!-- Confirmed Status Tag -->
+          <rect x="520" y="4" width="150" height="26" rx="13" fill="#EAF2ED"/>
+          <text x="595" y="21" font-size="10" font-weight="700" fill="#2D5A46" class="f-sans" text-anchor="middle">✓ Confirmed &amp; Ready</text>
+        </g>
+
+        <!-- Time & Room Details Box -->
+        <g transform="translate(36, 120)">
+          <rect width="678" height="110" rx="20" fill="#FAF8F5" stroke="#E5DFD5" stroke-width="1"/>
+          
+          <g transform="translate(24, 24)">
+            <text x="0" y="16" font-size="11" font-weight="600" fill="#697380" class="f-sans" text-anchor="start">Session Date &amp; Time:</text>
+            <text x="0" y="42" font-size="16" font-weight="800" fill="#16222F" class="f-sans" text-anchor="start">Thursday, November 05, 2026</text>
+            <text x="0" y="66" font-size="13" font-weight="700" fill="#C86D3B" class="f-sans" text-anchor="start">14:00 — 14:45 (Converted to your timezone)</text>
+          </g>
+
+          <!-- Launch Google Meet Room Button -->
+          <g transform="translate(390, 30)">
+            <rect width="260" height="52" rx="26" fill="#16222F"/>
+            <text x="130" y="32" font-size="12" font-weight="700" fill="#FFFFFF" class="f-sans" text-anchor="middle">Join Google Meet Room</text>
+          </g>
+        </g>
+
+        <!-- Footer Actions -->
+        <g transform="translate(36, 270)">
+          <line x1="0" y1="0" x2="678" y2="0" stroke="#F0EBE2" stroke-width="1"/>
+          <text x="0" y="32" font-size="11" font-weight="600" fill="#16222F" class="f-sans" text-anchor="start">Add to Google / Apple Calendar (.ics)</text>
+          <text x="678" y="32" font-size="11" font-weight="600" fill="#BE123C" class="f-sans" text-anchor="end">Reschedule or Cancel Session</text>
+        </g>
+      </g>
+
+      <!-- Past Sessions Summary -->
+      <g transform="translate(0, 400)">
+        <text x="0" y="0" font-size="16" font-weight="800" fill="#16222F" class="f-sans" text-anchor="start">Completed Sessions History</text>
+        
+        <g transform="translate(0, 20)">
+          <rect width="750" height="130" rx="24" fill="#FFFFFF" stroke="#E5DFD5" stroke-width="1"/>
+          
+          <g transform="translate(36, 24)">
+            <circle cx="20" cy="20" r="20" fill="#EAE5DC"/>
+            <text x="20" y="25" font-size="12" font-weight="800" fill="#16222F" class="f-sans" text-anchor="middle">SR</text>
+            
+            <text x="56" y="18" font-size="14" font-weight="800" fill="#16222F" class="f-sans" text-anchor="start">Portfolio Review with Sara Rezai</text>
+            <text x="56" y="38" font-size="11" font-weight="500" fill="#697380" class="f-sans" text-anchor="start">Held on October 16, 2026 • Your Rating: 5.0 out of 5 (★★★★★)</text>
+          </g>
+
+          <g transform="translate(560, 40)">
+            <rect width="150" height="38" rx="19" fill="#FAF8F5" stroke="#DDD7CD" stroke-width="1"/>
+            <text x="75" y="24" font-size="11" font-weight="600" fill="#4F5966" class="f-sans" text-anchor="middle">View Mentor Notes</text>
+          </g>
+        </g>
+      </g>
+
+    </g>
+
+    <!-- RIGHT COLUMN: MENTOR SCHEDULE SETTINGS (420px Width at x=780) -->
+    <g id="Mentor_Schedule_Widget" transform="translate(780, 0)">
+      
+      <text x="0" y="0" font-size="16" font-weight="800" fill="#16222F" class="f-sans" text-anchor="start">Mentor Weekly Availability Settings</text>
+      
+      <g transform="translate(0, 20)">
+        <rect width="420" height="510" rx="28" fill="#FFFFFF" stroke="#E5DFD5" stroke-width="1"/>
+        
+        <g transform="translate(28, 36)">
+          <text x="0" y="0" font-size="14" font-weight="800" fill="#16222F" class="f-sans" text-anchor="start">Your Recurring Weekly Hours</text>
+          <text x="0" y="22" font-size="11" font-weight="400" fill="#808996" class="f-sans" text-anchor="start">These windows automatically calculate open slots for mentees.</text>
+        </g>
+
+        <!-- Active Days Rows -->
+        <g transform="translate(25, 90)">
+          
+          <!-- Thursday -->
+          <g transform="translate(0, 0)">
+            <rect width="370" height="54" rx="16" fill="#FAF8F5" stroke="#E5DFD5" stroke-width="1"/>
+            <text x="24" y="32" font-size="12" font-weight="700" fill="#16222F" class="f-sans" text-anchor="start">Thursday</text>
+            <rect x="220" y="12" width="130" height="30" rx="10" fill="#FFFFFF" stroke="#DDD7CD" stroke-width="1"/>
+            <text x="285" y="31" font-size="11" font-weight="700" fill="#16222F" class="f-sans" text-anchor="middle">14:00 — 18:00</text>
+          </g>
+
+          <!-- Saturday -->
+          <g transform="translate(0, 66)">
+            <rect width="370" height="54" rx="16" fill="#FAF8F5" stroke="#E5DFD5" stroke-width="1"/>
+            <text x="24" y="32" font-size="12" font-weight="700" fill="#16222F" class="f-sans" text-anchor="start">Saturday</text>
+            <rect x="220" y="12" width="130" height="30" rx="10" fill="#FFFFFF" stroke="#DDD7CD" stroke-width="1"/>
+            <text x="285" y="31" font-size="11" font-weight="700" fill="#16222F" class="f-sans" text-anchor="middle">10:00 — 14:00</text>
+          </g>
+
+          <!-- Monday -->
+          <g transform="translate(0, 132)">
+            <rect width="370" height="54" rx="16" fill="#FAF8F5" stroke="#E5DFD5" stroke-width="1"/>
+            <text x="24" y="32" font-size="12" font-weight="700" fill="#16222F" class="f-sans" text-anchor="start">Monday</text>
+            <rect x="220" y="12" width="130" height="30" rx="10" fill="#FFFFFF" stroke="#DDD7CD" stroke-width="1"/>
+            <text x="285" y="31" font-size="11" font-weight="700" fill="#16222F" class="f-sans" text-anchor="middle">17:00 — 21:00</text>
+          </g>
+
+        </g>
+
+        <!-- Buffer Times Info -->
+        <g transform="translate(25, 305)">
+          <rect width="370" height="90" rx="18" fill="#FAF6F0" stroke="#EBDCCF" stroke-width="1"/>
+          <text x="20" y="30" font-size="11" font-weight="700" fill="#C86D3B" class="f-sans" text-anchor="start">✦ Booking Protection Rules:</text>
+          <text x="20" y="52" font-size="10" font-weight="500" fill="#5A6472" class="f-sans" text-anchor="start">• Buffer between sessions: 15 minutes</text>
+          <text x="20" y="72" font-size="10" font-weight="500" fill="#5A6472" class="f-sans" text-anchor="start">• Minimum advance notice required: 24 hours</text>
+        </g>
+
+        <!-- Edit Schedule CTA -->
+        <g transform="translate(25, 420)">
+          <rect width="370" height="50" rx="25" fill="#16222F"/>
+          <text x="185" y="31" font-size="12" font-weight="700" fill="#FFFFFF" class="f-sans" text-anchor="middle">Edit Weekly Working Hours &amp; Topics</text>
+        </g>
+
+      </g>
+
+    </g>
+
+  </g>
+
+</svg>

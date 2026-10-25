@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>پیرو (Peyroo) — داشبورد مدیریت جلسات و زمان‌بندی مربی</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    body, button, input, select, textarea {
+      font-family: "Vazirmatn", "Dana", "Shabnam", "Segoe UI", Tahoma, sans-serif !important;
+      letter-spacing: normal !important;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2.5px solid #16222F !important;
+      outline-offset: 3px !important;
+      border-radius: 12px;
+    }
+
+    .smooth-transition {
+      transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+  </style>
+</head>
+<body class="bg-[#F2EFE9] text-[#1E2631] min-h-screen antialiased p-3 md:p-6">
+
+  <!-- ========================================================================= -->
+  <!-- CONTROL BAR: VIEWPORT & FLOW SELECTOR                                     -->
+  <!-- ========================================================================= -->
+  <div class="max-w-6xl mx-auto mb-6 bg-white/80 backdrop-blur-md border border-[#E2DDD5] rounded-2xl p-3 md:p-4 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+    <div class="flex items-center gap-3">
+      <span class="w-3 h-3 rounded-full bg-[#C86D3B] shadow-xs"></span>
+      <div>
+        <span class="text-xs font-bold text-[#16222F]">داشبورد جلسات و پنل زمان‌بندی مربیان (فاز ۵ و ۶)</span>
+        <span class="text-[11px] text-[#697380] block sm:inline sm:mr-2">چرخه کامل جلسات، تنظیم ساعات آزاد و حالت‌های خالی</span>
+      </div>
+    </div>
+
+    <!-- Viewport Simulator -->
+    <div class="flex items-center bg-[#F7F6F2] rounded-xl p-1 border border-[#E2DDD5] text-xs">
+      <button onclick="setViewport('desktop')" id="vp-desktop" class="px-3 py-1.5 rounded-lg bg-[#16222F] text-white font-medium shadow-xs">
+        دسکتاپ (۱۴۴۰)
+      </button>
+      <button onclick="setViewport('tablet')" id="vp-tablet" class="px-3 py-1.5 rounded-lg text-[#697380] hover:text-[#16222F]">
+        تبلت (۷۶۸)
+      </button>
+      <button onclick="setViewport('mobile')" id="vp-mobile" class="px-3 py-1.5 rounded-lg text-[#697380] hover:text-[#16222F]">
+        موبایل (۳۷۵)
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MAIN APP CONTAINER                                                        -->
+  <!-- ========================================================================= -->
+  <div id="canvas-container" class="mx-auto w-full max-w-6xl smooth-transition">
+    
+    <div class="bg-[#FAF9F6] text-[#1E2631] rounded-3xl border border-[#E5DFD5] shadow-xl overflow-hidden min-h-[960px] flex flex-col justify-between">
+
+      <div>
+        <!-- --------------------------------------------------------------------- -->
+        <!-- 1. TOP NAVIGATION WITH USER PROFILE CONTEXT                           -->
+        <!-- --------------------------------------------------------------------- -->
+        <header class="bg-white/90 backdrop-blur-sm border-b border-[#EAE5DC] sticky top-0 z-30 px-5 md:px-8 py-4">
+          <div class="max-w-5xl mx-auto flex items-center justify-between gap-4">
+            
+            <!-- Brandmark -->
+            <div class="flex items-center gap-3.5">
+              <div class="w-10 h-10 rounded-2xl bg-[#16222F] flex items-center justify-center text-white shadow-md">
+                <svg width="24" height="24" viewBox="0 0 44 44" fill="none">
+                  <path d="M12 28L22 17L32 28" stroke="#C86D3B" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="22" cy="11" r="2.2" fill="#FAF9F5"/>
+                  <circle cx="16" cy="8" r="1.8" fill="#FAF9F5"/>
+                  <circle cx="28" cy="8" r="1.8" fill="#FAF9F5"/>
+                </svg>
+              </div>
+              <span class="text-xl font-bold text-[#16222F]">پـیـرو</span>
+            </div>
+
+            <!-- Dashboard Navigation Tabs -->
+            <nav class="flex items-center gap-2 text-xs">
+              <button onclick="switchSection('sessions')" id="nav-sessions" class="px-3.5 py-2 rounded-xl font-bold bg-[#16222F] text-white shadow-xs smooth-transition">
+                جلسات من
+              </button>
+              <button onclick="switchSection('schedule')" id="nav-schedule" class="px-3.5 py-2 rounded-xl font-medium text-[#4F5966] hover:text-[#16222F] hover:bg-[#F5F2EB] smooth-transition">
+                تنظیمات زمان‌بندی مربی
+              </button>
+              <button onclick="switchSection('empty')" id="nav-empty" class="px-3.5 py-2 rounded-xl font-medium text-[#4F5966] hover:text-[#16222F] hover:bg-[#F5F2EB] smooth-transition">
+                پیش‌نمایش حالت خالی
+              </button>
+            </nav>
+
+            <!-- User Menu -->
+            <div class="flex items-center gap-3">
+              <div class="hidden sm:flex flex-col text-start text-xs">
+                <span class="font-bold text-[#16222F]">امیرحسین رضوی</span>
+                <span class="text-[11px] text-[#697380]">دانش‌پذیر / مهندس نرم‌افزار</span>
+              </div>
+              <div class="w-10 h-10 rounded-2xl bg-[#C86D3B]/15 border border-[#C86D3B]/30 flex items-center justify-center text-sm font-bold text-[#C86D3B]">
+                ا.ر
+              </div>
+            </div>
+
+          </div>
+        </header>
+
+        <!-- ===================================================================== -->
+        <!-- SECTION 1: SESSIONS LIFECYCLE DASHBOARD (جلسات من)                     -->
+        <!-- ===================================================================== -->
+        <main id="section-sessions" class="max-w-5xl mx-auto px-5 md:px-8 py-8 space-y-8">
+          
+          <!-- Header & Quick Metrics -->
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#EAE5DC] pb-6">
+            <div>
+              <span class="text-xs font-bold text-[#C86D3B] uppercase tracking-wider">داشبورد یکپارچه جلسات</span>
+              <h1 class="text-2xl md:text-3xl font-extrabold text-[#16222F] mt-1">مدیریت گفتگوهای مربیگری</h1>
+              <p class="text-xs text-[#5A6472] mt-1 leading-relaxed">
+                پیگیری جلسات پیش‌رو، دسترسی به لینک اتاق مجازی و مشاهده سوابق مشاوره‌ها.
+              </p>
+            </div>
+
+            <!-- Stats Ribbon -->
+            <div class="flex items-center gap-3">
+              <div class="bg-white px-4 py-2.5 rounded-2xl border border-[#E5DFD5] text-center shadow-2xs">
+                <div class="text-base font-extrabold text-[#16222F]">۱</div>
+                <div class="text-[10px] text-[#697380]">جلسه فعال پیش‌رو</div>
+              </div>
+              <div class="bg-white px-4 py-2.5 rounded-2xl border border-[#E5DFD5] text-center shadow-2xs">
+                <div class="text-base font-extrabold text-[#16222F]">۳</div>
+                <div class="text-[10px] text-[#697380]">جلسه پایان‌یافته</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Session Lifecycle Filter Tabs -->
+          <div class="flex items-center gap-2 border-b border-[#EAE5DC] pb-2 text-xs">
+            <button onclick="filterLifecycle('upcoming')" id="tab-upcoming" class="px-4 py-2 rounded-xl font-bold bg-[#16222F] text-white shadow-xs smooth-transition">
+              جلسات پیش‌رو (۱)
+            </button>
+            <button onclick="filterLifecycle('completed')" id="tab-completed" class="px-4 py-2 rounded-xl font-medium text-[#4F5966] hover:text-[#16222F] smooth-transition">
+              پایان‌یافته (۳)
+            </button>
+            <button onclick="filterLifecycle('cancelled')" id="tab-cancelled" class="px-4 py-2 rounded-xl font-medium text-[#4F5966] hover:text-[#16222F] smooth-transition">
+              لغو‌شده (۱)
+            </button>
+          </div>
+
+          <!-- ----------------- UPCOMING SESSIONS LIST ----------------- -->
+          <div id="list-upcoming" class="space-y-4">
+            
+            <!-- Active Session Card with Arash Moradi -->
+            <article class="bg-white rounded-3xl border border-[#E5DFD5] p-6 shadow-sm hover:shadow-md smooth-transition relative overflow-hidden">
+              <!-- Softened Pathway Accent Pill -->
+              <div class="absolute top-4 start-0 bottom-4 w-1.5 bg-[#C86D3B] rounded-e-full"></div>
+
+              <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center pe-2">
+                
+                <!-- Mentor & Topic Summary (6 Cols) -->
+                <div class="lg:col-span-6 space-y-3">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[10px] font-bold border border-emerald-200">
+                      تایید شده و آماده برگزاری
+                    </span>
+                    <span class="text-[11px] text-[#808996]">کد جلسه: PYR-8924</span>
+                  </div>
+
+                  <div class="flex items-start gap-3.5">
+                    <div class="w-12 h-12 rounded-2xl bg-[#16222F] text-white flex items-center justify-center font-bold text-sm shrink-0">
+                      آ.م
+                    </div>
+                    <div>
+                      <h3 class="text-base font-bold text-[#16222F]">جلسه مشاوره با آرش مرادی</h3>
+                      <p class="text-xs text-[#5A6472] mt-0.5 font-medium">سرفصل: بررسی معماری سیستم و میکروسرویس‌ها (۴۵ دقیقه)</p>
+                    </div>
+                  </div>
+
+                  <div class="p-3 bg-[#FAF8F5] rounded-2xl border border-[#E5DFD5] text-xs space-y-1">
+                    <div class="font-bold text-[#16222F]">هدف ثبت‌شده شما:</div>
+                    <p class="text-[#5A6472] leading-relaxed text-[11px]">
+                      «بررسی الگوی شکستن دیتابیس مشترک به پایگاه‌های داده مجزا و حل مشکل همزمانی در تراکنش‌های مالی.»
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Timing & Room CTA (6 Cols) -->
+                <div class="lg:col-span-6 bg-[#FAF8F5] rounded-3xl border border-[#E5DFD5] p-5 space-y-4">
+                  <div class="flex items-center justify-between border-b border-[#EAE5DC] pb-3 text-xs">
+                    <div>
+                      <span class="text-[11px] text-[#697380] block">زمان برگزاری:</span>
+                      <span class="font-bold text-[#16222F] text-sm">پنجشنبه ۸ آبان ۱۴۰۵</span>
+                    </div>
+                    <div class="text-start">
+                      <span class="text-[11px] text-[#697380] block">ساعت (ایران):</span>
+                      <span class="font-bold text-[#C86D3B] text-sm">۱۵:۰۰ تا ۱۵:۴۵</span>
+                    </div>
+                  </div>
+
+                  <!-- Google Meet Button -->
+                  <div class="space-y-2">
+                    <a href="https://meet.google.com/pyr-xkm-vwt" target="_blank" class="w-full py-3 px-4 rounded-2xl bg-[#16222F] hover:bg-[#25374C] text-white font-bold text-xs flex items-center justify-center gap-2 smooth-transition shadow-sm">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="23 7 16 12 23 17 23 7"/>
+                        <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                      </svg>
+                      <span>ورود به اتاق ویدیویی جلسه (گوگل‌میت)</span>
+                    </a>
+                    <div class="text-[10px] text-center text-[#697380]">
+                      لینک ۱۰ دقیقه قبل از شروع جلسه فعال خواهد شد.
+                    </div>
+                  </div>
+
+                  <!-- Actions -->
+                  <div class="pt-2 border-t border-[#EAE5DC] flex items-center justify-between text-xs">
+                    <button class="text-[#4F5966] hover:text-[#16222F] font-medium">افزودن به تقویم (.ics)</button>
+                    <button class="text-rose-600 hover:text-rose-800 font-medium">لغو یا تغییر زمان جلسه</button>
+                  </div>
+                </div>
+
+              </div>
+            </article>
+
+          </div>
+
+          <!-- ----------------- COMPLETED SESSIONS LIST ----------------- -->
+          <div id="list-completed" class="space-y-4 hidden">
+            
+            <article class="bg-white rounded-3xl border border-[#E5DFD5] p-6 shadow-xs relative overflow-hidden">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#EAE5DC] pb-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 rounded-2xl bg-[#EAE5DC] text-[#16222F] flex items-center justify-center font-bold text-sm">
+                    س.ر
+                  </div>
+                  <div>
+                    <h3 class="text-base font-bold text-[#16222F]">جلسه نقد پورتفولیو با سارا رضایی</h3>
+                    <p class="text-xs text-[#697380]">برگزار شده در جمعه ۲۵ مهر ۱۴۰۵ • ۴۵ دقیقه</p>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <span class="text-xs px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200">
+                    پایان‌یافته
+                  </span>
+                </div>
+              </div>
+
+              <!-- Mentor Feedback Summary -->
+              <div class="mt-4 p-4 rounded-2xl bg-[#FAF8F5] border border-[#E5DFD5] text-xs space-y-2">
+                <div class="font-bold text-[#16222F]">یادداشت‌های جمع‌بندی مربی:</div>
+                <p class="text-[#5A6472] leading-relaxed">
+                  «امیرحسین پورتفولیوی بسیار منسجمی دارد. پیشنهاد شد برای پروژه‌های سیستم دیزاین، نمودار ارتباط توکن‌ها و مستندات Governance را برجسته‌تر کند.»
+                </p>
+              </div>
+
+              <!-- Testimonial Action -->
+              <div class="mt-4 pt-3 border-t border-[#EAE5DC] flex items-center justify-between text-xs">
+                <div class="flex items-center gap-1 text-[#C86D3B]">
+                  <span>★★★★★</span>
+                  <span class="text-[#697380] text-[11px] mr-1">امتیاز ثبت‌شده شما: ۵ از ۵</span>
+                </div>
+                <button class="px-4 py-2 rounded-xl border border-[#DDD7CD] text-[#4F5966] hover:text-[#16222F] font-medium">
+                  مشاهده متن نظر شما
+                </button>
+              </div>
+            </article>
+
+          </div>
+
+          <!-- ----------------- CANCELLED SESSIONS LIST ----------------- -->
+          <div id="list-cancelled" class="space-y-4 hidden">
+            <div class="p-6 rounded-3xl bg-white border border-[#E5DFD5] text-xs space-y-2">
+              <div class="flex justify-between items-center text-[#808996]">
+                <span class="font-bold text-rose-700">لغو شده توسط دانش‌پذیر</span>
+                <span>شنبه ۱۰ مهر ۱۴۰۵</span>
+              </div>
+              <h4 class="font-bold text-[#16222F] text-sm">جلسه آمادگی مصاحبه با پوریا شمس</h4>
+              <p class="text-[#697380]">دلیل لغو: تداخل با امتحان دانشگاهی.</p>
+            </div>
+          </div>
+
+        </main>
+
+        <!-- ===================================================================== -->
+        <!-- SECTION 2: MENTOR AVAILABILITY CONFIGURATION (تنظیمات مربیگری)        -->
+        <!-- ===================================================================== -->
+        <main id="section-schedule" class="max-w-5xl mx-auto px-5 md:px-8 py-8 space-y-8 hidden">
+          
+          <div class="border-b border-[#EAE5DC] pb-6">
+            <span class="text-xs font-bold text-[#C86D3B] uppercase tracking-wider">پنل اختصاصی مربی</span>
+            <h1 class="text-2xl md:text-3xl font-extrabold text-[#16222F] mt-1">مدیریت ساعات حضور و سرفصل‌ها</h1>
+            <p class="text-xs text-[#5A6472] mt-1 leading-relaxed">
+              روزهای هفته، بازه‌های زمانی در دسترس، مدت زمان جلسات و قوانین رزرو را تنظیم کنید.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- Left: Weekly Schedule Matrix (7 Cols) -->
+            <div class="lg:col-span-7 bg-white rounded-3xl border border-[#E5DFD5] p-6 space-y-5 shadow-xs">
+              
+              <div class="flex items-center justify-between border-b border-[#EAE5DC] pb-3">
+                <h3 class="text-base font-bold text-[#16222F]">ساعات کاری هفتگی مربیگری</h3>
+                <span class="text-xs font-bold text-[#C86D3B] bg-[#FAF6F0] px-3 py-1 rounded-full border border-[#EBDCCF]">
+                  ساعت رسمی ایران
+                </span>
+              </div>
+
+              <!-- Day Rows -->
+              <div class="space-y-3 text-xs">
+                
+                <!-- شنبه -->
+                <div class="flex items-center justify-between p-3.5 rounded-2xl bg-[#FAF8F5] border border-[#E5DFD5]">
+                  <div class="flex items-center gap-3">
+                    <input type="checkbox" checked class="w-4 h-4 rounded text-[#16222F]">
+                    <span class="font-bold text-[#16222F] w-16">شنبه</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <input type="text" value="۱۷:۰۰" class="w-16 p-1.5 rounded-xl border border-[#DDD7CD] text-center font-bold text-[#16222F] bg-white">
+                    <span class="text-[#808996]">تا</span>
+                    <input type="text" value="۲۱:۰۰" class="w-16 p-1.5 rounded-xl border border-[#DDD7CD] text-center font-bold text-[#16222F] bg-white">
+                  </div>
+                </div>
+
+                <!-- دوشنبه -->
+                <div class="flex items-center justify-between p-3.5 rounded-2xl bg-[#FAF8F5] border border-[#E5DFD5]">
+                  <div class="flex items-center gap-3">
+                    <input type="checkbox" checked class="w-4 h-4 rounded text-[#16222F]">
+                    <span class="font-bold text-[#16222F] w-16">دوشنبه</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <input type="text" value="۱۸:۰۰" class="w-16 p-1.5 rounded-xl border border-[#DDD7CD] text-center font-bold text-[#16222F] bg-white">
+                    <span class="text-[#808996]">تا</span>
+                    <input type="text" value="۲۲:۰۰" class="w-16 p-1.5 rounded-xl border border-[#DDD7CD] text-center font-bold text-[#16222F] bg-white">
+                  </div>
+                </div>
+
+                <!-- پنجشنبه -->
+                <div class="flex items-center justify-between p-3.5 rounded-2xl bg-[#FAF8F5] border border-[#E5DFD5]">
+                  <div class="flex items-center gap-3">
+                    <input type="checkbox" checked class="w-4 h-4 rounded text-[#16222F]">
+                    <span class="font-bold text-[#16222F] w-16">پنجشنبه</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <input type="text" value="۱۴:۰۰" class="w-16 p-1.5 rounded-xl border border-[#DDD7CD] text-center font-bold text-[#16222F] bg-white">
+                    <span class="text-[#808996]">تا</span>
+                    <input type="text" value="۱۹:۰۰" class="w-16 p-1.5 rounded-xl border border-[#DDD7CD] text-center font-bold text-[#16222F] bg-white">
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Buffer Times -->
+              <div class="pt-4 border-t border-[#EAE5DC] grid grid-cols-2 gap-4 text-xs">
+                <div>
+                  <label class="block font-bold text-[#16222F] mb-1">زمان استراحت بین جلسات:</label>
+                  <select class="w-full p-2.5 rounded-xl border border-[#DDD7CD] bg-white text-[#16222F]">
+                    <option>۱۵ دقیقه تنفس</option>
+                    <option>۳۰ دقیقه تنفس</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block font-bold text-[#16222F] mb-1">حداقل زمان اطلاع قبلی:</label>
+                  <select class="w-full p-2.5 rounded-xl border border-[#DDD7CD] bg-white text-[#16222F]">
+                    <option>۲۴ ساعت قبل</option>
+                    <option>۴۸ ساعت قبل</option>
+                  </select>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Right: Curriculum Topics Management (5 Cols) -->
+            <div class="lg:col-span-5 bg-white rounded-3xl border border-[#E5DFD5] p-6 space-y-5 shadow-xs">
+              
+              <div class="flex items-center justify-between border-b border-[#EAE5DC] pb-3">
+                <h3 class="text-base font-bold text-[#16222F]">سرفصل‌های مربیگری من</h3>
+                <button class="text-xs text-[#C86D3B] font-bold hover:underline">+ افزودن سرفصل</button>
+              </div>
+
+              <div class="space-y-3 text-xs">
+                <div class="p-4 rounded-2xl bg-[#FAF8F5] border border-[#E5DFD5] space-y-1">
+                  <div class="flex justify-between font-bold text-[#16222F]">
+                    <span>بررسی معماری سیستم</span>
+                    <span class="text-[#C86D3B]">۴۵ دقیقه</span>
+                  </div>
+                  <p class="text-[#697380] text-[11px]">نقد معماری مایکروسرویس، تاب‌آوری و زیرساخت توزیع‌شده.</p>
+                </div>
+
+                <div class="p-4 rounded-2xl bg-[#FAF8F5] border border-[#E5DFD5] space-y-1">
+                  <div class="flex justify-between font-bold text-[#16222F]">
+                    <span>مسیر شغلی به سطح Staff</span>
+                    <span class="text-[#C86D3B]">۳۰ دقیقه</span>
+                  </div>
+                  <p class="text-[#697380] text-[11px]">راهنمایی مهندسان ارشد برای عبور به سطح رهبری فنی.</p>
+                </div>
+              </div>
+
+              <button class="w-full py-3 px-4 rounded-xl bg-[#16222F] text-white font-bold text-xs shadow-xs hover:bg-[#25374C] smooth-transition">
+                ذخیره تغییرات برنامه هفتگی
+              </button>
+
+            </div>
+
+          </div>
+
+        </main>
+
+        <!-- ===================================================================== -->
+        <!-- SECTION 3: ARCHITECTURAL EMPTY STATES (حالت‌های خالی)                  -->
+        <!-- ===================================================================== -->
+        <main id="section-empty" class="max-w-3xl mx-auto px-5 md:px-8 py-16 text-center space-y-6 hidden">
+          
+          <!-- Custom Vector Graphic Empty State -->
+          <div class="w-28 h-28 mx-auto rounded-3xl bg-white border border-[#E5DFD5] flex items-center justify-center p-6 shadow-sm">
+            <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+              <!-- Calendar Frame -->
+              <rect x="8" y="14" width="48" height="42" rx="10" stroke="#16222F" stroke-width="2.5" fill="#FAF8F5"/>
+              <line x1="8" y1="26" x2="56" y2="26" stroke="#E5DFD5" stroke-width="2"/>
+              <!-- Calendar Rings -->
+              <rect x="18" y="8" width="4" height="10" rx="2" fill="#C86D3B"/>
+              <rect x="42" y="8" width="4" height="10" rx="2" fill="#C86D3B"/>
+              <!-- Guiding Star / Compass Mark inside Empty Calendar -->
+              <circle cx="32" cy="41" r="8" fill="#F2EFE9"/>
+              <path d="M32 36L33.5 39.5L37 41L33.5 42.5L32 46L30.5 42.5L27 41L30.5 39.5L32 36Z" fill="#C86D3B"/>
+            </svg>
+          </div>
+
+          <div class="max-w-md mx-auto space-y-2">
+            <h2 class="text-2xl font-bold text-[#16222F]">هنوز جلسه‌ای برای این بخش ثبت نشده است</h2>
+            <p class="text-xs text-[#5A6472] leading-relaxed">
+              شما در حال حاضر هیچ جلسه فعالی در این بخش ندارید. می‌توانید با مرور دایرکتوری، مربی متناسب با اهداف خود را پیدا و اولین گفتگوی خود را تنظیم کنید.
+            </p>
+          </div>
+
+          <div class="pt-2">
+            <button onclick="switchSection('sessions')" class="px-6 py-3 rounded-2xl bg-[#16222F] hover:bg-[#25374C] text-white text-xs font-bold shadow-sm smooth-transition">
+              مشاهده فهرست مربیان و رزرو جلسه
+            </button>
+          </div>
+
+        </main>
+
+      </div>
+
+      <!-- Footer -->
+      <footer class="bg-white border-t border-[#EAE5DC] px-5 md:px-8 py-6 mt-12 text-xs text-[#697380]">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-[#16222F]">پـیـرو (Peyroo)</span>
+            <span>•</span>
+            <span>داشبورد یکپارچه دانش‌پذیر و مربی</span>
+          </div>
+          <div>پایبندی به استانداردهای نرم‌افزاری و دسترس‌پذیری وب (WCAG 2.2 AA)</div>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <!-- SCRIPT -->
+  <script>
+    function setViewport(vp) {
+      const container = document.getElementById('canvas-container');
+      const bDesktop = document.getElementById('vp-desktop');
+      const bTablet = document.getElementById('vp-tablet');
+      const bMobile = document.getElementById('vp-mobile');
+
+      [bDesktop, bTablet, bMobile].forEach(b => b.className = 'px-3 py-1.5 rounded-lg text-[#697380] hover:text-[#16222F]');
+
+      if (vp === 'desktop') {
+        container.style.maxWidth = '1152px';
+        bDesktop.className = 'px-3 py-1.5 rounded-lg bg-[#16222F] text-white font-medium shadow-xs';
+      } else if (vp === 'tablet') {
+        container.style.maxWidth = '768px';
+        bTablet.className = 'px-3 py-1.5 rounded-lg bg-[#16222F] text-white font-medium shadow-xs';
+      } else if (vp === 'mobile') {
+        container.style.maxWidth = '375px';
+        bMobile.className = 'px-3 py-1.5 rounded-lg bg-[#16222F] text-white font-medium shadow-xs';
+      }
+    }
+
+    function switchSection(sec) {
+      document.getElementById('section-sessions').classList.add('hidden');
+      document.getElementById('section-schedule').classList.add('hidden');
+      document.getElementById('section-empty').classList.add('hidden');
+
+      ['nav-sessions', 'nav-schedule', 'nav-empty'].forEach(id => {
+        document.getElementById(id).className = 'px-3.5 py-2 rounded-xl font-medium text-[#4F5966] hover:text-[#16222F] hover:bg-[#F5F2EB] smooth-transition';
+      });
+
+      if (sec === 'sessions') {
+        document.getElementById('section-sessions').classList.remove('hidden');
+        document.getElementById('nav-sessions').className = 'px-3.5 py-2 rounded-xl font-bold bg-[#16222F] text-white shadow-xs smooth-transition';
+      } else if (sec === 'schedule') {
+        document.getElementById('section-schedule').classList.remove('hidden');
+        document.getElementById('nav-schedule').className = 'px-3.5 py-2 rounded-xl font-bold bg-[#16222F] text-white shadow-xs smooth-transition';
+      } else if (sec === 'empty') {
+        document.getElementById('section-empty').classList.remove('hidden');
+        document.getElementById('nav-empty').className = 'px-3.5 py-2 rounded-xl font-bold bg-[#16222F] text-white shadow-xs smooth-transition';
+      }
+    }
+
+    function filterLifecycle(tab) {
+      document.getElementById('list-upcoming').classList.add('hidden');
+      document.getElementById('list-completed').classList.add('hidden');
+      document.getElementById('list-cancelled').classList.add('hidden');
+
+      ['tab-upcoming', 'tab-completed', 'tab-cancelled'].forEach(id => {
+        document.getElementById(id).className = 'px-4 py-2 rounded-xl font-medium text-[#4F5966] hover:text-[#16222F] smooth-transition';
+      });
+
+      if (tab === 'upcoming') {
+        document.getElementById('list-upcoming').classList.remove('hidden');
+        document.getElementById('tab-upcoming').className = 'px-4 py-2 rounded-xl font-bold bg-[#16222F] text-white shadow-xs smooth-transition';
+      } else if (tab === 'completed') {
+        document.getElementById('list-completed').classList.remove('hidden');
+        document.getElementById('tab-completed').className = 'px-4 py-2 rounded-xl font-bold bg-[#16222F] text-white shadow-xs smooth-transition';
+      } else if (tab === 'cancelled') {
+        document.getElementById('list-cancelled').classList.remove('hidden');
+        document.getElementById('tab-cancelled').className = 'px-4 py-2 rounded-xl font-bold bg-[#16222F] text-white shadow-xs smooth-transition';
+      }
+    }
+  </script>
+
+</body>
+</html>

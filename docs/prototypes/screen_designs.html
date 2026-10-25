@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>پیرو (Peyroo) — سکوی ملی مربیگری و انتقال تجربه</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    /* Smooth Persian Typography Hierarchy */
+    body, button, input, select, textarea {
+      font-family: "Vazirmatn", "Dana", "Shabnam", "Segoe UI", Tahoma, sans-serif !important;
+      letter-spacing: normal !important; /* Critical for Persian cursive ligatures */
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* Soft Persian numerals */
+    .num-fa {
+      font-feature-settings: "ss01" on, "tnum" on;
+    }
+
+    /* Smooth focus rings */
+    button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible {
+      outline: 2.5px solid #16222F !important;
+      outline-offset: 3px !important;
+      border-radius: 12px;
+    }
+
+    /* Soft organic transition */
+    .smooth-transition {
+      transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+  </style>
+</head>
+<body class="bg-[#F2EFE9] text-[#1E2631] min-h-screen antialiased p-3 md:p-6">
+
+  <!-- ========================================================================= -->
+  <!-- CONTROL BAR: VIEWPORT SIMULATION (PERSION)                                -->
+  <!-- ========================================================================= -->
+  <div class="max-w-6xl mx-auto mb-6 bg-white/80 backdrop-blur-md border border-[#E2DDD5] rounded-2xl p-3 md:p-4 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+    <div class="flex items-center gap-3">
+      <span class="w-3 h-3 rounded-full bg-emerald-500 shadow-xs"></span>
+      <div>
+        <span class="text-xs font-bold text-[#16222F]">طراحی ویژه عرضه ملی و بومی (۱۰۰٪ فارسی)</span>
+        <span class="text-[11px] text-[#697380] block sm:inline sm:mr-2">تایپوگرافی روان، فرم‌های نرم، بدون گوشه‌های تیز</span>
+      </div>
+    </div>
+
+    <!-- Viewport Buttons -->
+    <div class="flex items-center bg-[#F7F6F2] rounded-xl p-1 border border-[#E2DDD5] text-xs">
+      <button onclick="setViewport('desktop')" id="vp-desktop" class="px-3 py-1.5 rounded-lg bg-[#16222F] text-white font-medium shadow-xs">
+        دسکتاپ (۱۴۴۰)
+      </button>
+      <button onclick="setViewport('tablet')" id="vp-tablet" class="px-3 py-1.5 rounded-lg text-[#697380] hover:text-[#16222F]">
+        تبلت (۷۶۸)
+      </button>
+      <button onclick="setViewport('mobile')" id="vp-mobile" class="px-3 py-1.5 rounded-lg text-[#697380] hover:text-[#16222F]">
+        موبایل (۳۷۵)
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MAIN APP CONTAINER                                                        -->
+  <!-- ========================================================================= -->
+  <div id="canvas-container" class="mx-auto w-full max-w-6xl smooth-transition">
+    
+    <div class="bg-[#FAF9F6] text-[#1E2631] rounded-3xl border border-[#E5DFD5] shadow-xl overflow-hidden min-h-[960px] flex flex-col justify-between">
+
+      <div>
+        <!-- --------------------------------------------------------------------- -->
+        <!-- 1. NAVIGATION HEADER (NATIVE PERSIAN)                                 -->
+        <!-- --------------------------------------------------------------------- -->
+        <header class="bg-white/90 backdrop-blur-sm border-b border-[#EAE5DC] sticky top-0 z-30 px-5 md:px-8 py-4">
+          <div class="max-w-5xl mx-auto flex items-center justify-between gap-4">
+            
+            <!-- Brandmark & Persian Title -->
+            <div class="flex items-center gap-3.5">
+              <!-- Softened Logo Icon with Persian 'پ' Constellation -->
+              <div class="w-11 h-11 rounded-2xl bg-[#16222F] flex items-center justify-center text-white shadow-md">
+                <svg width="28" height="28" viewBox="0 0 44 44" fill="none">
+                  <path d="M12 28L22 17L32 28" stroke="#C86D3B" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="22" cy="11" r="2.2" fill="#FAF9F5"/>
+                  <circle cx="16" cy="8" r="1.8" fill="#FAF9F5"/>
+                  <circle cx="28" cy="8" r="1.8" fill="#FAF9F5"/>
+                </svg>
+              </div>
+
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xl font-bold text-[#16222F]">پـیـرو</span>
+                  <span class="text-[11px] px-2 py-0.5 rounded-full bg-[#C86D3B]/10 text-[#C86D3B] font-semibold border border-[#C86D3B]/20">
+                    سکوی ملی
+                  </span>
+                </div>
+                <div class="text-[11px] text-[#697380] mt-0.5">انتقال تجربه و مربیگری ۱-به-۱ متخصصان صنعت</div>
+              </div>
+            </div>
+
+            <!-- Search Field -->
+            <div class="flex-1 max-w-md hidden md:block">
+              <div class="relative">
+                <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none text-[#808996]">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                  </svg>
+                </div>
+                <input type="text" placeholder="جستجوی مربی، تخصص یا شرکت (مثلاً: معماری توزیع‌شده، دیزاین سیستم)..." class="w-full bg-[#F5F2EB] border border-[#DDD7CD] rounded-2xl ps-10 pe-4 py-2.5 text-xs text-[#16222F] placeholder-[#808996] focus:bg-white focus:border-[#16222F] smooth-transition">
+              </div>
+            </div>
+
+            <!-- Header Actions -->
+            <div class="flex items-center gap-3 text-xs">
+              <a href="#" class="hidden sm:inline-block font-medium text-[#4F5966] hover:text-[#16222F]">درباره پیرو</a>
+              <a href="#" class="hidden sm:inline-block font-medium text-[#4F5966] hover:text-[#16222F]">ثبت‌نام به عنوان مربی</a>
+              <button class="px-4 py-2.5 rounded-xl bg-[#16222F] hover:bg-[#25374C] text-white font-medium shadow-sm smooth-transition">
+                ورود به حساب
+              </button>
+            </div>
+
+          </div>
+        </header>
+
+        <!-- --------------------------------------------------------------------- -->
+        <!-- 2. DIRECTORY HERO & DOMAIN SELECTOR (SMOOTH ROUNDED)                  -->
+        <!-- --------------------------------------------------------------------- -->
+        <section class="bg-white border-b border-[#EAE5DC] px-5 md:px-8 py-8">
+          <div class="max-w-5xl mx-auto space-y-6">
+            
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+              <div>
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF6F0] text-[#C86D3B] border border-[#EBDCCF] text-xs font-semibold mb-2.5">
+                  <span>✦</span>
+                  <span>جلسات تخصصی و هدفمند بدون هزینه</span>
+                </div>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-[#16222F] leading-tight">
+                  گفتگوی مستقیم با مربیان با‌تجربه
+                </h1>
+                <p class="text-xs md:text-sm text-[#5A6472] mt-1.5 leading-relaxed max-w-2xl">
+                  مسیر شغلی خود را با بازخورد صادقانه هموار کنید. جلسه ۳۰ تا ۴۵ دقیقه‌ای رزرو کنید، چالش‌های فنی خود را مطرح کنید و از راهنمایی‌های واقعی بهره‌مند شوید.
+                </p>
+              </div>
+
+              <!-- Timezone & Calendar Indicator -->
+              <div class="flex items-center gap-2 bg-[#F8F6F1] px-3 py-2 rounded-2xl border border-[#E5DFD5] text-xs">
+                <span class="text-[#697380]">مبنای زمان‌بندی:</span>
+                <span class="font-bold text-[#16222F] bg-white px-2.5 py-1 rounded-xl border border-[#DDD7CD] shadow-2xs">
+                  ساعت رسمی ایران (تهران)
+                </span>
+              </div>
+            </div>
+
+            <!-- Smooth Domain Pills (Soft Rounded Cards) -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+              
+              <!-- Tab 1: Engineering (Active) -->
+              <button onclick="filterDomain('eng')" id="tab-eng" class="flex items-center gap-3 p-3 rounded-2xl border-2 border-[#16222F] bg-[#FAF8F5] shadow-xs text-start smooth-transition">
+                <div class="w-10 h-10 rounded-xl bg-[#16222F] flex items-center justify-center text-white shrink-0">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="16 18 22 12 16 6"/>
+                    <polyline points="8 6 2 12 8 18"/>
+                    <circle cx="12" cy="12" r="2" fill="#C86D3B" stroke="none"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-[#16222F]">مهندسی نرم‌افزار</div>
+                  <div class="text-[11px] text-[#697380] mt-0.5">معماری و کدنویسی</div>
+                </div>
+              </button>
+
+              <!-- Tab 2: Product Design -->
+              <button onclick="filterDomain('design')" id="tab-design" class="flex items-center gap-3 p-3 rounded-2xl border border-[#E5DFD5] bg-white hover:border-[#16222F] text-start smooth-transition">
+                <div class="w-10 h-10 rounded-xl bg-[#F6F3EC] border border-[#DDD7CD] flex items-center justify-center text-[#16222F] shrink-0">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="4"/>
+                    <line x1="3" y1="9" x2="21" y2="9"/>
+                    <line x1="9" y1="21" x2="9" y2="9"/>
+                    <circle cx="6" cy="6" r="1.2" fill="#C86D3B" stroke="none"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-[#16222F]">طراحی محصول و تجربه</div>
+                  <div class="text-[11px] text-[#697380] mt-0.5">UI/UX و دیزاین سیستم</div>
+                </div>
+              </button>
+
+              <!-- Tab 3: Management -->
+              <button onclick="filterDomain('mgmt')" id="tab-mgmt" class="flex items-center gap-3 p-3 rounded-2xl border border-[#E5DFD5] bg-white hover:border-[#16222F] text-start smooth-transition">
+                <div class="w-10 h-10 rounded-xl bg-[#F6F3EC] border border-[#DDD7CD] flex items-center justify-center text-[#16222F] shrink-0">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="9"/>
+                    <polygon points="12 6 15 12 9 12" fill="#C86D3B" stroke="none"/>
+                    <line x1="12" y1="12" x2="12" y2="18"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-[#16222F]">مدیریت محصول</div>
+                  <div class="text-[11px] text-[#697380] mt-0.5">استراتژی و هدایت تیم</div>
+                </div>
+              </button>
+
+              <!-- Tab 4: Data & AI -->
+              <button onclick="filterDomain('data')" id="tab-data" class="flex items-center gap-3 p-3 rounded-2xl border border-[#E5DFD5] bg-white hover:border-[#16222F] text-start smooth-transition">
+                <div class="w-10 h-10 rounded-xl bg-[#F6F3EC] border border-[#DDD7CD] flex items-center justify-center text-[#16222F] shrink-0">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="6" cy="6" r="3"/>
+                    <circle cx="18" cy="6" r="3"/>
+                    <circle cx="12" cy="18" r="3"/>
+                    <line x1="8.5" y1="7.5" x2="15.5" y2="7.5"/>
+                    <line x1="7.5" y1="8.5" x2="10.5" y2="15.5"/>
+                    <line x1="16.5" y1="8.5" x2="13.5" y2="15.5"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-[#16222F]">داده و هوش مصنوعی</div>
+                  <div class="text-[11px] text-[#697380] mt-0.5">مدل‌سازی و تحلیل</div>
+                </div>
+              </button>
+
+            </div>
+
+          </div>
+        </section>
+
+        <!-- --------------------------------------------------------------------- -->
+        <!-- 3. MENTOR CARDS: SOFTENED ARCHITECTURAL DOSSIER                       -->
+        <!-- --------------------------------------------------------------------- -->
+        <main class="max-w-5xl mx-auto px-5 md:px-8 py-8 space-y-6">
+          
+          <div class="flex items-center justify-between text-xs text-[#697380]">
+            <div>نمایش <span class="font-bold text-[#16222F]">۲ مربی تاییدشده</span> با زمان‌های آزاد در این هفته</div>
+            <div class="flex items-center gap-2">
+              <span>زبان گفتگو:</span>
+              <span class="font-semibold text-[#16222F] bg-white px-2.5 py-1 rounded-xl border border-[#E5DFD5]">فارسی (اصلی)</span>
+            </div>
+          </div>
+
+          <!-- ==================== DOSSIER CARD 1: آرش مرادی ==================== -->
+          <article class="bg-white rounded-3xl border border-[#E5DFD5] p-6 shadow-sm hover:shadow-md smooth-transition relative overflow-hidden">
+            
+            <!-- Softened Pathway Accent Line (Smooth rounded capsule at start border) -->
+            <div class="absolute top-4 start-0 bottom-4 w-1.5 bg-[#C86D3B] rounded-e-full"></div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start pe-2">
+              
+              <!-- Right Column (In RTL): Identity & Curriculum (5 Cols) -->
+              <div class="lg:col-span-5 space-y-4">
+                
+                <div class="flex items-start gap-4">
+                  <!-- Soft Avatar with Verified Seal -->
+                  <div class="relative shrink-0">
+                    <div class="w-14 h-14 rounded-2xl bg-[#16222F] text-white flex items-center justify-center font-bold text-base shadow-xs">
+                      آ.م
+                    </div>
+                    <!-- Verified Practitioner Seal -->
+                    <div class="absolute -bottom-1 -start-1 w-5 h-5 rounded-full bg-[#FAF9F5] p-0.5 shadow-xs" title="مربی تاییدشده پیرو">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2L15 5H19V9L22 12L19 15V19H15L12 22L9 19H5V15L2 12L5 9V5H9L12 2Z" fill="#16222F"/>
+                        <path d="M12 7L13.5 10.5L17 12L13.5 13.5L12 17L10.5 13.5L7 12L10.5 10.5L12 7Z" fill="#C86D3B"/>
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <h2 class="text-lg font-bold text-[#16222F]">آرش مرادی</h2>
+                      <span class="text-[11px] px-2 py-0.5 rounded-full bg-[#F5F2EC] text-[#16222F] border border-[#DDD7CD] font-medium">
+                        ۱۱ سال تجربه
+                      </span>
+                    </div>
+                    <p class="text-xs font-semibold text-[#4F5966] mt-1">معمار ارشد سیستم و لید زیرساخت توزیع‌شده</p>
+                    
+                    <div class="flex items-center gap-3 mt-1.5 text-xs text-[#697380]">
+                      <span class="flex items-center gap-1 font-bold text-[#16222F]">
+                        <span class="text-[#C86D3B]">★</span> ۴.۹۷
+                        <span class="font-normal text-[#808996]">(۵۸ جلسه)</span>
+                      </span>
+                      <span>•</span>
+                      <span class="text-[#4F5966]">فارسی</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Bio with Relaxed Line-Height -->
+                <p class="text-xs text-[#4F5966] leading-relaxed">
+                  راهنمایی مهندسان بک‌اند در طراحی سیستم‌های توزیع‌شده با قابلیت اطمینان بالا، شکستن مونولیت‌ها و عبور از چالش‌های همزمانی داده. تمرکز من بر یادگیری عملگرایانه است.
+                </p>
+
+                <!-- Curriculum Offerings (Structured Dossier Matrix) -->
+                <div class="space-y-2 pt-1">
+                  <div class="text-[11px] font-bold text-[#697380]">سرفصل‌های پیشنهادی برای گفتگو:</div>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                    <div class="p-3 rounded-2xl border border-[#E5DFD5] bg-[#FAF8F5]">
+                      <div class="font-bold text-[#16222F]">بررسی معماری سیستم</div>
+                      <div class="text-[11px] text-[#697380] mt-0.5">۴۵ دقیقه • نقد معماری و چالش‌ها</div>
+                    </div>
+                    <div class="p-3 rounded-2xl border border-[#E5DFD5] bg-[#FAF8F5]">
+                      <div class="font-bold text-[#16222F]">مسیر رشد به سطح لید و Staff</div>
+                      <div class="text-[11px] text-[#697380] mt-0.5">۳۰ دقیقه • برنامه‌ریزی ارتقای شغلی</div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Left Column (In RTL): Availability Bridge (7 Cols) -->
+              <div class="lg:col-span-7 bg-[#FAF8F5] rounded-3xl border border-[#E5DFD5] p-5 space-y-4">
+                
+                <div class="flex items-center justify-between border-b border-[#EAE5DC] pb-3">
+                  <div>
+                    <span class="text-[11px] font-bold text-[#C86D3B]">پل زمان‌بندی جلسات</span>
+                    <div class="text-xs font-bold text-[#16222F] mt-0.5">نزدیک‌ترین زمان‌های آزاد</div>
+                  </div>
+                  <div class="text-start text-xs font-medium text-[#697380] bg-white px-3 py-1 rounded-full border border-[#DDD7CD]">
+                    ساعت رسمی ایران (تهران)
+                  </div>
+                </div>
+
+                <!-- Solar Hijri Date Selector Chips -->
+                <div class="flex gap-2.5">
+                  <button class="flex-1 py-2 px-3 rounded-2xl bg-white border-2 border-[#16222F] text-center shadow-xs">
+                    <div class="text-[11px] text-[#697380] font-medium">پنجشنبه</div>
+                    <div class="text-xs font-bold text-[#16222F] mt-0.5">۸ آبان</div>
+                  </button>
+                  <button class="flex-1 py-2 px-3 rounded-2xl bg-white border border-[#DDD7CD] text-center hover:border-[#16222F] smooth-transition">
+                    <div class="text-[11px] text-[#697380] font-medium">شنبه</div>
+                    <div class="text-xs font-bold text-[#4F5966] mt-0.5">۱۰ آبان</div>
+                  </button>
+                  <button class="flex-1 py-2 px-3 rounded-2xl bg-white border border-[#DDD7CD] text-center hover:border-[#16222F] smooth-transition">
+                    <div class="text-[11px] text-[#697380] font-medium">دوشنبه</div>
+                    <div class="text-xs font-bold text-[#4F5966] mt-0.5">۱۲ آبان</div>
+                  </button>
+                </div>
+
+                <!-- Slot Selection Grid -->
+                <div class="space-y-1.5">
+                  <div class="text-[11px] font-semibold text-[#697380]">یک بازه زمانی انتخاب کنید:</div>
+                  <div class="grid grid-cols-2 gap-2.5 text-xs">
+                    <button onclick="selectPersianSlot(this, 'آرش مرادی', 'بررسی معماری سیستم', 'پنجشنبه ۸ آبان ساعت ۱۵:۰۰')" class="slot-pill py-2.5 px-3.5 rounded-2xl bg-[#C86D3B] text-white font-semibold text-center shadow-xs flex items-center justify-between">
+                      <span>۱۵:۰۰ تا ۱۵:۴۵</span>
+                      <span class="text-[10px] bg-black/20 px-2 py-0.5 rounded-full">انتخاب‌شده</span>
+                    </button>
+                    <button onclick="selectPersianSlot(this, 'آرش مرادی', 'بررسی معماری سیستم', 'پنجشنبه ۸ آبان ساعت ۱۶:۳۰')" class="slot-pill py-2.5 px-3.5 rounded-2xl bg-white border border-[#DDD7CD] text-[#4F5966] text-center hover:border-[#16222F] smooth-transition">
+                      ۱۶:۳۰ تا ۱۷:۱۵
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Action Footer -->
+                <div class="pt-3 border-t border-[#EAE5DC] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                  <div class="text-[11px] text-[#697380]">
+                    لینک اتاق مجازی (Google Meet) پس از تایید ارائه می‌شود.
+                  </div>
+                  <button onclick="openPersianModal('آرش مرادی', 'بررسی معماری سیستم', 'پنجشنبه ۸ آبان ساعت ۱۵:۰۰')" class="w-full sm:w-auto py-2.5 px-5 rounded-xl bg-[#16222F] hover:bg-[#25374C] text-white font-medium text-xs smooth-transition shadow-sm flex items-center justify-center gap-2">
+                    <span>ادامه و تکمیل رزرو با آرش</span>
+                    <span>←</span>
+                  </button>
+                </div>
+
+              </div>
+
+            </div>
+          </article>
+
+
+          <!-- ==================== DOSSIER CARD 2: سارا رضایی ==================== -->
+          <article class="bg-white rounded-3xl border border-[#E5DFD5] p-6 shadow-sm hover:shadow-md smooth-transition relative overflow-hidden">
+            <div class="absolute top-4 start-0 bottom-4 w-1.5 bg-[#C86D3B] rounded-e-full"></div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start pe-2">
+              
+              <div class="lg:col-span-5 space-y-4">
+                
+                <div class="flex items-start gap-4">
+                  <div class="relative shrink-0">
+                    <div class="w-14 h-14 rounded-2xl bg-[#EAE5DC] text-[#16222F] border border-[#DDD7CD] flex items-center justify-center font-bold text-base shadow-xs">
+                      س.ر
+                    </div>
+                    <div class="absolute -bottom-1 -start-1 w-5 h-5 rounded-full bg-[#FAF9F5] p-0.5 shadow-xs" title="مربی تاییدشده پیرو">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2L15 5H19V9L22 12L19 15V19H15L12 22L9 19H5V15L2 12L5 9V5H9L12 2Z" fill="#16222F"/>
+                        <path d="M12 7L13.5 10.5L17 12L13.5 13.5L12 17L10.5 13.5L7 12L10.5 10.5L12 7Z" fill="#C86D3B"/>
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <h2 class="text-lg font-bold text-[#16222F]">سارا رضایی</h2>
+                      <span class="text-[11px] px-2 py-0.5 rounded-full bg-[#F5F2EC] text-[#16222F] border border-[#DDD7CD] font-medium">
+                        ۸ سال تجربه
+                      </span>
+                    </div>
+                    <p class="text-xs font-semibold text-[#4F5966] mt-1">طراح ارشد محصول و سرپرست دیزاین سیستم</p>
+                    
+                    <div class="flex items-center gap-3 mt-1.5 text-xs text-[#697380]">
+                      <span class="flex items-center gap-1 font-bold text-[#16222F]">
+                        <span class="text-[#C86D3B]">★</span> ۴.۹۹
+                        <span class="font-normal text-[#808996]">(۴۲ جلسه)</span>
+                      </span>
+                      <span>•</span>
+                      <span class="text-[#4F5966]">فارسی</span>
+                    </div>
+                  </div>
+                </div>
+
+                <p class="text-xs text-[#4F5966] leading-relaxed">
+                  تمرکز ویژه بر تدوین توکن‌های دیزاین، تجربه کاربری پلتفرم‌های پیچیده و آماده‌سازی پورتفولیوهای حرفه‌ای جهت حضور در تیم‌های تراز اول محصولی.
+                </p>
+
+                <div class="space-y-2 pt-1">
+                  <div class="text-[11px] font-bold text-[#697380]">سرفصل‌های پیشنهادی برای گفتگو:</div>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                    <div class="p-3 rounded-2xl border border-[#E5DFD5] bg-[#FAF8F5]">
+                      <div class="font-bold text-[#16222F]">بررسی و نقد پورتفولیو</div>
+                      <div class="text-[11px] text-[#697380] mt-0.5">۴۵ دقیقه • تحلیل مطالعات موردی</div>
+                    </div>
+                    <div class="p-3 rounded-2xl border border-[#E5DFD5] bg-[#FAF8F5]">
+                      <div class="font-bold text-[#16222F]">اصول مقیاس‌پذیری دیزاین سیستم</div>
+                      <div class="text-[11px] text-[#697380] mt-0.5">۳۰ دقیقه • راهبری توکن‌ها و کامپوننت</div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="lg:col-span-7 bg-[#FAF8F5] rounded-3xl border border-[#E5DFD5] p-5 space-y-4">
+                
+                <div class="flex items-center justify-between border-b border-[#EAE5DC] pb-3">
+                  <div>
+                    <span class="text-[11px] font-bold text-[#C86D3B]">پل زمان‌بندی جلسات</span>
+                    <div class="text-xs font-bold text-[#16222F] mt-0.5">نزدیک‌ترین زمان‌های آزاد</div>
+                  </div>
+                  <div class="text-start text-xs font-medium text-[#697380] bg-white px-3 py-1 rounded-full border border-[#DDD7CD]">
+                    ساعت رسمی ایران (تهران)
+                  </div>
+                </div>
+
+                <div class="flex gap-2.5">
+                  <button class="flex-1 py-2 px-3 rounded-2xl bg-white border-2 border-[#16222F] text-center shadow-xs">
+                    <div class="text-[11px] text-[#697380] font-medium">جمعه</div>
+                    <div class="text-xs font-bold text-[#16222F] mt-0.5">۹ آبان</div>
+                  </button>
+                  <button class="flex-1 py-2 px-3 rounded-2xl bg-white border border-[#DDD7CD] text-center hover:border-[#16222F] smooth-transition">
+                    <div class="text-[11px] text-[#697380] font-medium">یکشنبه</div>
+                    <div class="text-xs font-bold text-[#4F5966] mt-0.5">۱۱ آبان</div>
+                  </button>
+                  <button class="flex-1 py-2 px-3 rounded-2xl bg-white border border-[#DDD7CD] text-center hover:border-[#16222F] smooth-transition">
+                    <div class="text-[11px] text-[#697380] font-medium">سه‌شنبه</div>
+                    <div class="text-xs font-bold text-[#4F5966] mt-0.5">۱۳ آبان</div>
+                  </button>
+                </div>
+
+                <div class="space-y-1.5">
+                  <div class="text-[11px] font-semibold text-[#697380]">یک بازه زمانی انتخاب کنید:</div>
+                  <div class="grid grid-cols-2 gap-2.5 text-xs">
+                    <button onclick="selectPersianSlot(this, 'سارا رضایی', 'بررسی و نقد پورتفولیو', 'جمعه ۹ آبان ساعت ۱۴:۰۰')" class="slot-pill py-2.5 px-3.5 rounded-2xl bg-white border border-[#DDD7CD] text-[#4F5966] text-center hover:border-[#16222F] smooth-transition">
+                      ۱۴:۰۰ تا ۱۴:۴۵
+                    </button>
+                    <button onclick="selectPersianSlot(this, 'سارا رضایی', 'بررسی و نقد پورتفولیو', 'جمعه ۹ آبان ساعت ۱۵:۳۰')" class="slot-pill py-2.5 px-3.5 rounded-2xl bg-white border border-[#DDD7CD] text-[#4F5966] text-center hover:border-[#16222F] smooth-transition">
+                      ۱۵:۳۰ تا ۱۶:۱۵
+                    </button>
+                  </div>
+                </div>
+
+                <div class="pt-3 border-t border-[#EAE5DC] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                  <div class="text-[11px] text-[#697380]">
+                    لینک اتاق مجازی (Google Meet) پس از تایید ارائه می‌شود.
+                  </div>
+                  <button onclick="openPersianModal('سارا رضایی', 'بررسی و نقد پورتفولیو', 'جمعه ۹ آبان ساعت ۱۴:۰۰')" class="w-full sm:w-auto py-2.5 px-5 rounded-xl bg-[#16222F] hover:bg-[#25374C] text-white font-medium text-xs smooth-transition shadow-sm flex items-center justify-center gap-2">
+                    <span>ادامه و تکمیل رزرو با سارا</span>
+                    <span>←</span>
+                  </button>
+                </div>
+
+              </div>
+
+            </div>
+          </article>
+
+        </main>
+      </div>
+
+      <!-- --------------------------------------------------------------------- -->
+      <!-- 4. PERSIAN FOOTER                                                     -->
+      <!-- --------------------------------------------------------------------- -->
+      <footer class="bg-white border-t border-[#EAE5DC] px-5 md:px-8 py-6 mt-12 text-xs text-[#697380]">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-[#16222F]">پـیـرو (Peyroo)</span>
+            <span>•</span>
+            <span>پروژه تحلیل و طراحی سیستم‌های نرم‌افزاری دانشگاهی</span>
+          </div>
+          <div>پایبندی به استانداردهای دسترس‌پذیری وب (WCAG 2.2 AA)</div>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 5. PERSIAN BOOKING MODAL (SOFTENED & SMOOTH)                              -->
+  <!-- ========================================================================= -->
+  <div id="persian-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+    
+    <div class="bg-white rounded-3xl border border-[#E5DFD5] max-w-lg w-full p-6 md:p-8 shadow-2xl relative smooth-transition">
+      
+      <!-- Close Button -->
+      <button onclick="closePersianModal()" class="absolute top-5 end-5 text-[#808996] hover:text-[#16222F] p-2 rounded-xl hover:bg-[#FAF8F5]">
+        ✕
+      </button>
+
+      <!-- Step 1: Form -->
+      <div id="p-modal-step-form" class="space-y-5">
+        
+        <div>
+          <span class="text-[11px] font-bold text-[#C86D3B]">گام پایانی: جزئیات هدف از جلسه</span>
+          <h3 class="text-xl font-bold text-[#16222F] mt-1">تایید درخواست جلسه فردی</h3>
+          <p class="text-xs text-[#5A6472] mt-1 leading-relaxed">
+            با به اشتراک گذاشتن هدف یا سوالات کلیدی، به مربی کمک کنید تا با آمادگی کامل و موثرترین بازخورد در جلسه حاضر شود.
+          </p>
+        </div>
+
+        <!-- Session Summary Box -->
+        <div class="p-4 rounded-2xl bg-[#FAF8F5] border border-[#E5DFD5] text-xs space-y-1.5">
+          <div class="flex justify-between font-bold text-[#16222F]">
+            <span id="p-modal-mentor-name">آرش مرادی</span>
+            <span class="text-[#C86D3B]">۴۵ دقیقه مشاوره</span>
+          </div>
+          <div id="p-modal-topic" class="text-[#4F5966]">سرفصل: بررسی معماری سیستم</div>
+          <div id="p-modal-time" class="text-[11px] text-[#697380]">پنجشنبه ۸ آبان ساعت ۱۵:۰۰ به وقت ایران</div>
+        </div>
+
+        <!-- Inputs -->
+        <div class="space-y-3.5 text-xs">
+          <div>
+            <label class="block font-bold text-[#16222F] mb-1.5">چالش یا سوال اصلی شما برای این جلسه چیست؟ *</label>
+            <textarea rows="3" placeholder="مثلاً: در حال طراحی سرویس پردازش صف توزیع‌شده هستیم و درباره تضمین یک‌بار پردازش (Idempotency) نیاز به بازخورد دارم..." class="w-full p-3 rounded-2xl border border-[#DDD7CD] bg-[#FAF8F5] text-[#16222F] focus:bg-white focus:outline-none focus:border-[#16222F] leading-relaxed smooth-transition"></textarea>
+          </div>
+
+          <div>
+            <label class="block font-bold text-[#16222F] mb-1.5">لینک مستندات، مخزن گیت‌هاب یا فایل فیگما (اختیاری)</label>
+            <input type="text" placeholder="https://github.com/... یا لینک فیگما" class="w-full p-3 rounded-2xl border border-[#DDD7CD] bg-[#FAF8F5] text-[#16222F] focus:bg-white focus:outline-none focus:border-[#16222F] smooth-transition" dir="ltr">
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-[#EAE5DC] flex items-center justify-end gap-3">
+          <button onclick="closePersianModal()" class="px-4 py-2.5 rounded-xl border border-[#DDD7CD] text-[#5A6472] hover:text-[#16222F] text-xs font-semibold">
+            انصراف
+          </button>
+          <button onclick="submitPersianBooking()" class="px-5 py-2.5 rounded-xl bg-[#C86D3B] hover:bg-[#B45D2E] text-white text-xs font-bold shadow-sm smooth-transition">
+            ثبت نهایی و رزرو زمان
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Step 2: Confirmed -->
+      <div id="p-modal-step-confirmed" class="hidden text-center py-6 space-y-4">
+        <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-800 mx-auto flex items-center justify-center text-3xl font-bold shadow-xs">
+          ✓
+        </div>
+
+        <div>
+          <h3 class="text-xl font-bold text-[#16222F]">جلسه شما با موفقیت ثبت شد</h3>
+          <p class="text-xs text-[#5A6472] mt-1.5 max-w-sm mx-auto leading-relaxed">
+            درخواست شما در تقویم مربی ثبت گردید. لینک اتاق مجازی در پنل کاربری در دسترس خواهد بود.
+          </p>
+        </div>
+
+        <div class="p-3 bg-[#FAF8F5] rounded-2xl border border-[#E5DFD5] max-w-xs mx-auto text-xs font-mono text-[#16222F]" dir="ltr">
+          meet.google.com/pyr-fa-live
+        </div>
+
+        <div class="pt-2">
+          <button onclick="closePersianModal()" class="px-5 py-2.5 rounded-xl bg-[#16222F] text-white text-xs font-medium shadow-xs">
+            بازگشت به فهرست مربیان
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- SCRIPT LOGIC                                                              -->
+  <!-- ========================================================================= -->
+  <script>
+    function setViewport(vp) {
+      const container = document.getElementById('canvas-container');
+      const bDesktop = document.getElementById('vp-desktop');
+      const bTablet = document.getElementById('vp-tablet');
+      const bMobile = document.getElementById('vp-mobile');
+
+      [bDesktop, bTablet, bMobile].forEach(b => {
+        b.className = 'px-3 py-1.5 rounded-lg text-[#697380] hover:text-[#16222F]';
+      });
+
+      if (vp === 'desktop') {
+        container.style.maxWidth = '1152px';
+        bDesktop.className = 'px-3 py-1.5 rounded-lg bg-[#16222F] text-white font-medium shadow-xs';
+      } else if (vp === 'tablet') {
+        container.style.maxWidth = '768px';
+        bTablet.className = 'px-3 py-1.5 rounded-lg bg-[#16222F] text-white font-medium shadow-xs';
+      } else if (vp === 'mobile') {
+        container.style.maxWidth = '375px';
+        bMobile.className = 'px-3 py-1.5 rounded-lg bg-[#16222F] text-white font-medium shadow-xs';
+      }
+    }
+
+    function filterDomain(domain) {
+      const tabs = ['eng', 'design', 'mgmt', 'data'];
+      tabs.forEach(t => {
+        const el = document.getElementById('tab-' + t);
+        if (t === domain) {
+          el.className = 'flex items-center gap-3 p-3 rounded-2xl border-2 border-[#16222F] bg-[#FAF8F5] shadow-xs text-start smooth-transition';
+          el.querySelector('.rounded-xl').className = 'w-10 h-10 rounded-xl bg-[#16222F] flex items-center justify-center text-white shrink-0';
+        } else {
+          el.className = 'flex items-center gap-3 p-3 rounded-2xl border border-[#E5DFD5] bg-white hover:border-[#16222F] text-start smooth-transition';
+          el.querySelector('.rounded-xl').className = 'w-10 h-10 rounded-xl bg-[#F6F3EC] border border-[#DDD7CD] flex items-center justify-center text-[#16222F] shrink-0';
+        }
+      });
+    }
+
+    function selectPersianSlot(btn, mentor, topic, slot) {
+      const parent = btn.closest('.grid');
+      parent.querySelectorAll('.slot-pill').forEach(b => {
+        b.className = 'slot-pill py-2.5 px-3.5 rounded-2xl bg-white border border-[#DDD7CD] text-[#4F5966] text-center hover:border-[#16222F] smooth-transition';
+        const tag = b.querySelector('span:last-child');
+        if (tag && tag.classList.contains('rounded-full')) tag.remove();
+      });
+
+      btn.className = 'slot-pill py-2.5 px-3.5 rounded-2xl bg-[#C86D3B] text-white font-semibold text-center shadow-xs flex items-center justify-between';
+      if (!btn.querySelector('span:last-child')) {
+        const span = document.createElement('span');
+        span.className = 'text-[10px] bg-black/20 px-2 py-0.5 rounded-full';
+        span.innerText = 'انتخاب‌شده';
+        btn.appendChild(span);
+      }
+    }
+
+    function openPersianModal(mentor, topic, time) {
+      document.getElementById('p-modal-mentor-name').innerText = mentor;
+      document.getElementById('p-modal-topic').innerText = 'سرفصل: ' + topic;
+      document.getElementById('p-modal-time').innerText = time + ' به وقت ایران';
+
+      document.getElementById('p-modal-step-form').classList.remove('hidden');
+      document.getElementById('p-modal-step-confirmed').classList.add('hidden');
+      document.getElementById('persian-modal').classList.remove('hidden');
+    }
+
+    function closePersianModal() {
+      document.getElementById('persian-modal').classList.add('hidden');
+    }
+
+    function submitPersianBooking() {
+      document.getElementById('p-modal-step-form').classList.add('hidden');
+      document.getElementById('p-modal-step-confirmed').classList.remove('hidden');
+    }
+  </script>
+
+</body>
+</html>

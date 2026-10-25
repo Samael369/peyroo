@@ -1,0 +1,208 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1020" viewBox="0 0 1440 1020" fill="none" style="background:#FAF8F5;">
+  <style>
+    .f-sans { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    .f-bold { font-weight: 700; }
+    .f-semibold { font-weight: 600; }
+    .f-medium { font-weight: 500; }
+  </style>
+
+  <rect width="1440" height="1020" fill="#FAF8F5"/>
+
+  <!-- ========================================================================= -->
+  <!-- UI KIT HEADER                                                             -->
+  <!-- ========================================================================= -->
+  <g id="UI_Kit_Header" transform="translate(120, 40)">
+    <text x="0" y="32" font-size="28" font-weight="800" fill="#16222F" class="f-sans" text-anchor="start">Peyroo UI Kit &amp; Design System Components</text>
+    <text x="0" y="58" font-size="13" font-weight="500" fill="#697380" class="f-sans" text-anchor="start">Master design system tokens, atomic components, and variables engineered for Figma</text>
+    <line x1="0" y1="80" x2="1200" y2="80" stroke="#EAE5DC" stroke-width="1.5"/>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- SECTION 1: COLOR STYLES / VARIABLES                                       -->
+  <!-- ========================================================================= -->
+  <g id="Color_Tokens" transform="translate(120, 150)">
+    <text x="0" y="0" font-size="16" font-weight="800" fill="#16222F" class="f-sans" text-anchor="start">1. Color Styles &amp; Variables (WCAG 2.2 Audited)</text>
+    
+    <g transform="translate(0, 20)">
+      <!-- Swatch 1: Lapis Slate -->
+      <g transform="translate(0, 0)">
+        <rect width="280" height="90" rx="20" fill="#16222F"/>
+        <text x="24" y="36" font-size="14" font-weight="700" fill="#FFFFFF" class="f-sans" text-anchor="start">Persian Lapis Slate</text>
+        <text x="24" y="60" font-size="11" font-weight="400" fill="#A0AEC0" class="f-sans" text-anchor="start">Brand/Primary • #16222F (AAA 13.4:1)</text>
+      </g>
+
+      <!-- Swatch 2: Terracotta -->
+      <g transform="translate(305, 0)">
+        <rect width="280" height="90" rx="20" fill="#C86D3B"/>
+        <text x="24" y="36" font-size="14" font-weight="700" fill="#FFFFFF" class="f-sans" text-anchor="start">Raw Sienna / Terracotta</text>
+        <text x="24" y="60" font-size="11" font-weight="400" fill="#FAF6F0" class="f-sans" text-anchor="start">Brand/Accent • #C86D3B (AA 4.8:1)</text>
+      </g>
+
+      <!-- Swatch 3: Warm Sand Canvas -->
+      <g transform="translate(610, 0)">
+        <rect width="280" height="90" rx="20" fill="#F2EFE9" stroke="#E5DFD5" stroke-width="1"/>
+        <text x="24" y="36" font-size="14" font-weight="700" fill="#16222F" class="f-sans" text-anchor="start">Natural Sand Canvas</text>
+        <text x="24" y="60" font-size="11" font-weight="400" fill="#697380" class="f-sans" text-anchor="start">Surface/Canvas • #F2EFE9</text>
+      </g>
+
+      <!-- Swatch 4: Pure White Card -->
+      <g transform="translate(915, 0)">
+        <rect width="285" height="90" rx="20" fill="#FFFFFF" stroke="#E5DFD5" stroke-width="1"/>
+        <text x="24" y="36" font-size="14" font-weight="700" fill="#16222F" class="f-sans" text-anchor="start">Pure White Surface</text>
+        <text x="24" y="60" font-size="11" font-weight="400" fill="#697380" class="f-sans" text-anchor="start">Surface/Card • #FFFFFF</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- SECTION 2: BUTTON VARIANTS & STATES                                       -->
+  <!-- ========================================================================= -->
+  <g id="Button_Components" transform="translate(120, 290)">
+    <text x="0" y="0" font-size="16" font-weight="800" fill="#16222F" class="f-sans" text-anchor="start">2. Button Variants &amp; Interactive States</text>
+    
+    <g transform="translate(0, 24)">
+      
+      <!-- Primary Button -->
+      <g transform="translate(0, 0)">
+        <rect width="280" height="48" rx="24" fill="#16222F"/>
+        <text x="140" y="30" font-size="13" font-weight="700" fill="#FFFFFF" class="f-sans" text-anchor="middle">Primary Button</text>
+        <text x="140" y="68" font-size="10" fill="#808996" class="f-sans" text-anchor="middle">Type: Primary | State: Default</text>
+      </g>
+
+      <!-- Accent CTA Button -->
+      <g transform="translate(305, 0)">
+        <rect width="280" height="48" rx="24" fill="#C86D3B"/>
+        <text x="140" y="30" font-size="13" font-weight="700" fill="#FFFFFF" class="f-sans" text-anchor="middle">Accent CTA Button</text>
+        <text x="140" y="68" font-size="10" fill="#808996" class="f-sans" text-anchor="middle">Type: Accent | State: Default</text>
+      </g>
+
+      <!-- Secondary Outline Button -->
+      <g transform="translate(610, 0)">
+        <rect width="280" height="48" rx="24" fill="#FFFFFF" stroke="#DDD7CD" stroke-width="1.5"/>
+        <text x="140" y="30" font-size="13" font-weight="700" fill="#16222F" class="f-sans" text-anchor="middle">Secondary Outline</text>
+        <text x="140" y="68" font-size="10" fill="#808996" class="f-sans" text-anchor="middle">Type: Secondary | State: Default</text>
+      </g>
+
+      <!-- Ghost Button -->
+      <g transform="translate(915, 0)">
+        <rect width="285" height="48" rx="24" fill="#FAF8F5"/>
+        <text x="142" y="30" font-size="13" font-weight="600" fill="#4F5966" class="f-sans" text-anchor="middle">Ghost Button</text>
+        <text x="142" y="68" font-size="10" fill="#808996" class="f-sans" text-anchor="middle">Type: Ghost | State: Default</text>
+      </g>
+
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- SECTION 3: BADGES, STATUS PILLS & SEALS                                   -->
+  <!-- ========================================================================= -->
+  <g id="Badges_and_Chips" transform="translate(120, 420)">
+    <text x="0" y="0" font-size="16" font-weight="800" fill="#16222F" class="f-sans" text-anchor="start">3. Badges, Verification Seals &amp; Status Indicators</text>
+    
+    <g transform="translate(0, 24)">
+      
+      <!-- Verified Mentor Seal -->
+      <g transform="translate(0, 0)">
+        <rect width="180" height="42" rx="21" fill="#FFFFFF" stroke="#E5DFD5" stroke-width="1"/>
+        <circle cx="26" cy="21" r="10" fill="#C86D3B"/>
+        <text x="26" y="26" font-size="12" fill="#FFFFFF" text-anchor="middle">✦</text>
+        <text x="44" y="27" font-size="11" font-weight="700" fill="#16222F" class="f-sans" text-anchor="start">Verified Mentor</text>
+      </g>
+
+      <!-- Available ASAP Badge -->
+      <g transform="translate(200, 0)">
+        <rect width="180" height="42" rx="21" fill="#EAF2ED" stroke="#B8D8C3" stroke-width="1"/>
+        <circle cx="24" cy="21" r="4" fill="#2D5A46"/>
+        <text x="36" y="26" font-size="11" font-weight="700" fill="#2D5A46" class="f-sans" text-anchor="start">Available This Week</text>
+      </g>
+
+      <!-- Seniority Tag -->
+      <g transform="translate(400, 0)">
+        <rect width="170" height="42" rx="21" fill="#FAF8F5" stroke="#DDD7CD" stroke-width="1"/>
+        <text x="85" y="26" font-size="11" font-weight="600" fill="#16222F" class="f-sans" text-anchor="middle">11+ Years Experience</text>
+      </g>
+
+      <!-- Rating Star Chip -->
+      <g transform="translate(590, 0)">
+        <rect width="190" height="42" rx="21" fill="#FAF6F0" stroke="#EBDCCF" stroke-width="1"/>
+        <text x="95" y="26" font-size="11" font-weight="700" fill="#C86D3B" class="f-sans" text-anchor="middle">★ 4.98 (58 Reviews)</text>
+      </g>
+
+      <!-- Duration Chip -->
+      <g transform="translate(800, 0)">
+        <rect width="180" height="42" rx="21" fill="#16222F"/>
+        <text x="90" y="26" font-size="11" font-weight="600" fill="#FFFFFF" class="f-sans" text-anchor="middle">Duration: 45 min</text>
+      </g>
+
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- SECTION 4: FORM CONTROLS & INPUTS                                         -->
+  <!-- ========================================================================= -->
+  <g id="Form_Controls" transform="translate(120, 540)">
+    <text x="0" y="0" font-size="16" font-weight="800" fill="#16222F" class="f-sans" text-anchor="start">4. Form Controls &amp; Input Fields</text>
+    
+    <g transform="translate(0, 24)">
+      
+      <!-- Default Input -->
+      <g transform="translate(0, 0)">
+        <text x="0" y="16" font-size="12" font-weight="700" fill="#16222F" class="f-sans" text-anchor="start">Default Input Field:</text>
+        <rect x="0" y="26" width="580" height="48" rx="16" fill="#FAF8F5" stroke="#DDD7CD" stroke-width="1"/>
+        <text x="20" y="56" font-size="12" font-weight="400" fill="#808996" class="f-sans" text-anchor="start">e.g. Your Full Name...</text>
+      </g>
+
+      <!-- Active / Focus State -->
+      <g transform="translate(620, 0)">
+        <text x="0" y="16" font-size="12" font-weight="700" fill="#16222F" class="f-sans" text-anchor="start">Active / Focus State:</text>
+        <rect x="0" y="26" width="580" height="48" rx="16" fill="#FFFFFF" stroke="#16222F" stroke-width="2"/>
+        <text x="20" y="56" font-size="12" font-weight="500" fill="#16222F" class="f-sans" text-anchor="start">System Architecture &amp; Distributed Consistency</text>
+      </g>
+
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- SECTION 5: AVATAR MONOGRAM FAMILY                                         -->
+  <!-- ========================================================================= -->
+  <g id="Avatars" transform="translate(120, 700)">
+    <text x="0" y="0" font-size="16" font-weight="800" fill="#16222F" class="f-sans" text-anchor="start">5. Avatar &amp; Monogram Component Scale</text>
+    
+    <g transform="translate(0, 24)">
+      
+      <!-- Large (90px) -->
+      <g transform="translate(0, 0)">
+        <circle cx="50" cy="50" r="45" fill="#16222F"/>
+        <text x="50" y="58" font-size="24" font-weight="800" fill="#FFFFFF" class="f-sans" text-anchor="middle">AM</text>
+        <circle cx="80" cy="80" r="14" fill="#C86D3B"/>
+        <text x="80" y="85" font-size="13" fill="#FFFFFF" text-anchor="middle">✦</text>
+        <text x="50" y="115" font-size="11" fill="#808996" class="f-sans" text-anchor="middle">Profile Hero (90px)</text>
+      </g>
+
+      <!-- Medium (64px) -->
+      <g transform="translate(180, 10)">
+        <circle cx="40" cy="40" r="32" fill="#EAE5DC"/>
+        <text x="40" y="46" font-size="16" font-weight="800" fill="#16222F" class="f-sans" text-anchor="middle">SR</text>
+        <circle cx="62" cy="62" r="10" fill="#C86D3B"/>
+        <text x="62" y="66" font-size="10" fill="#FFFFFF" text-anchor="middle">✦</text>
+        <text x="40" y="95" font-size="11" fill="#808996" class="f-sans" text-anchor="middle">Catalog Card (64px)</text>
+      </g>
+
+      <!-- Small (44px) -->
+      <g transform="translate(340, 20)">
+        <circle cx="30" cy="30" r="22" fill="#FAF6F0" stroke="#EBDCCF" stroke-width="1"/>
+        <text x="30" y="35" font-size="12" font-weight="700" fill="#C86D3B" class="f-sans" text-anchor="middle">PS</text>
+        <text x="30" y="75" font-size="11" fill="#808996" class="f-sans" text-anchor="middle">Review Item (44px)</text>
+      </g>
+
+      <!-- Compact (36px) -->
+      <g transform="translate(480, 26)">
+        <circle cx="24" cy="24" r="18" fill="#16222F"/>
+        <text x="24" y="28" font-size="10" font-weight="700" fill="#FFFFFF" class="f-sans" text-anchor="middle">AR</text>
+        <text x="24" y="63" font-size="11" fill="#808996" class="f-sans" text-anchor="middle">Navbar User (36px)</text>
+      </g>
+
+    </g>
+  </g>
+
+</svg>
