@@ -136,6 +136,7 @@ All software engineering documentation is version-controlled in clean Markdown u
 - [`docs/discovery/PRODUCT_VISION.md`](./docs/discovery/PRODUCT_VISION.md): Problem definition, stakeholder registry, user personas (Amir & Sara), value proposition, and MoSCoW MVP boundaries.
 
 ### 5.2 Requirements Engineering Suite (Stage 04)
+- [`docs/requirements/USER_STORIES.md`](./docs/requirements/USER_STORIES.md): MVP definition, MoSCoW prioritized user stories (`US-01` to `US-14` in *"As a [user], I want [action], so that [benefit]"* format), and observable acceptance criteria (Semester Work Plan 1: 9–15 Aban).
 - [`docs/requirements/PROJECT_SCOPE.md`](./docs/requirements/PROJECT_SCOPE.md): Formal project boundaries, in-scope vs out-of-scope capabilities, interfaces, and operational constraints.
 - [`docs/requirements/STAKEHOLDERS.md`](./docs/requirements/STAKEHOLDERS.md): Unified Account capability model, user roles, and backend RBAC ownership permissions.
 - [`docs/requirements/FUNCTIONAL_REQUIREMENTS.md`](./docs/requirements/FUNCTIONAL_REQUIREMENTS.md): 29 unambiguous, testable functional requirements (`FR-001` to `FR-029`) across 10 modules.
