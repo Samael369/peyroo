@@ -15,27 +15,24 @@
 
   <style>
     :root {
-      --color-cream-base: #F8F2E8;
-      --color-cream-light: #FDFBF7;
+      --color-cream-100: rgb(251, 245, 236);
+      --color-cream-200: rgb(242, 232, 218);
+      --color-cream-300: rgb(231, 231, 225);
       --color-espresso: #2C1A11;
       --color-espresso-muted: #5E4131;
       --color-border: #DFCFC0;
-      --color-border-subtle: #E8DDD0;
       --color-blue-accent: #8EC5FF;
       --color-blue-hover: #78B4F5;
+      --color-amber-surface: #F5E9CF;
+      --color-amber-text: #79551F;
     }
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       color: var(--color-espresso);
       min-height: 100vh;
-      /* Warm, calm atmospheric gradient — retained per request */
-      background-color: #F8F2E8;
-      background-image: 
-        radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.95) 0px, transparent 55%),
-        radial-gradient(at 100% 15%, rgba(142, 197, 255, 0.16) 0px, transparent 45%),
-        radial-gradient(at 65% 85%, rgba(242, 230, 214, 0.85) 0px, transparent 65%),
-        linear-gradient(155deg, #FDFBF7 0%, #F5ECE0 45%, #EBE1D3 100%);
+      /* Exact Figma Canvas Gradient (Node 14:2) */
+      background: linear-gradient(143.55deg, rgb(251, 245, 236) 8.33%, rgb(242, 232, 218) 50%, rgb(231, 231, 225) 91.67%);
       background-attachment: fixed;
     }
 
@@ -47,22 +44,16 @@
       font-family: 'Noto Sans Arabic', 'Inter', sans-serif;
     }
 
-    /* Restrained, dignified surface with calm shadow */
-    .calm-surface {
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--color-border);
-      box-shadow: 
-        0 20px 40px -12px rgba(44, 26, 17, 0.05),
-        0 2px 6px rgba(44, 26, 17, 0.02);
+    /* Figma exact shadow: 0px 12px 32px -8px rgba(44, 26, 17, 0.06) */
+    .figma-card-shadow {
+      box-shadow: 0px 12px 32px -8px rgba(44, 26, 17, 0.06);
     }
 
     ::-webkit-scrollbar {
       width: 8px;
     }
     ::-webkit-scrollbar-track {
-      background: #F8F2E8;
+      background: rgb(242, 232, 218);
     }
     ::-webkit-scrollbar-thumb {
       background: #DFCFC0;
@@ -70,242 +61,252 @@
     }
   </style>
 </head>
-<body class="antialiased selection:bg-[#8EC5FF] selection:text-[#2C1A11]">
+<body class="antialiased selection:bg-[#8EC5FF] selection:text-[#2C1A11]" data-node-id="14:2" data-name="Peyroo — Editorial mentorship hero">
 
-  <!-- Top Navigation (Clean Hairline, Uncluttered, Restrained Corners) -->
-  <header class="w-full border-b border-[#DFCFC0]/80 bg-white/50 backdrop-blur-md sticky top-0 z-50">
-    <div class="max-w-[1440px] mx-auto px-8 lg:px-20 h-16 flex items-center justify-between">
+  <!-- Navigation (Figma Node: 14:3) -->
+  <header class="w-full border-b border-[#DFCFC0] bg-white/40 backdrop-blur-md sticky top-0 z-50" data-node-id="14:3">
+    <div class="max-w-[1440px] mx-auto px-6 lg:px-20 h-16 flex items-center justify-between">
       
-      <!-- Brand Wordmark & Nav Links -->
-      <div class="flex items-center gap-10">
+      <!-- Brand & Nav Links -->
+      <div class="flex items-center gap-6 lg:gap-10">
+        <!-- Monogram (Node 14:6: size-[32px] rounded-[8px] bg-[#2c1a11]) -->
         <a href="#" class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-[#2C1A11] flex items-center justify-center shrink-0 shadow-xs">
-            <span class="font-serif text-[#F8F2E8] text-2xl font-normal leading-none pt-0.5">P</span>
+          <div class="w-8 h-8 rounded-[8px] bg-[#2C1A11] flex items-center justify-center shrink-0" data-node-id="14:6">
+            <span class="font-serif text-[#F2E8DA] text-2xl font-normal leading-none pt-0.5" data-node-id="14:7">P</span>
           </div>
-          <span class="font-semibold text-lg text-[#2C1A11] tracking-tight">
-            Peyroo <span class="font-arabic font-normal text-sm text-[#5E4131] ml-0.5">(پیرو)</span>
+          <!-- Wordmark (Node 14:8) -->
+          <span class="font-semibold text-lg text-[#2C1A11] tracking-tight" data-node-id="14:8">
+            Peyroo <span class="font-arabic font-medium text-sm text-[#2C1A11]/80 ml-0.5">(پیرو)</span>
           </span>
         </a>
 
-        <!-- Desktop Navigation -->
-        <nav class="hidden md:flex items-center gap-7 text-[13.5px] font-medium text-[#5E4131]">
-          <a href="#mentors" class="text-[#2C1A11] hover:text-[#2C1A11] transition-colors">Find Mentors</a>
-          <a href="#how-it-works" class="hover:text-[#2C1A11] transition-colors">How It Works</a>
-          <a href="#principles" class="hover:text-[#2C1A11] transition-colors">Principles &amp; Fee</a>
+        <!-- Desktop Links (Nodes 14:9, 14:10, 14:11) -->
+        <nav class="hidden md:flex items-center gap-7 text-[13px] font-medium text-[#2C1A11]">
+          <a href="#mentors" class="hover:text-[#5E4131] transition-colors" data-node-id="14:9">Find Mentors</a>
+          <a href="#how-it-works" class="hover:text-[#5E4131] transition-colors" data-node-id="14:10">How It Works</a>
+          <a href="#principles" class="hover:text-[#5E4131] transition-colors" data-node-id="14:11">Principles &amp; Fee</a>
         </nav>
       </div>
 
-      <!-- Actions: Role Toggle & CTAs -->
-      <div class="flex items-center gap-5">
+      <!-- Actions (Nodes 14:12, 14:16, 14:17) -->
+      <div class="flex items-center gap-4 lg:gap-6">
         
-        <!-- Role Toggle (Subtle 8px radius) -->
-        <div id="role-toggle" class="hidden sm:inline-flex items-center p-0.5 bg-[#EAE0D2]/70 border border-[#DFCFC0] rounded-lg h-9">
-          <button id="btn-role-mentee" onclick="setRole('mentee')" class="h-7 px-3.5 rounded-md bg-[#2C1A11] text-[#F8F2E8] font-semibold text-xs transition-all">
-            Mentee
+        <!-- Mentee / Mentor toggle (Node 14:12: rounded-[20px] border-[#dfcfc0] h-[36px] w-[206px]) -->
+        <div id="role-toggle" class="hidden sm:inline-flex items-center p-[2px] bg-transparent border border-[#DFCFC0] rounded-[20px] h-[36px] w-[206px]" data-node-id="14:12">
+          <!-- Mentee active (Node 14:13: rounded-[18px] bg-[#2c1a11] h-[30px] w-[100px]) -->
+          <button id="btn-role-mentee" onclick="setRole('mentee')" class="h-[30px] w-[100px] rounded-[18px] bg-[#2C1A11] text-[#F2E8DA] font-semibold text-[14px] flex items-center justify-center transition-all" data-node-id="14:13">
+            <span data-node-id="14:14">Mentee</span>
           </button>
-          <button id="btn-role-mentor" onclick="setRole('mentor')" class="h-7 px-3.5 rounded-md text-[#5E4131] font-medium text-xs hover:text-[#2C1A11] transition-all">
+          <!-- Mentor inactive (Node 14:15) -->
+          <button id="btn-role-mentor" onclick="setRole('mentor')" class="h-[30px] flex-1 text-[#2C1A11] font-medium text-[12px] flex items-center justify-center hover:text-[#5E4131] transition-all" data-node-id="14:15">
             Mentor
           </button>
         </div>
 
-        <a href="#login" class="text-[13.5px] font-medium text-[#5E4131] hover:text-[#2C1A11] transition-colors">
+        <!-- Log in link (Node 14:16) -->
+        <a href="#login" class="text-[13px] font-medium text-[#2C1A11] hover:text-[#5E4131] transition-colors" data-node-id="14:16">
           Log in
         </a>
 
-        <!-- Accent Action (Restrained 10px radius) -->
-        <a href="#booking-card" class="h-9 px-4 rounded-lg bg-[#8EC5FF] hover:bg-[#78B4F5] text-[#2C1A11] font-semibold text-xs inline-flex items-center justify-center transition-all shadow-xs active:scale-95">
-          Book a session
+        <!-- Book a session CTA (Node 14:17: rounded-[20px] bg-[#8ec5ff] h-[40px] px-6 text-[14px] font-semibold) -->
+        <a href="#booking-card" class="h-[40px] px-6 rounded-[20px] bg-[#8EC5FF] hover:bg-[#78B4F5] text-[#2C1A11] font-semibold text-[14px] inline-flex items-center justify-center transition-all shadow-xs active:scale-95" data-node-id="14:17">
+          <span data-node-id="14:18">Book a session</span>
         </a>
       </div>
 
     </div>
   </header>
 
-  <!-- Main Hero Layout (Spacious, De-cluttered, Generous Margins) -->
-  <main class="max-w-[1440px] mx-auto px-8 lg:px-20 py-16 lg:py-24">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20 items-start">
+  <!-- Editorial Hero (Figma Node: 14:4) -->
+  <main class="max-w-[1440px] mx-auto px-6 lg:px-20 py-12 lg:py-16" data-node-id="14:4">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
       
-      <!-- Left Column: Editorial Introduction (Generous Breathing Room) -->
-      <section class="lg:col-span-7 flex flex-col justify-center space-y-10 pt-2 lg:pt-4">
+      <!-- Left: Editorial Introduction (Figma Node: 14:19) -->
+      <section class="lg:col-span-7 flex flex-col justify-center space-y-8 pt-4 lg:pt-6" data-node-id="14:19">
         
-        <!-- Headline & Description Group -->
-        <div class="space-y-5">
-          <h1 class="font-serif text-4xl sm:text-5xl lg:text-[50px] font-normal leading-[1.08] text-[#2C1A11] tracking-[-0.015em]">
+        <!-- Headline (Node 14:20: Newsreader 48px, leading [1.06], tracking-[-0.72px], #2c1a11) -->
+        <div class="space-y-1">
+          <h1 class="font-serif text-4xl sm:text-5xl lg:text-[48px] font-normal leading-[1.06] text-[#2C1A11] tracking-[-0.72px]" data-node-id="14:20">
             Deliberate, 1-on-1<br>
             mentorship for<br>
             software engineers.
           </h1>
-          <p class="text-base sm:text-lg text-[#5E4131] font-normal leading-relaxed max-w-[540px]">
-            Book verified availability slots with senior systems architects. Every session requires a mandatory structured agenda—no ghosting, no cold outreach anxiety.
-          </p>
         </div>
 
-        <!-- Topic Search (Clean 12px Radius, Spacious Padding) -->
-        <div class="w-full max-w-[540px] space-y-4">
-          <form onsubmit="handleSearch(event)" class="w-full h-14 bg-white/95 border border-[#DFCFC0] rounded-xl p-1.5 pl-4 flex items-center justify-between shadow-xs focus-within:border-[#2C1A11] transition-all">
+        <!-- Description (Node 14:21: Inter 18px, leading [1.5], #5e4131) -->
+        <p class="text-base sm:text-[18px] text-[#5E4131] font-normal leading-[1.5] max-w-[570px]" data-node-id="14:21">
+          Book verified availability slots with senior systems architects. Every session requires a mandatory structured agenda—no ghosting, no cold outreach anxiety.
+        </p>
+
+        <!-- Topic Search (Node 14:22: rounded-[24px] bg-white border border-[#dfcfc0] h-[64px] max-w-[560px]) -->
+        <div class="w-full max-w-[560px] space-y-3">
+          <form onsubmit="handleSearch(event)" class="w-full h-[64px] bg-white border border-[#DFCFC0] rounded-[24px] p-2 pl-4 flex items-center justify-between shadow-xs focus-within:border-[#2C1A11] transition-all" data-node-id="14:22">
             
             <div class="flex items-center gap-3 flex-1 mr-2">
-              <svg class="w-4 h-4 text-[#5E4131] shrink-0" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Search Icon (Node 14:23) -->
+              <svg class="w-5 h-5 text-[#5E4131] shrink-0" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" data-node-id="14:23">
                 <path d="M14.1667 8.75C14.1667 11.7415 11.7415 14.1667 8.75 14.1667C5.75846 14.1667 3.33333 11.7415 3.33333 8.75C3.33333 5.75846 5.75846 3.33333 8.75 3.33333C11.7415 3.33333 14.1667 5.75846 14.1667 8.75Z" stroke="#5E4131" stroke-width="1.33333"/>
                 <path d="M12.9167 12.9167L16.6667 16.6667" stroke="#5E4131" stroke-width="1.33333" stroke-linecap="round"/>
               </svg>
 
+              <!-- Search Input (Node 14:26) -->
               <input 
                 id="search-input" 
                 type="text" 
                 placeholder="Search by topic (e.g. Distributed Systems, Go, Concurrency)" 
-                class="w-full bg-transparent border-none outline-none text-sm text-[#2C1A11] placeholder:text-[#846857]/80 font-normal py-1"
+                class="w-full bg-transparent border-none outline-none text-[13px] text-[#2C1A11] placeholder:text-[#5E4131]/75 font-normal"
+                data-node-id="14:26"
               />
             </div>
 
-            <!-- Crisp Search Button -->
-            <button type="submit" class="h-11 px-5 rounded-lg bg-[#2C1A11] hover:bg-[#432A1C] text-white font-medium text-xs transition-colors shrink-0 flex items-center justify-center active:scale-95 cursor-pointer">
-              <span>Search</span>
+            <!-- Search CTA (Node 14:27: rounded-[16px] bg-[#2c1a11] text-white text-[14px] font-semibold h-[48px] w-[96px]) -->
+            <button type="submit" class="h-[48px] w-[96px] rounded-[16px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-semibold text-[14px] transition-colors shrink-0 flex items-center justify-center active:scale-95 cursor-pointer" data-node-id="14:27">
+              <span data-node-id="14:28">Search</span>
             </button>
           </form>
 
-          <!-- Quiet Suggested Topics (Clean Underlines, Zero Clutter) -->
-          <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[#5E4131] pt-0.5">
-            <button type="button" onclick="selectTopic('Distributed Systems')" class="underline underline-offset-4 decoration-[#DFCFC0] hover:decoration-[#2C1A11] hover:text-[#2C1A11] transition-all">
+          <!-- Underlined Focus Areas (Nodes 14:29, 14:30, 14:31) -->
+          <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] font-medium text-[#5E4131] pt-1">
+            <button type="button" onclick="selectTopic('Distributed Systems')" class="underline underline-offset-4 decoration-[#DFCFC0] hover:decoration-[#2C1A11] hover:text-[#2C1A11] transition-all" data-node-id="14:29">
               Distributed Systems
             </button>
-            <span class="text-[#DFCFC0] select-none">•</span>
-            <button type="button" onclick="selectTopic('PostgreSQL Internals')" class="underline underline-offset-4 decoration-[#DFCFC0] hover:decoration-[#2C1A11] hover:text-[#2C1A11] transition-all">
+            <button type="button" onclick="selectTopic('PostgreSQL Internals')" class="underline underline-offset-4 decoration-[#DFCFC0] hover:decoration-[#2C1A11] hover:text-[#2C1A11] transition-all" data-node-id="14:30">
               PostgreSQL Internals
             </button>
-            <span class="text-[#DFCFC0] select-none">•</span>
-            <button type="button" onclick="selectTopic('System Architecture')" class="underline underline-offset-4 decoration-[#DFCFC0] hover:decoration-[#2C1A11] hover:text-[#2C1A11] transition-all">
+            <button type="button" onclick="selectTopic('System Architecture')" class="underline underline-offset-4 decoration-[#DFCFC0] hover:decoration-[#2C1A11] hover:text-[#2C1A11] transition-all" data-node-id="14:31">
               System Architecture
             </button>
           </div>
         </div>
 
-        <!-- Invariant Guarantees (Simplified, Airy, Redundant Subtext Removed) -->
-        <div class="w-full max-w-[540px] pt-8 border-t border-[#DFCFC0]/80">
-          <div class="grid grid-cols-3 divide-x divide-[#DFCFC0]">
-            
-            <div class="text-left pr-6">
-              <p class="text-sm font-semibold text-[#2C1A11]">10% flat fee</p>
+        <!-- Quiet Guarantees Row (Node 14:32: divider 14:33, text 14:34, 14:35, 14:37) -->
+        <div class="w-full max-w-[560px] pt-6 border-t border-[#DFCFC0]" data-node-id="14:32">
+          <div class="flex items-center text-[14px] font-medium text-[#2C1A11]">
+            <div class="flex-1 text-left" data-node-id="14:34">
+              10% flat fee
             </div>
-
-            <div class="text-left px-6">
-              <p class="text-sm font-semibold text-[#2C1A11]">15-min lock</p>
+            <div class="h-[18px] w-px bg-[#DFCFC0] mx-4" data-node-id="14:36"></div>
+            <div class="flex-1 text-left" data-node-id="14:35">
+              15-min lock
             </div>
-
-            <div class="text-left pl-6">
-              <p class="text-sm font-semibold text-[#2C1A11]">24h policy</p>
+            <div class="h-[18px] w-px bg-[#DFCFC0] mx-4" data-node-id="14:38"></div>
+            <div class="flex-1 text-left" data-node-id="14:37">
+              24h policy
             </div>
-
           </div>
         </div>
 
       </section>
 
-      <!-- Right Column: Booking Card (Generous Padding, Restrained Corners, No Jargon) -->
+      <!-- Right: Book a session with Sara Rad (Figma Node: 14:39: rounded-[28px] w-[496px] bg-white border-[#dfcfc0]) -->
       <aside class="lg:col-span-5 flex justify-center lg:justify-end" id="booking-card">
-        <div class="w-full max-w-[480px] calm-surface rounded-2xl p-8 lg:p-9 relative space-y-7">
+        <div class="w-full max-w-[496px] bg-white border border-[#DFCFC0] rounded-[28px] p-7 figma-card-shadow relative space-y-6" data-node-id="14:39" data-name="Book a session with Sara Rad">
           
-          <!-- Mentor Profile Header -->
+          <!-- Mentor Profile Header (Nodes 14:40 - 14:45) -->
           <div class="flex items-start justify-between">
             <div class="flex items-center gap-4">
-              <!-- Avatar (Crisp 12px Squircle) -->
-              <div class="w-12 h-12 rounded-xl bg-[#F5ECE0] flex items-center justify-center shrink-0 border border-[#DFCFC0]">
-                <span class="font-medium text-sm text-[#2C1A11]">SR</span>
+              <!-- Avatar (Node 14:40: size-[52px] rounded-[26px] bg-[#f2e8da]) -->
+              <div class="w-[52px] h-[52px] rounded-[26px] bg-[#F2E8DA] flex items-center justify-center shrink-0" data-node-id="14:40">
+                <span class="font-medium text-[16px] text-[#2C1A11]" data-node-id="14:41">SR</span>
               </div>
 
-              <!-- Mentor Meta -->
+              <!-- Mentor Meta (Nodes 14:42, 14:43, 14:44) -->
               <div>
                 <div class="flex items-center gap-2">
-                  <h2 class="text-base font-semibold text-[#2C1A11]">Sara Rad</h2>
-                  <span class="w-2 h-2 rounded-full bg-[#8EC5FF] inline-block" title="Verified Mentor"></span>
+                  <h2 class="text-[18px] font-semibold text-[#2C1A11]" data-node-id="14:42">Sara Rad</h2>
+                  <span class="w-[10px] h-[10px] rounded-[5px] bg-[#8EC5FF] inline-block" title="Verified Mentor" data-node-id="14:43"></span>
                 </div>
-                <p class="text-xs text-[#5E4131] mt-0.5">Staff Systems Architect • 10y exp</p>
+                <p class="text-[13px] text-[#5E4131] mt-0.5" data-node-id="14:44">Staff Systems Architect • 10y exp</p>
               </div>
             </div>
 
-            <!-- Rating -->
-            <div class="text-xs font-semibold text-[#2C1A11] bg-[#FDFBF7] px-2.5 py-1 rounded-md border border-[#DFCFC0]">
+            <!-- Rating (Node 14:45) -->
+            <div class="text-[14px] font-medium text-[#2C1A11]" data-node-id="14:45">
               ★ 4.9
             </div>
           </div>
 
-          <!-- Fee & Duration -->
+          <!-- Fee & Duration (Nodes 14:46, 14:47) -->
           <div class="flex items-baseline gap-2">
-            <span class="font-serif text-[26px] font-normal text-[#2C1A11]">$25.00</span>
-            <span class="text-xs text-[#5E4131]">/ 45 min</span>
+            <span class="font-serif text-[26px] font-normal text-[#2C1A11]" data-node-id="14:46">$25.00</span>
+            <span class="text-[14px] text-[#5E4131]" data-node-id="14:47">/ 45 min</span>
           </div>
 
-          <!-- Divider -->
-          <div class="h-px bg-[#DFCFC0]/80 w-full"></div>
+          <!-- Hairline Divider (Node 14:48) -->
+          <div class="h-px bg-[#DFCFC0] w-full" data-node-id="14:48"></div>
 
-          <!-- Availability Slot Selection (Clean 12px Rounded Cards) -->
+          <!-- Availability Slots (Nodes 14:49 - 14:55) -->
           <div class="space-y-3">
-            <label class="text-xs font-semibold text-[#2C1A11] tracking-wide uppercase">Choose a time</label>
+            <label class="text-[14px] font-medium text-[#2C1A11]" data-node-id="14:49">Choose a time</label>
 
             <div class="grid grid-cols-2 gap-3">
-              <!-- Slot 1 (Selected) -->
+              <!-- Slot 1 (Selected in Figma: Node 14:50: rounded-[16px] bg-[#f3f8ff] border-2 border-[#8ec5ff] h-[56px]) -->
               <button 
                 id="slot-1" 
                 onclick="selectSlot(1, 'Tomorrow, 18:00')" 
-                class="h-13 px-4 rounded-xl bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left" 
+                class="h-[56px] px-4 rounded-[16px] bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left" 
+                data-node-id="14:50"
               >
-                <span class="text-xs font-medium text-[#2C1A11]">Tomorrow</span>
-                <span class="text-xs font-semibold text-[#2C1A11]">18:00</span>
+                <span class="text-[13px] font-medium text-[#2C1A11]" data-node-id="14:51">Tomorrow</span>
+                <span class="text-[13px] font-semibold text-[#2C1A11]" data-node-id="14:52">18:00</span>
               </button>
 
-              <!-- Slot 2 -->
+              <!-- Slot 2 (Node 14:53: rounded-[16px] bg-white border border-[#dfcfc0] h-[56px]) -->
               <button 
                 id="slot-2" 
                 onclick="selectSlot(2, 'Friday, 19:30')" 
-                class="h-13 px-4 rounded-xl bg-white border border-[#DFCFC0] hover:border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left" 
+                class="h-[56px] px-4 rounded-[16px] bg-white border border-[#DFCFC0] hover:border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left" 
+                data-node-id="14:53"
               >
-                <span class="text-xs font-normal text-[#2C1A11]">Friday</span>
-                <span class="text-xs font-semibold text-[#2C1A11]">19:30</span>
+                <span class="text-[13px] font-normal text-[#2C1A11]" data-node-id="14:54">Friday</span>
+                <span class="text-[13px] font-semibold text-[#2C1A11]" data-node-id="14:55">19:30</span>
               </button>
             </div>
           </div>
 
-          <!-- Mandatory Agenda Card (Clean, Uncluttered) -->
+          <!-- Mandatory Agenda (Nodes 14:56 - 14:60: container rounded-[16px] bg-[#fbf8f4] border border-[#dfcfc0] h-[80px]) -->
           <div class="space-y-2">
-            <label class="text-xs font-semibold text-[#2C1A11] tracking-wide uppercase">Mandatory agenda</label>
+            <div class="flex items-center justify-between">
+              <label class="text-[14px] font-medium text-[#2C1A11]" data-node-id="14:56">Mandatory agenda</label>
+              <span class="text-[12px] font-normal text-[#5E4131]" data-node-id="14:57">Required</span>
+            </div>
 
-            <div class="bg-[#FDFBF7] border border-[#DFCFC0] rounded-xl p-3.5 space-y-1">
-              <p id="agenda-topic-text" class="text-xs text-[#2C1A11] leading-relaxed">
+            <div class="bg-[#FBF8F4] border border-[#DFCFC0] rounded-[16px] p-3.5 space-y-0.5" data-node-id="14:58">
+              <p class="text-[11px] font-medium text-[#5E4131]" data-node-id="14:59">Topic</p>
+              <p id="agenda-topic-text" class="text-[14px] font-normal text-[#2C1A11]" data-node-id="14:60">
                 Kafka consumer partition rebalance lag
               </p>
             </div>
           </div>
 
-          <!-- Reservation Lock Indicator -->
-          <div class="inline-flex items-center px-3 py-1 rounded-md bg-[#F5E9CF] text-[#79551F] text-[11px] font-medium gap-1.5">
-            <svg class="w-3 h-3 text-[#79551F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-            </svg>
-            <span>15:00 lock guaranteed</span>
+          <!-- Reservation Lock (Node 14:61: rounded-[13px] bg-[#f5e9cf] h-[26px] px-3) -->
+          <div class="inline-flex items-center px-3 py-1 rounded-[13px] bg-[#F5E9CF] text-[#79551F] text-[11px] font-medium gap-1.5" data-node-id="14:61">
+            <span data-node-id="14:62">15:00 lock guaranteed</span>
           </div>
 
-          <!-- Pricing & Fee Breakdown -->
-          <div class="pt-2 border-t border-[#DFCFC0]/80 space-y-1">
+          <!-- Total & Platform Fee (Nodes 14:63 - 14:65) -->
+          <div class="pt-2 border-t border-[#DFCFC0] space-y-1">
             <div class="flex items-baseline justify-between">
-              <span class="text-sm font-semibold text-[#2C1A11]">Total</span>
-              <span class="font-serif text-[26px] font-normal text-[#2C1A11]">$27.50</span>
+              <span class="text-[16px] font-medium text-[#2C1A11]" data-node-id="14:63">Total</span>
+              <span class="font-serif text-[28px] font-normal text-[#2C1A11]" data-node-id="14:64">$27.50</span>
             </div>
-            <p class="text-[11px] text-[#5E4131]">
-              Includes 10% platform fee
+            <p class="text-[11px] text-[#5E4131]" data-node-id="14:65">
+              $25.00 session + $2.50 platform fee
             </p>
           </div>
 
-          <!-- Proceed Button (Restrained 10px Radius) -->
+          <!-- Proceed CTA (Node 14:66: rounded-[22px] bg-[#8ec5ff] h-[44px] text-[14px] font-semibold text-[#2c1a11]) -->
           <button 
             type="button" 
             onclick="handleProceed()" 
-            class="w-full h-11 rounded-lg bg-[#8EC5FF] hover:bg-[#78B4F5] text-[#2C1A11] font-semibold text-xs tracking-wide flex items-center justify-center transition-all shadow-xs active:scale-98 cursor-pointer"
+            class="w-full h-[44px] rounded-[22px] bg-[#8EC5FF] hover:bg-[#78B4F5] text-[#2C1A11] font-semibold text-[14px] flex items-center justify-center transition-all active:scale-98 cursor-pointer"
+            data-node-id="14:66"
           >
-            <span id="proceed-btn-text">Proceed to Confirmation</span>
+            <span id="proceed-btn-text" data-node-id="14:67">Proceed to Confirmation</span>
           </button>
 
           <!-- Feedback Notice -->
-          <div id="booking-feedback" class="hidden text-center text-xs font-medium text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg p-2.5">
+          <div id="booking-feedback" class="hidden text-center text-xs font-medium text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-[12px] p-2.5">
             Slot reserved! Lock expires in 15:00. Moving to checkout...
           </div>
 
@@ -327,11 +328,11 @@
       const mentorBtn = document.getElementById('btn-role-mentor');
 
       if (role === 'mentee') {
-        menteeBtn.className = "h-7 px-3.5 rounded-md bg-[#2C1A11] text-[#F8F2E8] font-semibold text-xs transition-all";
-        mentorBtn.className = "h-7 px-3.5 rounded-md text-[#5E4131] font-medium text-xs hover:text-[#2C1A11] transition-all";
+        menteeBtn.className = "h-[30px] w-[100px] rounded-[18px] bg-[#2C1A11] text-[#F2E8DA] font-semibold text-[14px] flex items-center justify-center transition-all";
+        mentorBtn.className = "h-[30px] flex-1 text-[#2C1A11] font-medium text-[12px] flex items-center justify-center hover:text-[#5E4131] transition-all";
       } else {
-        mentorBtn.className = "h-7 px-3.5 rounded-md bg-[#2C1A11] text-[#F8F2E8] font-semibold text-xs transition-all";
-        menteeBtn.className = "h-7 px-3.5 rounded-md text-[#5E4131] font-medium text-xs hover:text-[#2C1A11] transition-all";
+        mentorBtn.className = "h-[30px] w-[100px] rounded-[18px] bg-[#2C1A11] text-[#F2E8DA] font-semibold text-[14px] flex items-center justify-center transition-all";
+        menteeBtn.className = "h-[30px] flex-1 text-[#2C1A11] font-medium text-[12px] flex items-center justify-center hover:text-[#5E4131] transition-all";
       }
     }
 
@@ -343,11 +344,11 @@
       const slot2 = document.getElementById('slot-2');
 
       if (slotNum === 1) {
-        slot1.className = "h-13 px-4 rounded-xl bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left";
-        slot2.className = "h-13 px-4 rounded-xl bg-white border border-[#DFCFC0] hover:border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left";
+        slot1.className = "h-[56px] px-4 rounded-[16px] bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left";
+        slot2.className = "h-[56px] px-4 rounded-[16px] bg-white border border-[#DFCFC0] hover:border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left";
       } else {
-        slot2.className = "h-13 px-4 rounded-xl bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left";
-        slot1.className = "h-13 px-4 rounded-xl bg-white border border-[#DFCFC0] hover:border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left";
+        slot2.className = "h-[56px] px-4 rounded-[16px] bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left";
+        slot1.className = "h-[56px] px-4 rounded-[16px] bg-white border border-[#DFCFC0] hover:border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left";
       }
     }
 
@@ -355,7 +356,7 @@
       const searchInput = document.getElementById('search-input');
       const agendaTopic = document.getElementById('agenda-topic-text');
       if (searchInput) searchInput.value = topicName;
-      if (agendaTopic) agendaTopic.textContent = `${topicName} — architecture review`;
+      if (agendaTopic) agendaTopic.textContent = `${topicName} — code review`;
     }
 
     function handleSearch(e) {
