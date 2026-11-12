@@ -33,13 +33,26 @@ This repository strictly follows a formal 9-stage academic software engineering 
 | **Stage 04** | **Requirements Engineering (SRS)** | `[APPROVED]` | 29 FRs, 17 NFRs, 10 Use Cases, Acceptance Criteria: [`docs/requirements/`](./docs/requirements/) |
 | **Stage 05** | **System Analysis & UML Modeling** | `[APPROVED]` | Domain Model, Use Cases, Class Diagram, 12 Sequence & 7 Activity Diagrams: [`docs/analysis/uml/`](./docs/analysis/uml/) |
 | **Stage 06** | **System Design & Architecture** | `[APPROVED]` | Architecture, 6 ADRs, Components, PostgreSQL ERD, REST API, Security: [`docs/design/`](./docs/design/) |
-| **Stage 07** | **UI/UX Design & Wireframing** | `[READY TO BEGIN]` | Design system tokens, component wireframes, and clickable prototype specs |
+| **Stage 07** | **UI/UX Design & Wireframing** | `[IN PROGRESS]` | Design system tokens; Figma interactive prototype under development |
 | **Stage 08** | **Implementation & Unit Testing** | *Pending* | Modular codebase, automated integration tests, and presentation demo build |
 | **Stage 09** | **Verification, Deployment & Defense** | *Pending* | Public HTTPS deployment, automated test evidence, and engineering defense |
 
 ---
 
-## 3. High-Level System Architecture
+## 3. Presentation 1 Submission Package (25–26 Aban 1405 | 20 Points)
+
+> **Submission Cutoff:** 24 Aban 1405 @ 23:59 (15 November 2026)  
+> **Official Package Document:** [`docs/assignment/PRESENTATION_1_SUBMISSION.md`](./docs/assignment/PRESENTATION_1_SUBMISSION.md)  
+> **Target Release Tag:** `v0.1.0-p1`  
+> **Clickable Prototype:** `[INSERT_FIGMA_PROTOTYPE_URL_HERE]` (Figma design under independent development)
+
+### Team Member Contributions
+- **Alireza Abasi (Frontend & UI/UX Lead):** Product discovery, prioritized agile user stories (`US-01` – `US-14`) and acceptance criteria in [`USER_STORIES.md`](./docs/requirements/USER_STORIES.md), visual identity & design tokens in [`DESIGN_SYSTEM_TOKENS.md`](./docs/design/ui/DESIGN_SYSTEM_TOKENS.md), Figma clickable interactive prototype, client API contract review.
+- **Mostafa Sadidi (Backend & Architecture Lead):** Modular monolith architecture design, 4 mandatory design views (UML Use Case in [`USE_CASE_DIAGRAM.md`](./docs/analysis/uml/USE_CASE_DIAGRAM.md), UML Activity in [`ACTIVITY_DIAGRAMS.md`](./docs/analysis/uml/ACTIVITY_DIAGRAMS.md), System Architecture in [`ARCHITECTURE_DESIGN.md`](./docs/design/ARCHITECTURE_DESIGN.md), PostgreSQL ERD in [`DATABASE_DESIGN.md`](./docs/design/DATABASE_DESIGN.md)), 8-module REST API contract in [`API_DESIGN.md`](./docs/design/API_DESIGN.md), and hosting feasibility in [`DEPLOYMENT_DESIGN.md`](./docs/design/DEPLOYMENT_DESIGN.md).
+
+---
+
+## 4. High-Level System Architecture
 
 Peyroo is architected as a **Modular Monolith** organized into 8 highly cohesive domain components. The system enforces a strict 4-layer dependency model (Presentation $\to$ Application $\to$ Domain $\to$ Infrastructure) running within a single unified process for deterministic testing and free-tier cloud deployment feasibility:
 
@@ -90,9 +103,9 @@ flowchart TB
 
 ---
 
-## 4. Engineering Highlights & Technical Invariants
+## 5. Engineering Highlights & Technical Invariants
 
-### 4.1 ACID Concurrency & Partial Unique Indexing
+### 5.1 ACID Concurrency & Partial Unique Indexing
 To prevent double-booking race conditions while preserving full historical records of expired or cancelled sessions:
 - **Pessimistic Row Locking:** `SELECT ... FOR UPDATE` acquires an exclusive lock on the availability slot row during checkout.
 - **Partial Unique Indexing:** The database schema enforces that a slot may have at most **one active booking** at any time, while allowing unlimited terminal historical bookings:
@@ -101,7 +114,7 @@ To prevent double-booking race conditions while preserving full historical recor
   WHERE status IN ('INITIATED', 'PENDING_PAYMENT', 'CONFIRMED');
   ```
 
-### 4.2 Database-Level Concurrent Slot Overlap Prevention
+### 5.2 Database-Level Concurrent Slot Overlap Prevention
 Prevents mentors from publishing overlapping availability slots even under simultaneous multi-tab requests:
 ```sql
 CREATE EXTENSION IF NOT EXISTS btree_gist;
@@ -114,28 +127,29 @@ EXCLUDE USING gist (
 ) WHERE (status != 'CANCELLED');
 ```
 
-### 4.3 Auditable Financial Transaction Ledger
+### 5.3 Auditable Financial Transaction Ledger
 - Rather than claiming unneeded double-entry accounting overhead, financial records are stored as an **auditable payment transaction ledger**.
 - Refunds are modeled as discrete new transactions (`CANCELLATION_REFUND`) linked via `parent_transaction_id` to the original `SESSION_PAYMENT` record.
 - **Strict Expiration Precedence:** If a late payment is successfully captured by the bank after a booking has expired, it is recorded as a `COMPLETED` payment followed immediately by an automatic linked `CANCELLATION_REFUND` (net balance $0). Captured payments are never marked as `FAILED`.
 - Webhook callbacks are deduplicated via unique `idempotency_key` constraints.
 
-### 4.4 Connection-Pool Safe Background Scheduler
+### 5.4 Connection-Pool Safe Background Scheduler
 The in-process background worker executes periodic 60-second tasks for 15-minute reservation releases and automated session completions:
 - Utilizes PostgreSQL **transaction-level advisory locking** (`pg_try_advisory_xact_lock`), which binds strictly to the transaction block.
 - Guarantees zero lock leakage across pooled connections (compatible with PgBouncer and client connection pools) and safe single-leader execution across multi-instance server deployments.
 
 ---
 
-## 5. Comprehensive Documentation Map
+## 6. Comprehensive Documentation Map
 
 All software engineering documentation is version-controlled in clean Markdown under [`docs/`](./docs/):
 
-### 5.1 Assignment & Discovery Documentation
+### 6.1 Assignment & Presentation Documentation
+- [`docs/assignment/PRESENTATION_1_SUBMISSION.md`](./docs/assignment/PRESENTATION_1_SUBMISSION.md): Official Presentation 1 submission dossier, 20-point rubric breakdown, and member contribution statement for Alireza Abasi and Mostafa Sadidi.
 - [`docs/assignment/ASSIGNMENT_ANALYSIS.md`](./docs/assignment/ASSIGNMENT_ANALYSIS.md): Comprehensive analysis of course requirements, presentation milestones, grading rubrics, and technical constraints.
 - [`docs/discovery/PRODUCT_VISION.md`](./docs/discovery/PRODUCT_VISION.md): Problem definition, stakeholder registry, user personas (Amir & Sara), value proposition, and MoSCoW MVP boundaries.
 
-### 5.2 Requirements Engineering Suite (Stage 04)
+### 6.2 Requirements Engineering Suite (Stage 04)
 - [`docs/requirements/USER_STORIES.md`](./docs/requirements/USER_STORIES.md): MVP definition, MoSCoW prioritized user stories (`US-01` to `US-14` in *"As a [user], I want [action], so that [benefit]"* format), and observable acceptance criteria (Semester Work Plan 1: 9–15 Aban).
 - [`docs/requirements/PROJECT_SCOPE.md`](./docs/requirements/PROJECT_SCOPE.md): Formal project boundaries, in-scope vs out-of-scope capabilities, interfaces, and operational constraints.
 - [`docs/requirements/STAKEHOLDERS.md`](./docs/requirements/STAKEHOLDERS.md): Unified Account capability model, user roles, and backend RBAC ownership permissions.
@@ -145,7 +159,7 @@ All software engineering documentation is version-controlled in clean Markdown u
 - [`docs/requirements/ACCEPTANCE_CRITERIA.md`](./docs/requirements/ACCEPTANCE_CRITERIA.md): Given / When / Then (Gherkin) acceptance criteria for all major functional requirements.
 - [`docs/requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md`](./docs/requirements/REQUIREMENTS_TRACEABILITY_MATRIX.md): Bidirectional traceability cross-referencing business objectives, requirements, use cases, and future test cases.
 
-### 5.3 System Analysis & UML Modeling Suite (Stage 05)
+### 6.3 System Analysis & UML Modeling Suite (Stage 05)
 - [`docs/analysis/uml/SYSTEM_ANALYSIS.md`](./docs/analysis/uml/SYSTEM_ANALYSIS.md): Analytical foundations, system boundary, and core business invariants.
 - [`docs/analysis/uml/DOMAIN_MODEL.md`](./docs/analysis/uml/DOMAIN_MODEL.md): Conceptual domain model diagram, entities, and value objects.
 - [`docs/analysis/uml/USE_CASE_DIAGRAM.md`](./docs/analysis/uml/USE_CASE_DIAGRAM.md): Actor hierarchy, system boundaries, and sub-package use case diagrams (`<<include>>` and `<<extend>>`).
@@ -156,7 +170,7 @@ All software engineering documentation is version-controlled in clean Markdown u
 - [`docs/analysis/uml/UML_TRACEABILITY_MATRIX.md`](./docs/analysis/uml/UML_TRACEABILITY_MATRIX.md): 100% requirements coverage mapping.
 - [`docs/analysis/uml/UML_CONSISTENCY_REPORT.md`](./docs/analysis/uml/UML_CONSISTENCY_REPORT.md): Semantic verification and quality audit report.
 
-### 5.4 System Design & Architecture Suite (Stage 06)
+### 6.4 System Design & Architecture Suite (Stage 06)
 - [`docs/design/SYSTEM_DESIGN.md`](./docs/design/SYSTEM_DESIGN.md): Architectural synthesis, 4-layer model, and technical roadmap.
 - [`docs/design/ARCHITECTURE_DESIGN.md`](./docs/design/ARCHITECTURE_DESIGN.md): Modular Monolith evaluation, layer boundaries, and quality trade-offs.
 - [`docs/design/ARCHITECTURE_DECISIONS.md`](./docs/design/ARCHITECTURE_DECISIONS.md): 6 formal ADRs (Monolith, PostgreSQL Locking, Unified Account, In-Process Scheduler, JWT Cookies, Mock Gateway).
@@ -172,7 +186,7 @@ All software engineering documentation is version-controlled in clean Markdown u
 
 ---
 
-## 6. Technology Stack Baseline
+## 7. Technology Stack Baseline
 
 The technology stack is selected based on academic feasibility, type safety, low operational overhead, and free-tier hosting capability:
 
@@ -189,7 +203,7 @@ The technology stack is selected based on academic feasibility, type safety, low
 
 ---
 
-## 7. Development & Contribution Standards
+## 8. Development & Contribution Standards
 
 All development strictly follows the repository instructions in [`AGENTS.md`](./AGENTS.md):
 - **Branching Strategy:** Main branch remains stable. Features and stages evolve via dedicated staged development branches.
