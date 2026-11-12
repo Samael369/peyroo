@@ -34,6 +34,8 @@
       /* Figma Canvas Ambient Gradient */
       background: linear-gradient(143.55deg, rgb(251, 245, 236) 8.33%, rgb(242, 232, 218) 50%, rgb(231, 231, 225) 91.67%);
       background-attachment: fixed;
+      position: relative;
+      overflow-x: hidden;
     }
 
     .font-serif {
@@ -44,28 +46,52 @@
       font-family: 'Noto Sans Arabic', 'Inter', sans-serif;
     }
 
-    /* Floating Island Glass Header */
-    .floating-island-nav {
-      background: rgba(255, 255, 255, 0.82);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(223, 207, 192, 0.9);
+    /* True Liquid Glass: Highly refractive, specular top highlight, multi-layer depth */
+    .liquid-glass-nav {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.78) 0%, rgba(255, 255, 255, 0.48) 50%, rgba(255, 255, 255, 0.68) 100%);
+      backdrop-filter: blur(28px) saturate(160%);
+      -webkit-backdrop-filter: blur(28px) saturate(160%);
+      border: 1px solid rgba(255, 255, 255, 0.85);
       box-shadow: 
-        0 8px 30px rgba(44, 26, 17, 0.05),
-        0 1px 2px rgba(44, 26, 17, 0.03),
-        inset 0 1px 1px rgba(255, 255, 255, 0.95);
+        0 14px 34px -8px rgba(44, 26, 17, 0.06),
+        0 2px 8px rgba(44, 26, 17, 0.02),
+        inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.95),
+        inset 0 -1px 2px 0 rgba(223, 207, 192, 0.35);
     }
 
-    /* Frosted Glass Booking Card */
-    .frosted-booking-card {
-      background: rgba(255, 255, 255, 0.90);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(223, 207, 192, 0.95);
+    .liquid-glass-card {
+      background: linear-gradient(140deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.55) 45%, rgba(255, 255, 255, 0.72) 100%);
+      backdrop-filter: blur(32px) saturate(160%);
+      -webkit-backdrop-filter: blur(32px) saturate(160%);
+      border: 1px solid rgba(255, 255, 255, 0.9);
       box-shadow: 
-        0px 16px 36px -8px rgba(44, 26, 17, 0.06),
-        0px 2px 8px rgba(44, 26, 17, 0.02),
-        inset 0 1px 1px rgba(255, 255, 255, 0.95);
+        0 24px 64px -12px rgba(44, 26, 17, 0.08),
+        0 4px 16px -2px rgba(44, 26, 17, 0.03),
+        inset 0 2px 2px 0 rgba(255, 255, 255, 0.98),
+        inset 0 -1.5px 2px 0 rgba(223, 207, 192, 0.35);
+    }
+
+    .liquid-slot-active {
+      background: linear-gradient(135deg, rgba(243, 248, 255, 0.95) 0%, rgba(230, 242, 255, 0.85) 100%);
+      border: 2px solid #8EC5FF;
+      box-shadow: 
+        0 4px 14px rgba(142, 197, 255, 0.25),
+        inset 0 1px 1px rgba(255, 255, 255, 0.9);
+    }
+
+    .liquid-slot-inactive {
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(223, 207, 192, 0.8);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.8);
+    }
+
+    .liquid-btn-cta {
+      background: linear-gradient(135deg, #A4D3FF 0%, #8EC5FF 50%, #76B4FA 100%);
+      box-shadow: 
+        0 4px 16px rgba(142, 197, 255, 0.35),
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.85),
+        inset 0 -1px 1px rgba(44, 26, 17, 0.1);
     }
 
     ::-webkit-scrollbar {
@@ -76,20 +102,24 @@
     }
     ::-webkit-scrollbar-thumb {
       background: #DFCFC0;
-      border-radius: 4px;
+      border-radius: 9999px;
     }
   </style>
 </head>
 <body class="antialiased selection:bg-[#8EC5FF] selection:text-[#2C1A11]">
 
-  <!-- Top Floating Island Navbar (max-w-5xl, h-[64px], rounded-2xl, Balanced 3-Column Layout) -->
-  <div class="px-4 pt-3 sticky top-0 z-50">
-    <nav class="max-w-5xl mx-auto h-[64px] floating-island-nav rounded-2xl px-6 lg:px-8 flex items-center justify-between transition-all">
+  <!-- Ambient Caustic Refraction Glows -->
+  <div class="absolute right-[-80px] top-[100px] w-[600px] h-[600px] bg-[#8EC5FF]/20 rounded-full blur-[140px] pointer-events-none -z-10"></div>
+  <div class="absolute left-[-60px] top-[40px] w-[500px] h-[500px] bg-white/70 rounded-full blur-[120px] pointer-events-none -z-10"></div>
+
+  <!-- Top Floating Island Navbar: Liquid Glass Capsule with Fully-Rounded Components -->
+  <div class="px-4 pt-4 sticky top-0 z-50">
+    <nav class="max-w-5xl mx-auto h-[64px] liquid-glass-nav rounded-full px-6 lg:px-8 flex items-center justify-between transition-all">
       
-      <!-- Column 1: Brand Wordmark & Monogram -->
+      <!-- Column 1: Brand Wordmark with Fully-Rounded Monogram -->
       <div class="flex items-center gap-3">
         <a href="#" class="flex items-center gap-3 group">
-          <div class="w-8 h-8 rounded-lg bg-[#2C1A11] flex items-center justify-center shrink-0 shadow-xs transition-transform group-hover:scale-105">
+          <div class="w-9 h-9 rounded-full bg-[#2C1A11] flex items-center justify-center shrink-0 shadow-xs transition-transform group-hover:scale-105 border border-white/30">
             <span class="font-serif text-[#F2E8DA] text-2xl font-normal leading-none pt-0.5">P</span>
           </div>
           <span class="font-semibold text-base lg:text-[17px] text-[#2C1A11] tracking-tight flex items-center gap-1.5">
@@ -98,19 +128,19 @@
         </a>
       </div>
 
-      <!-- Column 2: Centered Navigation Links -->
-      <div class="hidden md:flex items-center gap-8 text-[13.5px] font-medium text-[#2C1A11]/85">
-        <a href="#mentors" class="hover:text-[#2C1A11] transition-colors">Find Mentors</a>
-        <a href="#how-it-works" class="hover:text-[#2C1A11] transition-colors">How It Works</a>
-        <a href="#principles" class="hover:text-[#2C1A11] transition-colors">Principles &amp; Fee</a>
+      <!-- Column 2: Centered Navigation Links with Fully-Rounded Pill Hovers -->
+      <div class="hidden md:flex items-center gap-2 text-[13.5px] font-medium text-[#2C1A11]/85">
+        <a href="#mentors" class="px-4 py-2 rounded-full hover:bg-white/60 hover:text-[#2C1A11] transition-all">Find Mentors</a>
+        <a href="#how-it-works" class="px-4 py-2 rounded-full hover:bg-white/60 hover:text-[#2C1A11] transition-all">How It Works</a>
+        <a href="#principles" class="px-4 py-2 rounded-full hover:bg-white/60 hover:text-[#2C1A11] transition-all">Principles &amp; Fee</a>
       </div>
 
-      <!-- Column 3: Actions (Role toggle removed; clean Log in + Sky Blue CTA) -->
-      <div class="flex items-center gap-5">
-        <a href="#login" class="text-[13.5px] font-medium text-[#5E4131] hover:text-[#2C1A11] transition-colors">
+      <!-- Column 3: Fully-Rounded Actions (Log in + Liquid Sky Blue CTA) -->
+      <div class="flex items-center gap-4">
+        <a href="#login" class="px-4 py-2 rounded-full text-[13.5px] font-medium text-[#5E4131] hover:text-[#2C1A11] hover:bg-white/50 transition-all">
           Log in
         </a>
-        <a href="#booking-card" class="h-10 px-5 rounded-xl bg-[#8EC5FF] hover:bg-[#78B4F5] text-[#2C1A11] font-semibold text-xs tracking-wide inline-flex items-center justify-center transition-all shadow-xs active:scale-95">
+        <a href="#booking-card" class="h-10 px-6 rounded-full liquid-btn-cta hover:brightness-105 text-[#2C1A11] font-semibold text-xs tracking-wide inline-flex items-center justify-center transition-all active:scale-95">
           Book a session
         </a>
       </div>
@@ -139,9 +169,9 @@
           Book verified availability slots with senior systems architects. Every session requires a mandatory structured agenda—no ghosting, no cold outreach anxiety.
         </p>
 
-        <!-- Topic Search Box (rounded-[24px], h-[64px], button rounded-[16px]) -->
+        <!-- Topic Search Box (Liquid Glass Pill Feel) -->
         <div class="w-full max-w-[560px] space-y-3">
-          <form onsubmit="handleSearch(event)" class="w-full h-[64px] bg-white border border-[#DFCFC0] rounded-[24px] p-2 pl-4 flex items-center justify-between shadow-xs focus-within:border-[#2C1A11] transition-all">
+          <form onsubmit="handleSearch(event)" class="w-full h-[64px] bg-white/85 backdrop-blur-xl border border-white/80 rounded-[24px] p-2 pl-4 flex items-center justify-between shadow-[0_4px_20px_-4px_rgba(44,26,17,0.04),inset_0_1.5px_1px_rgba(255,255,255,0.9)] focus-within:border-[#2C1A11] transition-all">
             
             <div class="flex items-center gap-3 flex-1 mr-2">
               <svg class="w-5 h-5 text-[#5E4131] shrink-0" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -157,7 +187,7 @@
               />
             </div>
 
-            <button type="submit" class="h-[48px] w-[96px] rounded-[16px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-semibold text-[14px] transition-colors shrink-0 flex items-center justify-center active:scale-95 cursor-pointer">
+            <button type="submit" class="h-[48px] w-[96px] rounded-[16px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-semibold text-[14px] transition-colors shrink-0 flex items-center justify-center active:scale-95 cursor-pointer shadow-xs">
               <span>Search</span>
             </button>
           </form>
@@ -197,15 +227,15 @@
 
       </section>
 
-      <!-- Right Column: Generous Frosted Glass Booking Card (500px width, 36px/p-9 padding, rounded-[28px]) -->
+      <!-- Right Column: Liquid Glass Booking Card (500px width, 36px/p-9 padding, rounded-[28px]) -->
       <aside class="lg:col-span-5 flex justify-center lg:justify-end" id="booking-card">
-        <div class="w-full max-w-[500px] frosted-booking-card rounded-[28px] p-9 relative space-y-6">
+        <div class="w-full max-w-[500px] liquid-glass-card rounded-[28px] p-9 relative space-y-6">
           
           <!-- Mentor Profile Header -->
           <div class="flex items-start justify-between">
             <div class="flex items-center gap-4">
-              <!-- Avatar with rounded-2xl (16px) -->
-              <div class="w-[52px] h-[52px] rounded-2xl bg-[#F2E8DA] flex items-center justify-center shrink-0 border border-[#DFCFC0]">
+              <!-- Avatar with liquid glass rim -->
+              <div class="w-[52px] h-[52px] rounded-2xl bg-[#F2E8DA]/90 flex items-center justify-center shrink-0 border border-white/90 shadow-2xs">
                 <span class="font-medium text-[16px] text-[#2C1A11]">SR</span>
               </div>
 
@@ -213,14 +243,14 @@
               <div>
                 <div class="flex items-center gap-2">
                   <h2 class="text-[18px] font-semibold text-[#2C1A11]">Sara Rad</h2>
-                  <span class="w-[10px] h-[10px] rounded-[5px] bg-[#8EC5FF] inline-block shadow-xs" title="Verified Mentor"></span>
+                  <span class="w-[10px] h-[10px] rounded-full bg-[#8EC5FF] inline-block shadow-[0_0_8px_rgba(142,197,255,0.8)]" title="Verified Mentor"></span>
                 </div>
                 <p class="text-[13px] text-[#5E4131] mt-0.5">Staff Systems Architect • 10y exp</p>
               </div>
             </div>
 
-            <!-- Rating -->
-            <div class="text-[14px] font-medium text-[#2C1A11] bg-white/80 px-2.5 py-1 rounded-lg border border-[#DFCFC0]">
+            <!-- Rating with liquid pill -->
+            <div class="text-[14px] font-medium text-[#2C1A11] bg-white/80 backdrop-blur-md px-3 py-1 rounded-full border border-white/90 shadow-2xs">
               ★ 4.9
             </div>
           </div>
@@ -231,44 +261,44 @@
             <span class="text-[14px] text-[#5E4131]">/ 45 min</span>
           </div>
 
-          <!-- Hairline Divider -->
-          <div class="h-px bg-[#DFCFC0]/80 w-full"></div>
+          <!-- Hairline Glass Divider -->
+          <div class="h-px bg-gradient-to-r from-transparent via-[#DFCFC0] to-transparent w-full"></div>
 
           <!-- Availability Slot Selection (h-[56px], rounded-[18px]) -->
           <div class="space-y-3">
             <label class="text-[14px] font-medium text-[#2C1A11]">Choose a time</label>
 
             <div class="grid grid-cols-2 gap-3.5">
-              <!-- Slot 1 (Selected) -->
+              <!-- Slot 1 (Selected with Liquid Active Glow) -->
               <button 
                 id="slot-1" 
                 onclick="selectSlot(1, 'Tomorrow, 18:00')" 
-                class="h-[56px] px-4 rounded-[18px] bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left shadow-2xs hover:scale-[1.01]" 
+                class="h-[56px] px-4 rounded-[18px] liquid-slot-active flex items-center justify-between transition-all cursor-pointer text-left hover:scale-[1.01]" 
               >
                 <span class="text-[13px] font-medium text-[#2C1A11]">Tomorrow</span>
-                <span class="text-[13px] font-semibold text-[#2C1A11]">18:00</span>
+                <span class="text-[13px] font-semibold text-[#2C1A11] bg-white/80 px-2 py-0.5 rounded-md">18:00</span>
               </button>
 
-              <!-- Slot 2 -->
+              <!-- Slot 2 (Liquid Inactive) -->
               <button 
                 id="slot-2" 
                 onclick="selectSlot(2, 'Friday, 19:30')" 
-                class="h-[56px] px-4 rounded-[18px] bg-white/90 border border-[#DFCFC0] hover:border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left shadow-2xs hover:scale-[1.01]" 
+                class="h-[56px] px-4 rounded-[18px] liquid-slot-inactive hover:border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left hover:scale-[1.01]" 
               >
                 <span class="text-[13px] font-normal text-[#2C1A11]">Friday</span>
-                <span class="text-[13px] font-semibold text-[#2C1A11]">19:30</span>
+                <span class="text-[13px] font-semibold text-[#2C1A11] bg-white/60 px-2 py-0.5 rounded-md">19:30</span>
               </button>
             </div>
           </div>
 
-          <!-- Mandatory Agenda Box (rounded-[18px], p-4, bg-[#FBF8F4]) -->
+          <!-- Mandatory Agenda Box (Liquid Glass Inner Panel) -->
           <div class="space-y-2">
             <div class="flex items-center justify-between">
               <label class="text-[14px] font-medium text-[#2C1A11]">Mandatory agenda</label>
-              <span class="text-[12px] font-normal text-[#5E4131]">Required</span>
+              <span class="text-[11px] font-semibold text-[#5E4131] uppercase tracking-wider bg-white/70 px-2 py-0.5 rounded-full border border-white/80">Required</span>
             </div>
 
-            <div class="bg-[#FBF8F4] border border-[#DFCFC0] rounded-[18px] p-4 space-y-1">
+            <div class="bg-white/60 backdrop-blur-md border border-white/80 rounded-[18px] p-4 space-y-1 shadow-2xs">
               <p class="text-[11px] font-medium text-[#5E4131]">Topic</p>
               <p id="agenda-topic-text" class="text-[14px] font-normal text-[#2C1A11] leading-relaxed">
                 Kafka consumer partition rebalance lag
@@ -276,8 +306,8 @@
             </div>
           </div>
 
-          <!-- Reservation Lock (rounded-[14px], h-[26px], px-3.5) -->
-          <div class="inline-flex items-center px-3.5 py-1 rounded-[14px] bg-[#F5E9CF] text-[#79551F] text-[11px] font-medium gap-1.5 shadow-2xs">
+          <!-- Reservation Lock (Liquid Amber Chip) -->
+          <div class="inline-flex items-center px-3.5 py-1.5 rounded-full bg-[#F5E9CF]/90 backdrop-blur-xs text-[#79551F] text-[11px] font-medium gap-1.5 border border-white/60 shadow-2xs">
             <svg class="w-3.5 h-3.5 text-[#79551F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
             </svg>
@@ -285,7 +315,7 @@
           </div>
 
           <!-- Total & Platform Fee Breakdown -->
-          <div class="pt-2 border-t border-[#DFCFC0]/80 space-y-1">
+          <div class="pt-2 border-t border-[#DFCFC0]/70 space-y-1">
             <div class="flex items-baseline justify-between">
               <span class="text-[15px] font-medium text-[#2C1A11]">Total</span>
               <span class="font-serif text-[28px] font-normal text-[#2C1A11]">$27.50</span>
@@ -295,17 +325,17 @@
             </p>
           </div>
 
-          <!-- Proceed CTA Button (h-[48px], rounded-[16px], bg-[#8EC5FF]) -->
+          <!-- Proceed CTA Button with Liquid Glass Accent -->
           <button 
             type="button" 
             onclick="handleProceed()" 
-            class="w-full h-[48px] rounded-[16px] bg-[#8EC5FF] hover:bg-[#78B4F5] text-[#2C1A11] font-semibold text-sm flex items-center justify-center transition-all shadow-xs active:scale-98 cursor-pointer"
+            class="w-full h-[48px] rounded-[16px] liquid-btn-cta hover:brightness-105 text-[#2C1A11] font-semibold text-sm flex items-center justify-center transition-all active:scale-98 cursor-pointer"
           >
             <span id="proceed-btn-text">Proceed to Confirmation</span>
           </button>
 
           <!-- Feedback Notice -->
-          <div id="booking-feedback" class="hidden text-center text-xs font-medium text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-[14px] p-2.5">
+          <div id="booking-feedback" class="hidden text-center text-xs font-medium text-emerald-800 bg-emerald-50/90 border border-emerald-200 rounded-[14px] p-2.5">
             Slot reserved! Lock expires in 15:00. Moving to checkout...
           </div>
 
@@ -328,11 +358,11 @@
       const slot2 = document.getElementById('slot-2');
 
       if (slotNum === 1) {
-        slot1.className = "h-[56px] px-4 rounded-[18px] bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left shadow-2xs hover:scale-[1.01]";
-        slot2.className = "h-[56px] px-4 rounded-[18px] bg-white/90 border border-[#DFCFC0] hover:border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left shadow-2xs hover:scale-[1.01]";
+        slot1.className = "h-[56px] px-4 rounded-[18px] liquid-slot-active flex items-center justify-between transition-all cursor-pointer text-left hover:scale-[1.01]";
+        slot2.className = "h-[56px] px-4 rounded-[18px] liquid-slot-inactive hover:border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left hover:scale-[1.01]";
       } else {
-        slot2.className = "h-[56px] px-4 rounded-[18px] bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left shadow-2xs hover:scale-[1.01]";
-        slot1.className = "h-[56px] px-4 rounded-[18px] bg-white/90 border border-[#DFCFC0] hover:border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left shadow-2xs hover:scale-[1.01]";
+        slot2.className = "h-[56px] px-4 rounded-[18px] liquid-slot-active flex items-center justify-between transition-all cursor-pointer text-left hover:scale-[1.01]";
+        slot1.className = "h-[56px] px-4 rounded-[18px] liquid-slot-inactive hover:border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left hover:scale-[1.01]";
       }
     }
 
