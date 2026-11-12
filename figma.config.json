@@ -1,0 +1,9 @@
+{
+  "codeConnect": {
+    "include": [
+      "frontend/src/components/**",
+      "src/components/**"
+    ],
+    "figmaFileUrl": "https://www.figma.com/design/ukkaM4uP7bLipB7BPZrKAU"
+  }
+}

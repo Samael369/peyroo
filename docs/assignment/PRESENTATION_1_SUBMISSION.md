@@ -19,7 +19,7 @@ In accordance with Section 8 ("Submit one package per team at each review") of `
 |---|---|---|
 | **Repository Link** | Shared Git repository with clear README | [https://github.com/Samael369/peyroo](https://github.com/Samael369/peyroo) |
 | **Exact Git Reference** | Git commit hash or release tag | Tag: `v0.1.0-p1` *(Commit: `[INSERT_COMMIT_HASH_BEFORE_SUBMISSION]`)* |
-| **Clickable Prototype Link** | Interactive prototype (Figma / Subframe) | `[INSERT_FIGMA_PROTOTYPE_URL_HERE]` |
+| **Clickable Prototype Link** | Interactive prototype (Figma / Subframe) | [Figma Design Canvas](https://www.figma.com/design/ukkaM4uP7bLipB7BPZrKAU) *(Prototype: `[INSERT_FIGMA_PROTOTYPE_URL_HERE]`)* |
 | **API Contract / List** | Endpoint paths, inputs, outputs, error codes | [`docs/design/API_DESIGN.md`](file:///c:/Users/r/Desktop/peyroo/docs/design/API_DESIGN.md) |
 | **UML Use Case Diagram** | Main actors & MVP actions | [`docs/analysis/uml/USE_CASE_DIAGRAM.md`](file:///c:/Users/r/Desktop/peyroo/docs/analysis/uml/USE_CASE_DIAGRAM.md) |
 | **UML Activity Diagram** | Workflow steps, decisions, failure branches | [`docs/analysis/uml/ACTIVITY_DIAGRAMS.md`](file:///c:/Users/r/Desktop/peyroo/docs/analysis/uml/ACTIVITY_DIAGRAMS.md) |

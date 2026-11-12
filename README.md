@@ -44,7 +44,7 @@ This repository strictly follows a formal 9-stage academic software engineering 
 > **Submission Cutoff:** 24 Aban 1405 @ 23:59 (15 November 2026)  
 > **Official Package Document:** [`docs/assignment/PRESENTATION_1_SUBMISSION.md`](./docs/assignment/PRESENTATION_1_SUBMISSION.md)  
 > **Target Release Tag:** `v0.1.0-p1`  
-> **Clickable Prototype:** `[INSERT_FIGMA_PROTOTYPE_URL_HERE]` (Figma design under independent development)
+> **Clickable Prototype:** [Figma Design Canvas](https://www.figma.com/design/ukkaM4uP7bLipB7BPZrKAU) *(Interactive prototype link: `[INSERT_FIGMA_PROTOTYPE_URL_HERE]`)*
 
 ### Team Member Contributions
 - **Alireza Abasi (Frontend & UI/UX Lead):** Product discovery, prioritized agile user stories (`US-01` – `US-14`) and acceptance criteria in [`USER_STORIES.md`](./docs/requirements/USER_STORIES.md), visual identity & design tokens in [`DESIGN_SYSTEM_TOKENS.md`](./docs/design/ui/DESIGN_SYSTEM_TOKENS.md), Figma clickable interactive prototype, client API contract review.
@@ -183,6 +183,12 @@ All software engineering documentation is version-controlled in clean Markdown u
 - [`docs/design/DESIGN_TRACEABILITY_MATRIX.md`](./docs/design/DESIGN_TRACEABILITY_MATRIX.md): Bidirectional traceability linking requirements to components, database tables, and API operations.
 - [`docs/design/DESIGN_VALIDATION_REPORT.md`](./docs/design/DESIGN_VALIDATION_REPORT.md): Formal verification report confirming cross-stage consistency.
 - [`docs/design/DESIGN_REVIEW_AND_CORRECTION_REPORT.md`](./docs/design/DESIGN_REVIEW_AND_CORRECTION_REPORT.md): Audit report detailing the 11 audited issues and their architectural resolutions.
+
+### 6.5 UI/UX Design & Wireframing Suite (Stage 07)
+- [`docs/design/ui/DESIGN_SYSTEM_TOKENS.md`](./docs/design/ui/DESIGN_SYSTEM_TOKENS.md): *Oceanic Precision* visual identity, 2 Primary + 1 Odd Punch hierarchy, typography, button states, and WCAG AA accessibility matrix.
+- [`docs/design/ui/tokens.json`](./docs/design/ui/tokens.json): W3C DTCG-compliant design token export for automated synchronization with Figma variables via Tokens Studio.
+- [`docs/design/ui/FIGMA_PROMPT_ENGINEERING_KIT.md`](./docs/design/ui/FIGMA_PROMPT_ENGINEERING_KIT.md): Google AI (Gemini) prompt engineering kit and Tailwind blueprints for generating and importing all 7 primary journey screens into Figma.
+- [`figma.config.json`](./figma.config.json): Official Figma Code Connect configuration linking Figma components to codebase implementations.
 
 ---
 
