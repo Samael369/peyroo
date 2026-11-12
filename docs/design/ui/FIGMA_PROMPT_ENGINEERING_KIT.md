@@ -2,227 +2,171 @@
 
 > **Project:** Peyroo (پیرو) — Mentorship Platform  
 > **Target Figma File:** [`https://www.figma.com/design/ukkaM4uP7bLipB7BPZrKAU`](https://www.figma.com/design/ukkaM4uP7bLipB7BPZrKAU)  
-> **Design Theme:** *Oceanic Precision* (`#0A1128` Space Navy, `#0284C7` Cerulean Sky, `#10B981` Electric Emerald)  
+> **Approved Visual Identity:** **Cream & Baby Blue Warm Light (60-30-10 Rule)**  
+> **Core Triad:** `#F2E8DA` (60% Cream Canvas) • `#3B2418` (30% Espresso Brown) • `#8EC5FF` (10% Baby Blue Accent)  
 > **Document Identifier:** `docs/design/ui/FIGMA_PROMPT_ENGINEERING_KIT.md`  
 > **Status:** `[APPROVED & BASELINED]`  
 
 ---
 
-## 1. Overview & Tool Pipeline
-
-This engineering kit empowers **Alireza Abasi** to use Google account AI models (Gemini 1.5 Pro / Flash in [Google AI Studio](https://aistudio.google.com/) or Antigravity) to generate high-fidelity, responsive screens that import seamlessly into native, editable Figma Auto-Layout frames.
-
-### Recommended Pipeline
-```mermaid
-flowchart LR
-    Prompt["Gemini System Prompt\n(From this Kit)"] --> Gemini["Google AI Studio\n(Gemini 1.5 Pro / Flash)"]
-    Gemini --> Code["Pixel-Accurate Tailwind CSS / HTML"]
-    Code --> Plugin["Figma Plugin:\n'HTML to Design' / 'Builder.io'"]
-    Plugin --> Figma["Native Editable Auto-Layout Frames\n(Peyroo Canvas)"]
-```
-
----
-
-## 2. Global Gemini System Prompt (Copy into Google AI Studio)
+## 1. Global Gemini System Prompt (Copy into Google AI Studio / Gemini Chat)
 
 ```markdown
-You are a Principal UI/UX Designer & Senior Frontend Engineer designing the web interface for Peyroo (پیرو), an academic mentorship platform connecting software engineers with junior mentees.
+You are a Principal UI/UX Designer & Senior Frontend Engineer designing a charming, minimalistic web application for Peyroo (پیرو), an academic mentorship platform connecting software industry professionals with junior engineers.
 
-Design Guidelines:
-- Palette: "Oceanic Precision" (Dark Theme Native)
-  - Canvas: #0A1128 (Space Navy)
-  - Card/Surface: #0F172A (Deep Slate)
-  - Raised Surface: #1E293B (Elevated Card)
-  - Borders: #334155
-  - Interactive Action: #0284C7 (Cerulean Sky, hover: #0369A1)
-  - Punch CTA / Success: #10B981 (Electric Emerald, hover: #059669, glow: rgba(16, 185, 129, 0.25))
-  - Warnings/Hold: #F59E0B (Amber)
-  - Errors: #EF4444 (Crimson)
+Visual Design Language:
+- Palette: "Cream & Baby Blue Warm Light" (60-30-10 Rule)
+  - 60% Primary Canvas: #F2E8DA (Warm Vintage Cream / linen-like, organic breathing room)
+  - 30% Secondary Structure & Text: #3B2418 (Deep Roasted Espresso Brown for headings, brand text, card borders #E2D5C3, and navigation)
+  - 10% Loud Accent: #8EC5FF (Sky Baby Blue for high-stakes conversion CTAs, active highlights, and verification badges)
+  - Card Surfaces: #FFFFFF (Pure White) and #FAF6F0 (Subtle Warm Cream)
+  - Delicate Borders: #E2D5C3 (Soft Sand)
+  - Text on Baby Blue CTA: Always use dark espresso #3B2418 text for crisp 8.5:1 WCAG AAA contrast
+  - Semantic Status: #2E7D32 (Success), #D97706 (15m Hold Warning), #DC2626 (Error)
 - Typography:
   - UI/Headings: Plus Jakarta Sans (or Inter/system-ui)
-  - Timestamps, Rates, IDs: JetBrains Mono (monospace, bold)
-- Layout Constraints:
-  - Standard desktop canvas: 1440px wide, container max-w-7xl (1280px).
-  - 8px grid spacing, rounded-xl (12px) cards, rounded-lg (8px) buttons and inputs.
-  - Full WCAG AA contrast compliance (minimum 4.5:1 on text, white text on emerald punch).
-
-Output Format:
-- Return clean, semantic HTML5 with Tailwind CSS classes.
-- Use explicit inline styles for brand hex codes if standard Tailwind colors deviate.
-- Clean nested structure that converts 1:1 into Figma Auto-Layout groups.
+  - Timestamps, Rates, IDs: JetBrains Mono (bold monospace)
+- Layout:
+  - Desktop canvas: 1440px wide, max-w-6xl container.
+  - 8px grid, generous whitespace, rounded-2xl (16px) cards, rounded-xl (12px) buttons.
 ```
 
 ---
 
-## 3. Screen-by-Screen Prompts & Blueprints
+## 2. Interactive Panel-by-Panel Prompts
 
 ---
 
-### Screen 1: Hero Landing & Featured Mentor Discovery (`/`)
+### Step 1: Panel 1 — Hero Landing & Value Proposition (`/`)
 
-#### Gemini Prompt:
+#### Ready-to-Copy Figma AI Prompt:
 ```markdown
-Generate the Hero Landing Page for Peyroo.
-Components to include:
-1. Navigation Bar:
-   - Brand logo: "Peyroo (پیرو)" with small emerald dot.
-   - Links: "Find Mentors", "How It Works", "Pricing", "Become a Mentor".
-   - Auth buttons: "Log In" (Ghost) and "Get Started" (Emerald Punch CTA: #10B981).
-2. Hero Section:
-   - Ambient mesh background gradient (Space Navy #0A1128 with subtle emerald and cerulean glows).
-   - Display Headline: "Master Software Engineering Through 1-on-1 Mentorship."
-   - Subtitle: "Direct access to senior backend architects, systems engineers, and tech leads. Book verified time slots with clear agendas—zero cold outreach chaos."
-   - Search & Filter Bar: Input for "Search by skill (e.g. Go, Distributed Systems, React)" + Search button (#10B981).
-   - Quick Filter Chips: ["All", "Backend", "Distributed Systems", "Frontend", "System Design", "DevOps", "AI/ML"].
-3. Trust / Metric Badges:
-   - "15-Minute Guaranteed Concurrency Lock" | "Transparent 10% Platform Commission" | "100% Refund Guarantee (24h Notice)".
+Create a charming, warm, minimalistic landing page for 'Peyroo' (a software engineering mentorship platform):
+- 60% Canvas: Warm Vintage Cream background (#F2E8DA). Clean, uncluttered layout with generous whitespace.
+- 30% Structure: Deep Espresso Brown (#3B2418) for all typography, navbar, and card outlines (#E2D5C3).
+- 10% Loud Accent: Sky Baby Blue (#8EC5FF) for conversion buttons (with dark brown #3B2418 bold text).
+- Top Navbar:
+  - Brand mark 'P' in brown square + 'Peyroo (پیرو)'.
+  - Nav links: 'Explore Mentors', 'How It Works', 'Pricing'.
+  - Pill toggle: [ 'Mentee Mode' | 'Mentor Mode' ].
+  - CTA Button: 'Book a Session' in Baby Blue (#8EC5FF).
+- Hero Section:
+  - Small top pill: '15-Minute Concurrency Lock • 100% Refund Policy'.
+  - Display Headline: 'Master Software Engineering Through 1-on-1 Mentorship.'
+  - Subtitle: 'Book discrete, verified sessions with senior systems architects. Every session requires a structured pre-submitted agenda—zero ghosting, zero cold outreach friction.'
+  - Search Box: Input for 'Search by skill (e.g., Go, Distributed Systems, Kafka)' with a Brown 'Search' button.
+  - Filter chips: 'Backend', 'Distributed Systems', 'Go', 'System Design', 'DevOps'.
 ```
 
 ---
 
-### Screen 2: Mentor Catalog with Multi-Tag Filter (`/mentors`)
+### Step 2: Panel 2 — Mentor Catalog & Search Results (`/mentors`)
 
-#### Gemini Prompt:
+#### Ready-to-Copy Figma AI Prompt:
 ```markdown
-Generate the Mentor Catalog & Search Results Page for Peyroo.
-Components to include:
-1. Filter Sidebar / Top Bar:
-   - Search input field.
-   - Filter tags (multi-select): Backend (active, Cerulean #0284C7), Frontend, Go, Python, React, Cloud/DevOps.
-   - Rate slider ($0 - $100/session) and Duration filter (30m, 45m, 60m).
-2. Mentor Card Grid (3 columns):
-   - Card Surface: #0F172A, border #334155, rounded-xl.
-   - Mentor Avatar with green online pulse.
-   - Mentor Name: "Sara Rad" + Headline: "Senior Distributed Systems Engineer @ TechCorp".
-   - Bio snippet (2 lines).
-   - Expertise Badges: ["Go", "Distributed Systems", "Kubernetes"].
-   - Session Rate: "$25.00 / 45-min session" in JetBrains Mono.
-   - Next Open Slot Badge: "Next slot: Tomorrow, 18:00".
-   - Action Button: "View Profile & Book" (Secondary Cerulean button: #0284C7).
+Create a clean, charming minimalistic Mentor Catalog page for 'Peyroo':
+- Canvas: Warm Vintage Cream (#F2E8DA).
+- Filter Bar: Multi-select category pills (Active tag: Baby Blue #8EC5FF with #3B2418 text), rate slider, duration filter (30, 45, 60m).
+- 3-Column Mentor Card Grid:
+  - Cards: Pure White (#FFFFFF) surface, delicate warm border (#E2D5C3), rounded-2xl, soft shadow.
+  - Mentor Avatar with verified checkmark badge.
+  - Name: 'Sara Rad' + Headline: 'Staff Distributed Systems Engineer'.
+  - Bio: '10+ years scaling high-throughput backends. Specializing in concurrency models and senior interview prep.'
+  - Skill Badges: ['Go', 'Kafka', 'System Design'].
+  - Rate: '$25.00 / 45-min session' in JetBrains Mono brown font.
+  - Action Button: 'View Slots & Book' (Ghost button with brown border, or Baby Blue CTA).
 ```
 
 ---
 
-### Screen 3: Mentor Public Profile & Availability Slot Grid (`/mentors/:id`)
+### Step 3: Panel 3 — Mentor Profile & Weekly Slot Grid (`/mentors/:id`)
 
-#### Gemini Prompt:
+#### Ready-to-Copy Figma AI Prompt:
 ```markdown
-Generate the Mentor Public Profile Page for Peyroo.
-Components to include:
-1. Mentor Hero Header:
-   - Large avatar, verified mentor badge, name "Sara Rad", headline, GitHub and LinkedIn links.
-   - Stat boxes: "4.9/5 Rating (38 Reviews)" | "45-min standard session" | "Base Rate: $25.00".
-2. Left Column (About & Experience):
-   - Biography detailing 8+ years in cloud infrastructure and high-throughput microservices.
-   - Mentoring topics: Code architecture reviews, mock technical interviews, production incident postmortems.
-3. Right Column (Interactive Availability Calendar & Slots):
-   - Week view (Mon - Sun).
-   - Availability Slot Pills (Status: Available, border #334155, text #F8FAFC).
-   - Selected Slot Pill: #0C4A6E background, #0284C7 border, with checkmark icon.
-   - Action Trigger: "Reserve Slot & Enter Agenda" (Emerald Punch CTA: #10B981).
-   - Security Notice: "Meeting link (Google Meet) will be revealed upon payment confirmation."
+Create a warm editorial Mentor Public Profile page for 'Peyroo':
+- Canvas: Warm Cream (#F2E8DA).
+- Left Column: Mentor details (Sara Rad), star rating (4.9 ★), bio, mentoring topics, GitHub/LinkedIn links.
+- Right Column: Weekly Availability Calendar & Slots:
+  - Week view tabs (Mon - Sun).
+  - Slot Pills:
+    - Available: White background, #E2D5C3 border, brown text.
+    - Selected: Sky Baby Blue (#8EC5FF) border and subtle fill, bold checkmark.
+    - Held (15m): Amber border with countdown timer.
+    - Booked: Soft beige background, muted strikethrough text.
+  - Security note: 'Private video meeting link (Google Meet) revealed upon confirmation.'
+  - Action CTA: 'Proceed to Agenda ($27.50)' in Baby Blue (#8EC5FF) with dark brown text.
 ```
 
 ---
 
-### Screen 4: Booking Drawer & Mandatory Structured Agenda (`/bookings/new`)
+### Step 4: Panel 4 — Booking Drawer & Mandatory Structured Agenda (`/bookings/new`)
 
-#### Gemini Prompt:
+#### Ready-to-Copy Figma AI Prompt:
 ```markdown
-Generate the Session Booking Modal / Drawer for Peyroo.
-Components to include:
-1. Modal Container:
-   - Raised surface #1E293B, border #334155, rounded-2xl, backdrop blur over Space Navy canvas.
-   - Header: "Book Mentorship Session with Sara Rad" + Close icon.
-   - Summary Banner: "Friday, Nov 20, 2026 • 18:00 – 18:45 (45 min) • $25.00".
-2. Mandatory Agenda Form:
-   - Field 1: "Discussion Topic / Primary Objective" (Input, placeholder: "e.g., Kafka Consumer Group lag troubleshooting in production", min 10 chars).
-   - Field 2: "Specific Questions & Context" (Textarea, placeholder: "What exact roadblocks are you facing?", min 15 chars).
-   - Field 3: "Relevant Project Links" (Optional input, placeholder: "https://github.com/username/project").
-3. Holding Notice Banner:
-   - Amber warning box (#78350F25 with #F59E0B border): "Your slot will be reserved for 15 minutes once you click Proceed."
-4. Action Buttons:
-   - "Cancel" (Ghost) and "Proceed to Payment ($27.50)" (Emerald Punch CTA: #10B981).
+Create a charming modal dialog for booking a mentorship session on 'Peyroo':
+- Modal: Pure White (#FFFFFF) elevated container, delicate warm border (#E2D5C3), rounded-2xl, dark backdrop blur.
+- Header: 'Book Session with Sara Rad • Friday 18:00 (45 min) • $25.00'.
+- Mandatory Agenda Form:
+  - Field 1: 'Primary Objective / Topic' (Input: min 10 chars).
+  - Field 2: 'Specific Questions & Roadblocks' (Textarea: min 15 chars).
+  - Field 3: 'Project / Code Link' (Input: GitHub or portfolio URL).
+- 15-Minute Lock Alert: Amber pill (#FFFBEB with #D97706 text): 'Your slot is held for 15:00 minutes while you complete payment.'
+- Footer: 'Cancel' (Ghost) and 'Proceed to Payment ($27.50)' (Baby Blue CTA #8EC5FF).
 ```
 
 ---
 
-### Screen 5: Mock Banking Gateway Checkout Simulator (`/mock-gateway/checkout`)
+### Step 5: Panel 5 — Mock Banking Gateway Simulator (`/mock-gateway/checkout`)
 
-#### Gemini Prompt:
+#### Ready-to-Copy Figma AI Prompt:
 ```markdown
-Generate the Mock Banking Gateway Simulator Page for Peyroo.
-Components to include:
-1. Gateway Header:
-   - "Peyroo Mock Banking Gateway — Sandbox Simulator".
-   - Security badge: "ACID Transaction & Concurrency Verification Mode".
-2. Itemized Financial Breakdown Card (#0F172A):
-   - Mentor Session Fee: $25.00
-   - Peyroo Platform Commission (10%): $2.50
-   - Total Amount Due: $27.50 (in bold JetBrains Mono #10B981).
-   - 15-Minute Countdown Timer: "14:48 remaining to complete payment" (Amber #F59E0B pulse).
-3. Mock Card Input Form:
-   - Card Number, Expiration (MM/YY), CVV, Cardholder Name (pre-filled with sandbox test data).
-4. Academic Presentation Test Triggers (Dual Action Buttons):
-   - Green Button (#10B981): "Simulate Successful Payment (Test Positive Flow)"
-   - Red Button (#EF4444): "Simulate Failed Payment (Test Negative / Rejection Flow)"
-   - Gray Link: "Cancel and Return to Peyroo"
+Create a clean, minimalist Mock Banking Gateway checkout page for 'Peyroo':
+- Canvas: Warm Cream (#F2E8DA).
+- Checkout Card (#FFFFFF with #E2D5C3 border):
+  - Title: 'Peyroo Mock Payment Gateway (Sandbox)'.
+  - Itemized Ledger:
+    - Mentor Session Fee: $25.00
+    - Peyroo Platform Commission (10%): $2.50
+    - Total Amount Due: $27.50 (bold JetBrains Mono in brown #3B2418).
+  - 15-Minute Countdown Timer: '14:32 remaining'.
+  - Mock Card Inputs (Card Number, Expire, CVV).
+  - Academic Test Triggers (Two prominent buttons):
+    - Green button: 'Simulate Successful Payment'
+    - Red button: 'Simulate Failed Payment (Test Failure Path)'
 ```
 
 ---
 
-### Screen 6: Booking Confirmation & Revealed Meeting Link (`/bookings/:id/confirmation`)
+### Step 6: Panel 6 — Booking Confirmation & Meeting URL Access (`/bookings/:id/confirmation`)
 
-#### Gemini Prompt:
+#### Ready-to-Copy Figma AI Prompt:
 ```markdown
-Generate the Booking Confirmation Screen for Peyroo.
-Components to include:
-1. Success Banner:
-   - Emerald checkmark icon (#10B981) + "Booking Successfully Confirmed!"
-   - Booking ID: "#BK-10492" in JetBrains Mono.
-2. Confidential Meeting Access Card (Highlighted Container):
-   - Green-tinted container (#064E3B30 with #10B981 border).
-   - Label: "Your Private Video Meeting Room"
-   - Video URL Box: "https://meet.google.com/abc-defg-hij" with "Copy Link" and "Join Call" buttons.
-   - Privacy footnote: "Disclosed exclusively to you (Mentee) and Sara Rad (Mentor)."
-3. Session Details & Receipt:
-   - Mentor: Sara Rad | Date: Friday, Nov 20, 2026 @ 18:00 – 18:45.
-   - Total Paid: $27.50 (Invoice Download link).
-   - Submitted Agenda preview.
-   - 24-Hour Cancellation Policy Badge: "Free cancellation with 100% refund available until Nov 19 @ 18:00."
-4. Navigation:
-   - Button: "View in Mentee Dashboard" (#0284C7).
+Create a warm, minimalist Booking Confirmation screen for 'Peyroo':
+- Canvas: Warm Cream (#F2E8DA).
+- Confirmation Card (#FFFFFF):
+  - Green checkmark icon + 'Booking Confirmed! (ID: #BK-10492)'.
+  - Highlighted Meeting Room Container (#F0F7FF with #8EC5FF border):
+    - 'Your Private Google Meet Link:'
+    - URL box: 'https://meet.google.com/abc-defg-hij' with 'Join Meeting' button (#8EC5FF) and 'Copy Link' button.
+    - Confidentiality footnote: 'Masked from public; accessible only to booked mentee and mentor.'
+  - Session Summary: Sara Rad • Friday, Nov 20 @ 18:00 • Total Paid: $27.50.
+  - 24-Hour Policy Pill: 'Full 100% refund available if cancelled at least 24h before start.'
 ```
 
 ---
 
-### Screen 7: Dual-Mode Session Dashboard (`/dashboard`)
+### Step 7: Panel 7 — Personal Session Dashboard (`/dashboard`)
 
-#### Gemini Prompt:
+#### Ready-to-Copy Figma AI Prompt:
 ```markdown
-Generate the Mentee/Mentor Unified Dashboard for Peyroo.
-Components to include:
-1. Header Bar:
-   - User Avatar + Welcome "Amir Hosseini"
-   - Mode Toggle Pill: [ "Mentee Mode" (Active) | "Mentor Mode" ]
-2. Session Tabs:
-   - ["Upcoming Sessions (1)", "Past Sessions (4)", "Cancelled (0)"]
-3. Active Session Card:
-   - Status badge: "CONFIRMED" (Green #10B981).
-   - Mentor Name, Avatar, Date & Time countdown ("In 3 days").
-   - Meeting Link: "Join Google Meet" (#10B981 button).
-   - Agenda Preview accordion.
-   - Action dropdown: "Cancel Booking" (Triggers 24h refund modal).
-4. Completed Session Card (from Past Sessions tab):
-   - Status badge: "COMPLETED".
-   - Review prompt: "Rate your session with Sara Rad" (5 interactive stars + "Write Review" button).
+Create a clean, charming user dashboard for 'Peyroo':
+- Canvas: Warm Cream (#F2E8DA).
+- Top Bar: User avatar (Amir Hosseini) + Mode Switch Pill: [ 'Mentee Mode' (Active) | 'Mentor Mode' ].
+- Navigation Tabs: ['Upcoming Sessions (1)', 'Past Sessions (3)', 'Cancelled (0)'].
+- Upcoming Session Card:
+  - Status Badge: 'CONFIRMED' (green).
+  - Mentor Sara Rad, Friday 18:00 countdown badge ('In 2 days').
+  - Action: 'Join Google Meet' in Baby Blue (#8EC5FF).
+  - Submitted Agenda accordion.
+  - Secondary action: 'Cancel Booking' (triggers 24h refund modal).
 ```
-
----
-
-## 4. How to Import Code into Figma in 10 Seconds
-
-1. Copy the HTML/Tailwind snippet generated by Gemini.
-2. In Figma, press `Ctrl + /` (or `Cmd + /`) and search for **"html.to.design"** (or **"Builder.io"**).
-3. Paste the code or preview URL.
-4. Click **Import** $\to$ Figma converts every `div`, text element, button, and image into clean, editable Figma Auto-Layout layers!
