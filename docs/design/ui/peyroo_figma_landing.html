@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Peyroo (پیرو) — Software Engineering Mentorship</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  
+  <!-- Fonts: Newsreader (Editorial Serif), Inter (Sans), Noto Sans Arabic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Noto+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --color-cream: #F2E8DA;
+      --color-cream-light: #FBF5EC;
+      --color-cream-edge: #E7E7E1;
+      --color-espresso: #2C1A11;
+      --color-espresso-muted: #5E4131;
+      --color-border: #DFCFC0;
+      --color-blue-accent: #8EC5FF;
+      --color-blue-hover: #78B4F5;
+      --color-blue-surface: #F3F8FF;
+      --color-amber-surface: #F5E9CF;
+      --color-amber-text: #79551F;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--color-espresso);
+      background: linear-gradient(143.55deg, #FBF5EC 8.33%, #F2E8DA 50%, #E7E7E1 91.67%);
+      min-height: 100vh;
+    }
+
+    .font-serif {
+      font-family: 'Newsreader', Georgia, serif;
+    }
+
+    .font-arabic {
+      font-family: 'Noto Sans Arabic', 'Inter', sans-serif;
+    }
+
+    /* Subtle custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F2E8DA;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #DFCFC0;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #BFAEA0;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-[#8EC5FF] selection:text-[#2C1A11]" data-node-id="14:2" data-name="Peyroo — Editorial mentorship hero">
+
+  <!-- Top Navigation (Figma Node: 14:3) -->
+  <header class="w-full border-b border-[#DFCFC0] bg-[#FBF5EC]/90 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-[1440px] mx-auto px-6 lg:px-20 h-16 flex items-center justify-between">
+      
+      <!-- Left: Monogram, Brand & Links -->
+      <div class="flex items-center gap-6 lg:gap-10">
+        <!-- Logo / Monogram (Figma Node: 14:6, 14:7, 14:8) -->
+        <a href="#" class="flex items-center gap-3 group">
+          <div class="w-8 h-8 rounded-lg bg-[#2C1A11] flex items-center justify-center shrink-0 shadow-sm" data-node-id="14:6">
+            <span class="font-serif text-[#F2E8DA] text-2xl font-normal leading-none pt-0.5" data-node-id="14:7">P</span>
+          </div>
+          <span class="font-semibold text-lg text-[#2C1A11] tracking-tight flex items-center gap-1.5" data-node-id="14:8">
+            Peyroo <span class="font-arabic font-medium text-sm text-[#5E4131]">(پیرو)</span>
+          </span>
+        </a>
+
+        <!-- Desktop Nav Links (Figma Node: 14:9, 14:10, 14:11) -->
+        <nav class="hidden md:flex items-center gap-7 text-[13px] font-medium text-[#2C1A11]">
+          <a href="#mentors" class="hover:text-[#5E4131] transition-colors" data-node-id="14:9">Find Mentors</a>
+          <a href="#how-it-works" class="hover:text-[#5E4131] transition-colors" data-node-id="14:10">How It Works</a>
+          <a href="#principles" class="hover:text-[#5E4131] transition-colors" data-node-id="14:11">Principles &amp; Fee</a>
+        </nav>
+      </div>
+
+      <!-- Right: Role Toggle, Login, CTA (Figma Node: 14:12, 14:16, 14:17) -->
+      <div class="flex items-center gap-4 lg:gap-6">
+        
+        <!-- Mentee / Mentor Switch (Figma Node: 14:12) -->
+        <div id="role-toggle" class="hidden sm:inline-flex items-center p-[2px] bg-transparent border border-[#DFCFC0] rounded-[20px] h-9" data-node-id="14:12">
+          <button id="btn-role-mentee" onclick="setRole('mentee')" class="h-[30px] px-4 rounded-[18px] bg-[#2C1A11] text-[#F2E8DA] font-semibold text-sm transition-all duration-150" data-node-id="14:13">
+            Mentee
+          </button>
+          <button id="btn-role-mentor" onclick="setRole('mentor')" class="h-[30px] px-4 rounded-[18px] text-[#2C1A11] font-medium text-xs hover:text-[#5E4131] transition-all duration-150" data-node-id="14:15">
+            Mentor
+          </button>
+        </div>
+
+        <a href="#login" class="text-[13px] font-medium text-[#2C1A11] hover:text-[#5E4131] transition-colors" data-node-id="14:16">
+          Log in
+        </a>
+
+        <!-- Primary Accent CTA: Book a session (Figma Node: 14:17) -->
+        <a href="#booking-card" class="h-10 px-5 rounded-[20px] bg-[#8EC5FF] hover:bg-[#78B4F5] text-[#2C1A11] font-semibold text-sm inline-flex items-center justify-center transition-all shadow-[0_1px_2px_rgba(44,26,17,0.08)] active:scale-95" data-node-id="14:17">
+          <span data-node-id="14:18">Book a session</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Hero Layout (Figma Node: 14:4) -->
+  <main class="max-w-[1440px] mx-auto px-6 lg:px-20 py-12 lg:py-20">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+      
+      <!-- Left Column: Editorial Introduction (Figma Node: 14:19) -->
+      <section class="lg:col-span-7 flex flex-col justify-center space-y-8 pt-4 lg:pt-8" data-node-id="14:19">
+        
+        <!-- Headline (Figma Node: 14:20) -->
+        <div class="space-y-1">
+          <h1 class="font-serif text-4xl sm:text-5xl lg:text-[48px] font-normal leading-[1.06] text-[#2C1A11] tracking-[-0.72px]" data-node-id="14:20">
+            Deliberate, 1-on-1<br>
+            mentorship for<br>
+            software engineers.
+          </h1>
+        </div>
+
+        <!-- Description (Figma Node: 14:21) -->
+        <p class="text-base sm:text-lg text-[#5E4131] font-normal leading-relaxed max-w-[570px]" data-node-id="14:21">
+          Book verified availability slots with senior systems architects. Every session requires a mandatory structured agenda—no ghosting, no cold outreach anxiety.
+        </p>
+
+        <!-- Topic Search Bar (Figma Node: 14:22) -->
+        <div class="w-full max-w-[560px] space-y-3">
+          <form onsubmit="handleSearch(event)" class="w-full h-16 bg-white border border-[#DFCFC0] rounded-[24px] p-2 pl-4 flex items-center justify-between shadow-[0_2px_8px_rgba(44,26,17,0.04)] focus-within:border-[#2C1A11] transition-all" data-node-id="14:22">
+            
+            <div class="flex items-center gap-3 flex-1 mr-2">
+              <!-- Search Icon (Figma Node: 14:23, asset 2841980e) -->
+              <svg class="w-5 h-5 text-[#5E4131] shrink-0" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" data-node-id="14:23">
+                <path d="M14.1667 8.75C14.1667 11.7415 11.7415 14.1667 8.75 14.1667C5.75846 14.1667 3.33333 11.7415 3.33333 8.75C3.33333 5.75846 5.75846 3.33333 8.75 3.33333C11.7415 3.33333 14.1667 5.75846 14.1667 8.75Z" stroke="#5E4131" stroke-width="1.33333"/>
+                <path d="M12.9167 12.9167L16.6667 16.6667" stroke="#5E4131" stroke-width="1.33333" stroke-linecap="round"/>
+              </svg>
+
+              <!-- Search Input (Figma Node: 14:26) -->
+              <input 
+                id="search-input" 
+                type="text" 
+                placeholder="Search by topic (e.g. Distributed Systems, Go, Concurrency)" 
+                class="w-full bg-transparent border-none outline-none text-[13px] text-[#2C1A11] placeholder:text-[#846857] font-normal"
+                data-node-id="14:26"
+              />
+            </div>
+
+            <!-- Search Button (Figma Node: 14:27, 14:28) -->
+            <button type="submit" class="h-12 px-6 rounded-[16px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-semibold text-sm transition-colors shrink-0 flex items-center justify-center active:scale-95" data-node-id="14:27">
+              <span data-node-id="14:28">Search</span>
+            </button>
+          </form>
+
+          <!-- Suggested Focus Areas / Topics (Figma Node: 14:29, 14:30, 14:31) -->
+          <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px] font-medium text-[#5E4131] pt-1">
+            <button type="button" onclick="selectTopic('Distributed Systems')" class="underline underline-offset-4 decoration-[#DFCFC0] hover:decoration-[#2C1A11] hover:text-[#2C1A11] transition-all" data-node-id="14:29">
+              Distributed Systems
+            </button>
+            <span class="text-[#DFCFC0] select-none">•</span>
+            <button type="button" onclick="selectTopic('PostgreSQL Internals')" class="underline underline-offset-4 decoration-[#DFCFC0] hover:decoration-[#2C1A11] hover:text-[#2C1A11] transition-all" data-node-id="14:30">
+              PostgreSQL Internals
+            </button>
+            <span class="text-[#DFCFC0] select-none">•</span>
+            <button type="button" onclick="selectTopic('System Architecture')" class="underline underline-offset-4 decoration-[#DFCFC0] hover:decoration-[#2C1A11] hover:text-[#2C1A11] transition-all" data-node-id="14:31">
+              System Architecture
+            </button>
+          </div>
+        </div>
+
+        <!-- Quiet Guarantees Row (Figma Node: 14:32) -->
+        <div class="w-full max-w-[560px] pt-6 border-t border-[#DFCFC0]" data-node-id="14:32">
+          <div class="grid grid-cols-3 divide-x divide-[#DFCFC0] text-center">
+            
+            <div class="text-left pr-4" data-node-id="14:34">
+              <p class="text-sm font-medium text-[#2C1A11]">10% flat fee</p>
+              <p class="text-xs text-[#5E4131] mt-0.5">Transparent platform cut</p>
+            </div>
+
+            <div class="text-left px-4" data-node-id="14:35">
+              <p class="text-sm font-medium text-[#2C1A11]">15-min lock</p>
+              <p class="text-xs text-[#5E4131] mt-0.5">Guaranteed slot hold</p>
+            </div>
+
+            <div class="text-left pl-4" data-node-id="14:37">
+              <p class="text-sm font-medium text-[#2C1A11]">24h policy</p>
+              <p class="text-xs text-[#5E4131] mt-0.5">Full refund on cancellation</p>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Right Column: Interactive Booking Card (Figma Node: 14:39) -->
+      <aside class="lg:col-span-5 flex justify-center lg:justify-end" id="booking-card">
+        <div class="w-full max-w-[496px] bg-white border border-[#DFCFC0] rounded-[28px] p-7 shadow-[0px_12px_32px_-8px_rgba(44,26,17,0.06)] relative space-y-6" data-node-id="14:39" data-name="Book a session with Sara Rad">
+          
+          <!-- Mentor Header Profile (Figma Node: 14:40 - 14:45) -->
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-4">
+              <!-- Avatar with Monogram initials (Figma Node: 14:40, 14:41) -->
+              <div class="w-[52px] h-[52px] rounded-full bg-[#F2E8DA] flex items-center justify-center shrink-0 border border-[#DFCFC0]" data-node-id="14:40">
+                <span class="font-medium text-base text-[#2C1A11]" data-node-id="14:41">SR</span>
+              </div>
+
+              <!-- Mentor Meta (Figma Node: 14:42, 14:43, 14:44) -->
+              <div>
+                <div class="flex items-center gap-2">
+                  <h2 class="text-lg font-semibold text-[#2C1A11]" data-node-id="14:42">Sara Rad</h2>
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#8EC5FF] inline-block" title="Verified Mentor" data-node-id="14:43"></span>
+                </div>
+                <p class="text-[13px] text-[#5E4131] mt-0.5" data-node-id="14:44">Staff Systems Architect • 10y exp</p>
+              </div>
+            </div>
+
+            <!-- Rating (Figma Node: 14:45) -->
+            <div class="text-sm font-medium text-[#2C1A11] bg-[#FBF5EC] px-2.5 py-1 rounded-full border border-[#DFCFC0]" data-node-id="14:45">
+              ★ 4.9
+            </div>
+          </div>
+
+          <!-- Fee & Duration (Figma Node: 14:46, 14:47) -->
+          <div class="flex items-baseline gap-2">
+            <span class="font-serif text-[26px] font-normal text-[#2C1A11]" data-node-id="14:46">$25.00</span>
+            <span class="text-sm text-[#5E4131]" data-node-id="14:47">/ 45 min</span>
+          </div>
+
+          <!-- Hairline Divider (Figma Node: 14:48) -->
+          <div class="h-px bg-[#DFCFC0] w-full" data-node-id="14:48"></div>
+
+          <!-- Availability Slot Selection (Figma Node: 14:49 - 14:55) -->
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <label class="text-sm font-medium text-[#2C1A11]" data-node-id="14:49">Choose a time</label>
+              <span class="text-xs text-[#5E4131]">Tehran Time (GMT+3:30)</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <!-- Slot 1 (Selected State in Figma: Node 14:50) -->
+              <button 
+                id="slot-1" 
+                onclick="selectSlot(1, 'Tomorrow, 18:00')" 
+                class="h-14 px-4 rounded-[16px] bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all duration-150 cursor-pointer text-left" 
+                data-node-id="14:50"
+              >
+                <span class="text-[13px] font-medium text-[#2C1A11]" data-node-id="14:51">Tomorrow</span>
+                <span class="text-[13px] font-semibold text-[#2C1A11]" data-node-id="14:52">18:00</span>
+              </button>
+
+              <!-- Slot 2 (Unselected State in Figma: Node 14:53) -->
+              <button 
+                id="slot-2" 
+                onclick="selectSlot(2, 'Friday, 19:30')" 
+                class="h-14 px-4 rounded-[16px] bg-white border border-[#DFCFC0] hover:border-[#8EC5FF] flex items-center justify-between transition-all duration-150 cursor-pointer text-left" 
+                data-node-id="14:53"
+              >
+                <span class="text-[13px] font-normal text-[#2C1A11]" data-node-id="14:54">Friday</span>
+                <span class="text-[13px] font-semibold text-[#2C1A11]" data-node-id="14:55">19:30</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Mandatory Agenda Card (Figma Node: 14:56 - 14:60) -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <label class="text-sm font-medium text-[#2C1A11]" data-node-id="14:56">Mandatory agenda</label>
+              <span class="text-xs font-medium text-[#5E4131] uppercase tracking-wider" data-node-id="14:57">Required</span>
+            </div>
+
+            <div class="bg-[#FBF8F4] border border-[#DFCFC0] rounded-[16px] p-3.5 space-y-1" data-node-id="14:58">
+              <p class="text-[11px] font-medium text-[#5E4131]" data-node-id="14:59">Topic</p>
+              <p id="agenda-topic-text" class="text-sm font-normal text-[#2C1A11]" data-node-id="14:60">
+                Kafka consumer partition rebalance lag
+              </p>
+            </div>
+          </div>
+
+          <!-- Reservation Lock Badge (Figma Node: 14:61, 14:62) -->
+          <div class="inline-flex items-center px-3 py-1 rounded-[13px] bg-[#F5E9CF] text-[#79551F] text-[11px] font-medium gap-1.5" data-node-id="14:61">
+            <svg class="w-3.5 h-3.5 text-[#79551F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            </svg>
+            <span data-node-id="14:62">15:00 lock guaranteed</span>
+          </div>
+
+          <!-- Pricing & Fee Breakdown (Figma Node: 14:63, 14:64, 14:65) -->
+          <div class="pt-2 border-t border-[#DFCFC0] space-y-1">
+            <div class="flex items-baseline justify-between">
+              <span class="text-base font-medium text-[#2C1A11]" data-node-id="14:63">Total</span>
+              <span class="font-serif text-[28px] font-normal text-[#2C1A11]" data-node-id="14:64">$27.50</span>
+            </div>
+            <p class="text-[11px] text-[#5E4131]" data-node-id="14:65">
+              $25.00 session + $2.50 platform fee (10%)
+            </p>
+          </div>
+
+          <!-- Action CTA: Proceed to Confirmation (Figma Node: 14:66, 14:67) -->
+          <button 
+            type="button" 
+            onclick="handleProceed()" 
+            class="w-full h-11 rounded-[22px] bg-[#8EC5FF] hover:bg-[#78B4F5] text-[#2C1A11] font-semibold text-sm flex items-center justify-center transition-all shadow-sm active:scale-98 cursor-pointer"
+            data-node-id="14:66"
+          >
+            <span id="proceed-btn-text" data-node-id="14:67">Proceed to Confirmation</span>
+          </button>
+
+          <!-- Feedback Notice -->
+          <div id="booking-feedback" class="hidden text-center text-xs font-medium text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg p-2.5">
+            Slot reserved! Lock expires in 15:00. Moving to checkout...
+          </div>
+
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- Interactive JavaScript logic -->
+  <script>
+    let activeRole = 'mentee';
+    let selectedSlot = 1;
+    let selectedSlotText = 'Tomorrow, 18:00';
+
+    function setRole(role) {
+      activeRole = role;
+      const menteeBtn = document.getElementById('btn-role-mentee');
+      const mentorBtn = document.getElementById('btn-role-mentor');
+
+      if (role === 'mentee') {
+        menteeBtn.className = "h-[30px] px-4 rounded-[18px] bg-[#2C1A11] text-[#F2E8DA] font-semibold text-sm transition-all duration-150";
+        mentorBtn.className = "h-[30px] px-4 rounded-[18px] text-[#2C1A11] font-medium text-xs hover:text-[#5E4131] transition-all duration-150";
+      } else {
+        mentorBtn.className = "h-[30px] px-4 rounded-[18px] bg-[#2C1A11] text-[#F2E8DA] font-semibold text-sm transition-all duration-150";
+        menteeBtn.className = "h-[30px] px-4 rounded-[18px] text-[#2C1A11] font-medium text-xs hover:text-[#5E4131] transition-all duration-150";
+      }
+    }
+
+    function selectSlot(slotNum, slotText) {
+      selectedSlot = slotNum;
+      selectedSlotText = slotText;
+
+      const slot1 = document.getElementById('slot-1');
+      const slot2 = document.getElementById('slot-2');
+
+      if (slotNum === 1) {
+        slot1.className = "h-14 px-4 rounded-[16px] bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all duration-150 cursor-pointer text-left";
+        slot2.className = "h-14 px-4 rounded-[16px] bg-white border border-[#DFCFC0] hover:border-[#8EC5FF] flex items-center justify-between transition-all duration-150 cursor-pointer text-left";
+      } else {
+        slot2.className = "h-14 px-4 rounded-[16px] bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all duration-150 cursor-pointer text-left";
+        slot1.className = "h-14 px-4 rounded-[16px] bg-white border border-[#DFCFC0] hover:border-[#8EC5FF] flex items-center justify-between transition-all duration-150 cursor-pointer text-left";
+      }
+    }
+
+    function selectTopic(topicName) {
+      const searchInput = document.getElementById('search-input');
+      const agendaTopic = document.getElementById('agenda-topic-text');
+      if (searchInput) searchInput.value = topicName;
+      if (agendaTopic) agendaTopic.textContent = `${topicName} — deep dive & code review`;
+    }
+
+    function handleSearch(e) {
+      e.preventDefault();
+      const searchInput = document.getElementById('search-input');
+      if (searchInput && searchInput.value.trim()) {
+        const agendaTopic = document.getElementById('agenda-topic-text');
+        agendaTopic.textContent = searchInput.value.trim();
+      }
+    }
+
+    function handleProceed() {
+      const btn = document.getElementById('proceed-btn-text');
+      const feedback = document.getElementById('booking-feedback');
+      btn.textContent = "Locking slot (" + selectedSlotText + ")...";
+      feedback.classList.remove('hidden');
+      setTimeout(() => {
+        btn.textContent = "Proceed to Confirmation";
+      }, 3000);
+    }
+  </script>
+
+</body>
+</html>
