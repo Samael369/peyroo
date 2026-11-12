@@ -17,25 +17,24 @@
     :root {
       --color-cream-base: #F8F2E8;
       --color-cream-light: #FDFBF7;
-      --color-cream-deep: #EBE0D0;
       --color-espresso: #2C1A11;
       --color-espresso-muted: #5E4131;
-      --color-border: #E2D5C7;
+      --color-border: #DFCFC0;
+      --color-border-subtle: #E8DDD0;
       --color-blue-accent: #8EC5FF;
       --color-blue-hover: #78B4F5;
-      --color-blue-tint: rgba(142, 197, 255, 0.22);
     }
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       color: var(--color-espresso);
       min-height: 100vh;
-      /* Atmospheric, luminous warm gradient background with gentle baby-blue morning tint */
+      /* Warm, calm atmospheric gradient — retained per request */
       background-color: #F8F2E8;
       background-image: 
         radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.95) 0px, transparent 55%),
-        radial-gradient(at 100% 15%, rgba(142, 197, 255, 0.20) 0px, transparent 48%),
-        radial-gradient(at 65% 85%, rgba(242, 230, 214, 0.9) 0px, transparent 65%),
+        radial-gradient(at 100% 15%, rgba(142, 197, 255, 0.16) 0px, transparent 45%),
+        radial-gradient(at 65% 85%, rgba(242, 230, 214, 0.85) 0px, transparent 65%),
         linear-gradient(155deg, #FDFBF7 0%, #F5ECE0 45%, #EBE1D3 100%);
       background-attachment: fixed;
     }
@@ -48,29 +47,17 @@
       font-family: 'Noto Sans Arabic', 'Inter', sans-serif;
     }
 
-    /* Soft, rounded glass panels */
-    .glass-card {
-      background: rgba(255, 255, 255, 0.88);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(226, 213, 199, 0.9);
-      box-shadow: 
-        0 24px 48px -12px rgba(44, 26, 17, 0.06),
-        0 4px 16px -4px rgba(44, 26, 17, 0.02),
-        inset 0 1px 1px rgba(255, 255, 255, 0.95);
-    }
-
-    .glass-input {
+    /* Restrained, dignified surface with calm shadow */
+    .calm-surface {
       background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(226, 213, 199, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--color-border);
       box-shadow: 
-        0 4px 20px -4px rgba(44, 26, 17, 0.04),
-        inset 0 1px 1px rgba(255, 255, 255, 0.9);
+        0 20px 40px -12px rgba(44, 26, 17, 0.05),
+        0 2px 6px rgba(44, 26, 17, 0.02);
     }
 
-    /* Custom smooth scrollbar */
     ::-webkit-scrollbar {
       width: 8px;
     }
@@ -79,59 +66,54 @@
     }
     ::-webkit-scrollbar-thumb {
       background: #DFCFC0;
-      border-radius: 9999px;
+      border-radius: 4px;
     }
   </style>
 </head>
-<body class="antialiased selection:bg-[#8EC5FF] selection:text-[#2C1A11] relative overflow-x-hidden">
+<body class="antialiased selection:bg-[#8EC5FF] selection:text-[#2C1A11]">
 
-  <!-- Ambient background glow behind right column -->
-  <div class="absolute right-0 top-16 w-[650px] h-[650px] bg-[#8EC5FF]/15 rounded-full blur-[120px] pointer-events-none -z-10"></div>
-  <div class="absolute left-10 top-40 w-[500px] h-[500px] bg-white/70 rounded-full blur-[100px] pointer-events-none -z-10"></div>
-
-  <!-- Top Navigation (Rounder, Luminous, Pill Controls) -->
-  <header class="w-full border-b border-[#E2D5C7]/70 bg-white/40 backdrop-blur-md sticky top-0 z-50 transition-all">
-    <div class="max-w-[1440px] mx-auto px-6 lg:px-20 h-18 flex items-center justify-between">
+  <!-- Top Navigation (Clean Hairline, Uncluttered, Restrained Corners) -->
+  <header class="w-full border-b border-[#DFCFC0]/80 bg-white/50 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-[1440px] mx-auto px-8 lg:px-20 h-16 flex items-center justify-between">
       
-      <!-- Left: Monogram, Brand & Links -->
-      <div class="flex items-center gap-8 lg:gap-12">
-        <!-- Logo / Monogram (Rounded squircle) -->
-        <a href="#" class="flex items-center gap-3 group">
-          <div class="w-9 h-9 rounded-2xl bg-[#2C1A11] flex items-center justify-center shrink-0 shadow-sm transition-transform group-hover:scale-105">
+      <!-- Brand Wordmark & Nav Links -->
+      <div class="flex items-center gap-10">
+        <a href="#" class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-[#2C1A11] flex items-center justify-center shrink-0 shadow-xs">
             <span class="font-serif text-[#F8F2E8] text-2xl font-normal leading-none pt-0.5">P</span>
           </div>
-          <span class="font-semibold text-lg text-[#2C1A11] tracking-tight flex items-center gap-1.5">
-            Peyroo <span class="font-arabic font-medium text-sm text-[#5E4131]">(پیرو)</span>
+          <span class="font-semibold text-lg text-[#2C1A11] tracking-tight">
+            Peyroo <span class="font-arabic font-normal text-sm text-[#5E4131] ml-0.5">(پیرو)</span>
           </span>
         </a>
 
-        <!-- Desktop Nav Links -->
-        <nav class="hidden md:flex items-center gap-8 text-[13.5px] font-medium text-[#2C1A11]/90">
-          <a href="#mentors" class="hover:text-[#2C1A11] transition-colors">Find Mentors</a>
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:flex items-center gap-7 text-[13.5px] font-medium text-[#5E4131]">
+          <a href="#mentors" class="text-[#2C1A11] hover:text-[#2C1A11] transition-colors">Find Mentors</a>
           <a href="#how-it-works" class="hover:text-[#2C1A11] transition-colors">How It Works</a>
           <a href="#principles" class="hover:text-[#2C1A11] transition-colors">Principles &amp; Fee</a>
         </nav>
       </div>
 
-      <!-- Right: Friendly Pill Controls, Role Toggle, Login, CTA -->
-      <div class="flex items-center gap-4 lg:gap-6">
+      <!-- Actions: Role Toggle & CTAs -->
+      <div class="flex items-center gap-5">
         
-        <!-- Friendly Pill Role Toggle -->
-        <div id="role-toggle" class="hidden sm:inline-flex items-center p-1 bg-[#EBE0D0]/50 border border-[#E2D5C7] rounded-full h-10 shadow-inner">
-          <button id="btn-role-mentee" onclick="setRole('mentee')" class="h-8 px-5 rounded-full bg-[#2C1A11] text-[#F8F2E8] font-semibold text-xs tracking-wide shadow-sm transition-all duration-200">
+        <!-- Role Toggle (Subtle 8px radius) -->
+        <div id="role-toggle" class="hidden sm:inline-flex items-center p-0.5 bg-[#EAE0D2]/70 border border-[#DFCFC0] rounded-lg h-9">
+          <button id="btn-role-mentee" onclick="setRole('mentee')" class="h-7 px-3.5 rounded-md bg-[#2C1A11] text-[#F8F2E8] font-semibold text-xs transition-all">
             Mentee
           </button>
-          <button id="btn-role-mentor" onclick="setRole('mentor')" class="h-8 px-5 rounded-full text-[#5E4131] font-medium text-xs hover:text-[#2C1A11] transition-all duration-200">
+          <button id="btn-role-mentor" onclick="setRole('mentor')" class="h-7 px-3.5 rounded-md text-[#5E4131] font-medium text-xs hover:text-[#2C1A11] transition-all">
             Mentor
           </button>
         </div>
 
-        <a href="#login" class="text-[13.5px] font-medium text-[#5E4131] hover:text-[#2C1A11] transition-colors px-2">
+        <a href="#login" class="text-[13.5px] font-medium text-[#5E4131] hover:text-[#2C1A11] transition-colors">
           Log in
         </a>
 
-        <!-- Friendly Round CTA: Book a session (Baby Blue #8EC5FF) -->
-        <a href="#booking-card" class="h-11 px-6 rounded-full bg-[#8EC5FF] hover:bg-[#78B4F5] text-[#2C1A11] font-semibold text-sm inline-flex items-center justify-center transition-all shadow-[0_2px_8px_rgba(142,197,255,0.4)] hover:shadow-[0_4px_16px_rgba(142,197,255,0.5)] active:scale-95">
+        <!-- Accent Action (Restrained 10px radius) -->
+        <a href="#booking-card" class="h-9 px-4 rounded-lg bg-[#8EC5FF] hover:bg-[#78B4F5] text-[#2C1A11] font-semibold text-xs inline-flex items-center justify-center transition-all shadow-xs active:scale-95">
           Book a session
         </a>
       </div>
@@ -139,91 +121,79 @@
     </div>
   </header>
 
-  <!-- Main Hero Layout -->
-  <main class="max-w-[1440px] mx-auto px-6 lg:px-20 py-12 lg:py-20">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+  <!-- Main Hero Layout (Spacious, De-cluttered, Generous Margins) -->
+  <main class="max-w-[1440px] mx-auto px-8 lg:px-20 py-16 lg:py-24">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20 items-start">
       
-      <!-- Left Column: Editorial Introduction (Charming, Friendly, Minimalist) -->
-      <section class="lg:col-span-7 flex flex-col justify-center space-y-8 pt-4 lg:pt-6">
+      <!-- Left Column: Editorial Introduction (Generous Breathing Room) -->
+      <section class="lg:col-span-7 flex flex-col justify-center space-y-10 pt-2 lg:pt-4">
         
-        <!-- Subtle Pill Eyebrow -->
-        <div class="inline-flex items-center gap-2 self-start px-3.5 py-1.5 rounded-full bg-white/70 border border-[#E2D5C7] text-xs font-medium text-[#5E4131] shadow-2xs">
-          <span class="w-2 h-2 rounded-full bg-[#8EC5FF] animate-pulse"></span>
-          <span>Verified Availability • 1-on-1 Architecture Sessions</span>
-        </div>
-
-        <!-- Headline (Editorial, Warm & Flowing) -->
-        <div class="space-y-2">
-          <h1 class="font-serif text-4xl sm:text-5xl lg:text-[52px] font-normal leading-[1.08] text-[#2C1A11] tracking-[-0.02em]">
+        <!-- Headline & Description Group -->
+        <div class="space-y-5">
+          <h1 class="font-serif text-4xl sm:text-5xl lg:text-[50px] font-normal leading-[1.08] text-[#2C1A11] tracking-[-0.015em]">
             Deliberate, 1-on-1<br>
             mentorship for<br>
             software engineers.
           </h1>
+          <p class="text-base sm:text-lg text-[#5E4131] font-normal leading-relaxed max-w-[540px]">
+            Book verified availability slots with senior systems architects. Every session requires a mandatory structured agenda—no ghosting, no cold outreach anxiety.
+          </p>
         </div>
 
-        <!-- Friendly Description -->
-        <p class="text-base sm:text-lg text-[#5E4131] font-normal leading-relaxed max-w-[560px]">
-          Book verified availability slots with senior systems architects. Every session requires a mandatory structured agenda—no ghosting, no cold outreach anxiety.
-        </p>
-
-        <!-- Topic Search Bar (Rounder, Friendly Pill with Smooth Backdrop) -->
-        <div class="w-full max-w-[560px] space-y-3.5">
-          <form onsubmit="handleSearch(event)" class="w-full h-16 glass-input rounded-full p-2 pl-6 flex items-center justify-between shadow-sm focus-within:border-[#2C1A11] focus-within:shadow-md transition-all">
+        <!-- Topic Search (Clean 12px Radius, Spacious Padding) -->
+        <div class="w-full max-w-[540px] space-y-4">
+          <form onsubmit="handleSearch(event)" class="w-full h-14 bg-white/95 border border-[#DFCFC0] rounded-xl p-1.5 pl-4 flex items-center justify-between shadow-xs focus-within:border-[#2C1A11] transition-all">
             
-            <div class="flex items-center gap-3.5 flex-1 mr-2">
-              <!-- Search Icon (Figma asset) -->
-              <svg class="w-5 h-5 text-[#5E4131] shrink-0" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div class="flex items-center gap-3 flex-1 mr-2">
+              <svg class="w-4 h-4 text-[#5E4131] shrink-0" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M14.1667 8.75C14.1667 11.7415 11.7415 14.1667 8.75 14.1667C5.75846 14.1667 3.33333 11.7415 3.33333 8.75C3.33333 5.75846 5.75846 3.33333 8.75 3.33333C11.7415 3.33333 14.1667 5.75846 14.1667 8.75Z" stroke="#5E4131" stroke-width="1.33333"/>
                 <path d="M12.9167 12.9167L16.6667 16.6667" stroke="#5E4131" stroke-width="1.33333" stroke-linecap="round"/>
               </svg>
 
-              <!-- Search Input -->
               <input 
                 id="search-input" 
                 type="text" 
                 placeholder="Search by topic (e.g. Distributed Systems, Go, Concurrency)" 
-                class="w-full bg-transparent border-none outline-none text-sm text-[#2C1A11] placeholder:text-[#846857]/80 font-normal"
+                class="w-full bg-transparent border-none outline-none text-sm text-[#2C1A11] placeholder:text-[#846857]/80 font-normal py-1"
               />
             </div>
 
-            <!-- Round Search Button -->
-            <button type="submit" class="h-12 px-7 rounded-full bg-[#2C1A11] hover:bg-[#432A1C] text-white font-medium text-sm transition-all shrink-0 flex items-center justify-center shadow-sm active:scale-95 cursor-pointer">
+            <!-- Crisp Search Button -->
+            <button type="submit" class="h-11 px-5 rounded-lg bg-[#2C1A11] hover:bg-[#432A1C] text-white font-medium text-xs transition-colors shrink-0 flex items-center justify-center active:scale-95 cursor-pointer">
               <span>Search</span>
             </button>
           </form>
 
-          <!-- Charming Pill Chips for Topics -->
-          <div class="flex flex-wrap items-center gap-2 pt-1">
-            <span class="text-xs text-[#846857] mr-1">Popular:</span>
-            <button type="button" onclick="selectTopic('Distributed Systems')" class="px-3.5 py-1 rounded-full bg-white/60 hover:bg-white border border-[#E2D5C7] text-xs font-medium text-[#5E4131] hover:text-[#2C1A11] transition-all hover:scale-105 active:scale-95 shadow-2xs">
+          <!-- Quiet Suggested Topics (Clean Underlines, Zero Clutter) -->
+          <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[#5E4131] pt-0.5">
+            <button type="button" onclick="selectTopic('Distributed Systems')" class="underline underline-offset-4 decoration-[#DFCFC0] hover:decoration-[#2C1A11] hover:text-[#2C1A11] transition-all">
               Distributed Systems
             </button>
-            <button type="button" onclick="selectTopic('PostgreSQL Internals')" class="px-3.5 py-1 rounded-full bg-white/60 hover:bg-white border border-[#E2D5C7] text-xs font-medium text-[#5E4131] hover:text-[#2C1A11] transition-all hover:scale-105 active:scale-95 shadow-2xs">
+            <span class="text-[#DFCFC0] select-none">•</span>
+            <button type="button" onclick="selectTopic('PostgreSQL Internals')" class="underline underline-offset-4 decoration-[#DFCFC0] hover:decoration-[#2C1A11] hover:text-[#2C1A11] transition-all">
               PostgreSQL Internals
             </button>
-            <button type="button" onclick="selectTopic('System Architecture')" class="px-3.5 py-1 rounded-full bg-white/60 hover:bg-white border border-[#E2D5C7] text-xs font-medium text-[#5E4131] hover:text-[#2C1A11] transition-all hover:scale-105 active:scale-95 shadow-2xs">
+            <span class="text-[#DFCFC0] select-none">•</span>
+            <button type="button" onclick="selectTopic('System Architecture')" class="underline underline-offset-4 decoration-[#DFCFC0] hover:decoration-[#2C1A11] hover:text-[#2C1A11] transition-all">
               System Architecture
             </button>
           </div>
         </div>
 
-        <!-- Quiet Guarantees Row (Soft Pill Cards) -->
-        <div class="w-full max-w-[560px] pt-6 border-t border-[#E2D5C7]/80">
-          <div class="grid grid-cols-3 gap-3">
+        <!-- Invariant Guarantees (Simplified, Airy, Redundant Subtext Removed) -->
+        <div class="w-full max-w-[540px] pt-8 border-t border-[#DFCFC0]/80">
+          <div class="grid grid-cols-3 divide-x divide-[#DFCFC0]">
             
-            <div class="bg-white/50 backdrop-blur-xs p-3.5 rounded-2xl border border-[#E2D5C7]/70 text-left transition-transform hover:scale-[1.02]">
-              <p class="text-xs font-semibold text-[#2C1A11]">10% flat fee</p>
-              <p class="text-[11px] text-[#5E4131] mt-0.5">Transparent platform cut</p>
+            <div class="text-left pr-6">
+              <p class="text-sm font-semibold text-[#2C1A11]">10% flat fee</p>
             </div>
 
-            <div class="bg-white/50 backdrop-blur-xs p-3.5 rounded-2xl border border-[#E2D5C7]/70 text-left transition-transform hover:scale-[1.02]">
-              <p class="text-xs font-semibold text-[#2C1A11]">15-min lock</p>
-              <p class="text-[11px] text-[#5E4131] mt-0.5">Guaranteed slot hold</p>
+            <div class="text-left px-6">
+              <p class="text-sm font-semibold text-[#2C1A11]">15-min lock</p>
             </div>
 
-            <div class="bg-white/50 backdrop-blur-xs p-3.5 rounded-2xl border border-[#E2D5C7]/70 text-left transition-transform hover:scale-[1.02]">
-              <p class="text-xs font-semibold text-[#2C1A11]">24h policy</p>
-              <p class="text-[11px] text-[#5E4131] mt-0.5">Full refund protection</p>
+            <div class="text-left pl-6">
+              <p class="text-sm font-semibold text-[#2C1A11]">24h policy</p>
             </div>
 
           </div>
@@ -231,124 +201,111 @@
 
       </section>
 
-      <!-- Right Column: Charming, Friendly Booking Card (Rounder 36px Squircle, Glass Luminous) -->
+      <!-- Right Column: Booking Card (Generous Padding, Restrained Corners, No Jargon) -->
       <aside class="lg:col-span-5 flex justify-center lg:justify-end" id="booking-card">
-        <div class="w-full max-w-[496px] glass-card rounded-[36px] p-8 relative space-y-6 transition-all hover:shadow-[0_28px_60px_-12px_rgba(44,26,17,0.08)]">
+        <div class="w-full max-w-[480px] calm-surface rounded-2xl p-8 lg:p-9 relative space-y-7">
           
           <!-- Mentor Profile Header -->
           <div class="flex items-start justify-between">
             <div class="flex items-center gap-4">
-              <!-- Avatar with Warm Rounded Monogram -->
-              <div class="w-14 h-14 rounded-full bg-[#F5ECE0] flex items-center justify-center shrink-0 border-2 border-white shadow-sm ring-2 ring-[#E2D5C7]/60">
-                <span class="font-medium text-base text-[#2C1A11]">SR</span>
+              <!-- Avatar (Crisp 12px Squircle) -->
+              <div class="w-12 h-12 rounded-xl bg-[#F5ECE0] flex items-center justify-center shrink-0 border border-[#DFCFC0]">
+                <span class="font-medium text-sm text-[#2C1A11]">SR</span>
               </div>
 
               <!-- Mentor Meta -->
               <div>
                 <div class="flex items-center gap-2">
-                  <h2 class="text-lg font-semibold text-[#2C1A11]">Sara Rad</h2>
-                  <span class="w-2.5 h-2.5 rounded-full bg-[#8EC5FF] inline-block shadow-[0_0_8px_rgba(142,197,255,0.8)]" title="Verified Mentor"></span>
+                  <h2 class="text-base font-semibold text-[#2C1A11]">Sara Rad</h2>
+                  <span class="w-2 h-2 rounded-full bg-[#8EC5FF] inline-block" title="Verified Mentor"></span>
                 </div>
-                <p class="text-[13px] text-[#5E4131] mt-0.5 font-normal">Staff Systems Architect • 10y exp</p>
+                <p class="text-xs text-[#5E4131] mt-0.5">Staff Systems Architect • 10y exp</p>
               </div>
             </div>
 
-            <!-- Rating Pill -->
-            <div class="text-xs font-semibold text-[#2C1A11] bg-[#FDFBF7] px-3 py-1.5 rounded-full border border-[#E2D5C7] shadow-2xs flex items-center gap-1">
-              <span class="text-amber-600">★</span> 4.9
+            <!-- Rating -->
+            <div class="text-xs font-semibold text-[#2C1A11] bg-[#FDFBF7] px-2.5 py-1 rounded-md border border-[#DFCFC0]">
+              ★ 4.9
             </div>
           </div>
 
           <!-- Fee & Duration -->
           <div class="flex items-baseline gap-2">
-            <span class="font-serif text-[28px] font-normal text-[#2C1A11]">$25.00</span>
-            <span class="text-sm text-[#5E4131]">/ 45 min session</span>
+            <span class="font-serif text-[26px] font-normal text-[#2C1A11]">$25.00</span>
+            <span class="text-xs text-[#5E4131]">/ 45 min</span>
           </div>
 
-          <!-- Hairline Divider -->
-          <div class="h-px bg-gradient-to-r from-transparent via-[#E2D5C7] to-transparent w-full"></div>
+          <!-- Divider -->
+          <div class="h-px bg-[#DFCFC0]/80 w-full"></div>
 
-          <!-- Availability Slot Selection (Rounder Squircle Cards) -->
+          <!-- Availability Slot Selection (Clean 12px Rounded Cards) -->
           <div class="space-y-3">
-            <div class="flex items-center justify-between">
-              <label class="text-sm font-semibold text-[#2C1A11]">Choose a time</label>
-              <span class="text-xs text-[#5E4131]">Tehran Time (GMT+3:30)</span>
-            </div>
+            <label class="text-xs font-semibold text-[#2C1A11] tracking-wide uppercase">Choose a time</label>
 
-            <div class="grid grid-cols-2 gap-3.5">
-              <!-- Slot 1 (Selected State) -->
+            <div class="grid grid-cols-2 gap-3">
+              <!-- Slot 1 (Selected) -->
               <button 
                 id="slot-1" 
                 onclick="selectSlot(1, 'Tomorrow, 18:00')" 
-                class="h-15 px-4 rounded-[22px] bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all duration-200 cursor-pointer text-left shadow-2xs hover:scale-[1.02]" 
+                class="h-13 px-4 rounded-xl bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left" 
               >
-                <div class="flex flex-col">
-                  <span class="text-[13px] font-semibold text-[#2C1A11]">Tomorrow</span>
-                  <span class="text-[11px] text-[#5E4131]">Slot 1</span>
-                </div>
-                <span class="text-sm font-bold text-[#2C1A11] bg-white/80 px-2 py-1 rounded-lg">18:00</span>
+                <span class="text-xs font-medium text-[#2C1A11]">Tomorrow</span>
+                <span class="text-xs font-semibold text-[#2C1A11]">18:00</span>
               </button>
 
-              <!-- Slot 2 (Unselected State) -->
+              <!-- Slot 2 -->
               <button 
                 id="slot-2" 
                 onclick="selectSlot(2, 'Friday, 19:30')" 
-                class="h-15 px-4 rounded-[22px] bg-white/70 border border-[#E2D5C7] hover:border-[#8EC5FF] flex items-center justify-between transition-all duration-200 cursor-pointer text-left shadow-2xs hover:scale-[1.02]" 
+                class="h-13 px-4 rounded-xl bg-white border border-[#DFCFC0] hover:border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left" 
               >
-                <div class="flex flex-col">
-                  <span class="text-[13px] font-medium text-[#2C1A11]">Friday</span>
-                  <span class="text-[11px] text-[#5E4131]">Slot 2</span>
-                </div>
-                <span class="text-sm font-semibold text-[#2C1A11] bg-white/60 px-2 py-1 rounded-lg">19:30</span>
+                <span class="text-xs font-normal text-[#2C1A11]">Friday</span>
+                <span class="text-xs font-semibold text-[#2C1A11]">19:30</span>
               </button>
             </div>
           </div>
 
-          <!-- Mandatory Agenda Card (Rounded Friendly Container) -->
+          <!-- Mandatory Agenda Card (Clean, Uncluttered) -->
           <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <label class="text-sm font-semibold text-[#2C1A11]">Mandatory agenda</label>
-              <span class="text-[11px] font-semibold text-[#5E4131] uppercase tracking-wider bg-[#F5ECE0] px-2 py-0.5 rounded-full">Required</span>
-            </div>
+            <label class="text-xs font-semibold text-[#2C1A11] tracking-wide uppercase">Mandatory agenda</label>
 
-            <div class="bg-[#FDFBF7]/90 border border-[#E2D5C7] rounded-[22px] p-4 space-y-1 shadow-2xs">
-              <p class="text-[11px] font-semibold text-[#5E4131]">Topic to discuss</p>
-              <p id="agenda-topic-text" class="text-sm font-medium text-[#2C1A11] leading-snug">
+            <div class="bg-[#FDFBF7] border border-[#DFCFC0] rounded-xl p-3.5 space-y-1">
+              <p id="agenda-topic-text" class="text-xs text-[#2C1A11] leading-relaxed">
                 Kafka consumer partition rebalance lag
               </p>
             </div>
           </div>
 
-          <!-- Reservation Lock Badge (Smooth Pill with Warm Accent) -->
-          <div class="inline-flex items-center px-3.5 py-1.5 rounded-full bg-[#F5E9CF] text-[#79551F] text-xs font-medium gap-2 shadow-2xs">
-            <svg class="w-3.5 h-3.5 text-[#79551F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <!-- Reservation Lock Indicator -->
+          <div class="inline-flex items-center px-3 py-1 rounded-md bg-[#F5E9CF] text-[#79551F] text-[11px] font-medium gap-1.5">
+            <svg class="w-3 h-3 text-[#79551F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
             </svg>
             <span>15:00 lock guaranteed</span>
           </div>
 
           <!-- Pricing & Fee Breakdown -->
-          <div class="pt-3 border-t border-[#E2D5C7]/80 space-y-1">
+          <div class="pt-2 border-t border-[#DFCFC0]/80 space-y-1">
             <div class="flex items-baseline justify-between">
-              <span class="text-base font-semibold text-[#2C1A11]">Total due</span>
-              <span class="font-serif text-[30px] font-normal text-[#2C1A11]">$27.50</span>
+              <span class="text-sm font-semibold text-[#2C1A11]">Total</span>
+              <span class="font-serif text-[26px] font-normal text-[#2C1A11]">$27.50</span>
             </div>
-            <p class="text-[11.5px] text-[#5E4131]">
-              $25.00 mentor rate + $2.50 transparent platform fee (10%)
+            <p class="text-[11px] text-[#5E4131]">
+              Includes 10% platform fee
             </p>
           </div>
 
-          <!-- Action CTA: Round Pill Proceed Button (Baby Blue #8EC5FF) -->
+          <!-- Proceed Button (Restrained 10px Radius) -->
           <button 
             type="button" 
             onclick="handleProceed()" 
-            class="w-full h-12 rounded-full bg-[#8EC5FF] hover:bg-[#78B4F5] text-[#2C1A11] font-semibold text-sm flex items-center justify-center transition-all shadow-[0_2px_8px_rgba(142,197,255,0.4)] hover:shadow-[0_4px_16px_rgba(142,197,255,0.5)] active:scale-98 cursor-pointer"
+            class="w-full h-11 rounded-lg bg-[#8EC5FF] hover:bg-[#78B4F5] text-[#2C1A11] font-semibold text-xs tracking-wide flex items-center justify-center transition-all shadow-xs active:scale-98 cursor-pointer"
           >
             <span id="proceed-btn-text">Proceed to Confirmation</span>
           </button>
 
-          <!-- Feedback Notice (Rounded) -->
-          <div id="booking-feedback" class="hidden text-center text-xs font-medium text-emerald-800 bg-emerald-50/90 border border-emerald-200 rounded-2xl p-3 shadow-2xs">
+          <!-- Feedback Notice -->
+          <div id="booking-feedback" class="hidden text-center text-xs font-medium text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg p-2.5">
             Slot reserved! Lock expires in 15:00. Moving to checkout...
           </div>
 
@@ -370,11 +327,11 @@
       const mentorBtn = document.getElementById('btn-role-mentor');
 
       if (role === 'mentee') {
-        menteeBtn.className = "h-8 px-5 rounded-full bg-[#2C1A11] text-[#F8F2E8] font-semibold text-xs tracking-wide shadow-sm transition-all duration-200";
-        mentorBtn.className = "h-8 px-5 rounded-full text-[#5E4131] font-medium text-xs hover:text-[#2C1A11] transition-all duration-200";
+        menteeBtn.className = "h-7 px-3.5 rounded-md bg-[#2C1A11] text-[#F8F2E8] font-semibold text-xs transition-all";
+        mentorBtn.className = "h-7 px-3.5 rounded-md text-[#5E4131] font-medium text-xs hover:text-[#2C1A11] transition-all";
       } else {
-        mentorBtn.className = "h-8 px-5 rounded-full bg-[#2C1A11] text-[#F8F2E8] font-semibold text-xs tracking-wide shadow-sm transition-all duration-200";
-        menteeBtn.className = "h-8 px-5 rounded-full text-[#5E4131] font-medium text-xs hover:text-[#2C1A11] transition-all duration-200";
+        mentorBtn.className = "h-7 px-3.5 rounded-md bg-[#2C1A11] text-[#F8F2E8] font-semibold text-xs transition-all";
+        menteeBtn.className = "h-7 px-3.5 rounded-md text-[#5E4131] font-medium text-xs hover:text-[#2C1A11] transition-all";
       }
     }
 
@@ -386,11 +343,11 @@
       const slot2 = document.getElementById('slot-2');
 
       if (slotNum === 1) {
-        slot1.className = "h-15 px-4 rounded-[22px] bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all duration-200 cursor-pointer text-left shadow-2xs hover:scale-[1.02]";
-        slot2.className = "h-15 px-4 rounded-[22px] bg-white/70 border border-[#E2D5C7] hover:border-[#8EC5FF] flex items-center justify-between transition-all duration-200 cursor-pointer text-left shadow-2xs hover:scale-[1.02]";
+        slot1.className = "h-13 px-4 rounded-xl bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left";
+        slot2.className = "h-13 px-4 rounded-xl bg-white border border-[#DFCFC0] hover:border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left";
       } else {
-        slot2.className = "h-15 px-4 rounded-[22px] bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all duration-200 cursor-pointer text-left shadow-2xs hover:scale-[1.02]";
-        slot1.className = "h-15 px-4 rounded-[22px] bg-white/70 border border-[#E2D5C7] hover:border-[#8EC5FF] flex items-center justify-between transition-all duration-200 cursor-pointer text-left shadow-2xs hover:scale-[1.02]";
+        slot2.className = "h-13 px-4 rounded-xl bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left";
+        slot1.className = "h-13 px-4 rounded-xl bg-white border border-[#DFCFC0] hover:border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-left";
       }
     }
 
@@ -398,7 +355,7 @@
       const searchInput = document.getElementById('search-input');
       const agendaTopic = document.getElementById('agenda-topic-text');
       if (searchInput) searchInput.value = topicName;
-      if (agendaTopic) agendaTopic.textContent = `${topicName} — deep dive & code review`;
+      if (agendaTopic) agendaTopic.textContent = `${topicName} — architecture review`;
     }
 
     function handleSearch(e) {
