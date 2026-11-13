@@ -45,19 +45,41 @@
       font-feature-settings: "ss01" on, "numr" on;
     }
 
-    /* Liquid Glass Textures (Applied to Main Structural Frames) */
-    .liquid-glass-frame {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.78) 0%, rgba(255, 255, 255, 0.48) 50%, rgba(255, 255, 255, 0.68) 100%);
+    /* Responsive Liquid Glass Navbar Styling */
+    .navbar-liquid-surface {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.52) 50%, rgba(255, 255, 255, 0.74) 100%);
       backdrop-filter: blur(28px) saturate(160%);
       -webkit-backdrop-filter: blur(28px) saturate(160%);
-      border: 1px solid rgba(255, 255, 255, 0.9);
-      box-shadow: 
-        0 16px 40px -10px rgba(44, 26, 17, 0.07),
-        0 2px 8px rgba(44, 26, 17, 0.02),
-        inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.95),
-        inset 0 -1px 2px 0 rgba(223, 207, 192, 0.35);
     }
 
+    /* Mobile: Hovering Floating Island */
+    @media (max-width: 767px) {
+      .navbar-mobile-island {
+        border-radius: 9999px;
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        box-shadow: 
+          0 16px 40px -10px rgba(44, 26, 17, 0.1),
+          0 2px 8px rgba(44, 26, 17, 0.03),
+          inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.95),
+          inset 0 -1px 2px 0 rgba(223, 207, 192, 0.35);
+      }
+    }
+
+    /* Desktop & iPad View (md: 768px and up): Full-Width Bar */
+    @media (min-width: 768px) {
+      .navbar-desktop-full {
+        border-radius: 0 !important;
+        border-top: none !important;
+        border-left: none !important;
+        border-right: none !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.85) !important;
+        box-shadow: 
+          0 4px 24px -4px rgba(44, 26, 17, 0.03),
+          inset 0 -1px 1px 0 rgba(223, 207, 192, 0.3) !important;
+      }
+    }
+
+    /* Booking Card Liquid Glass Frame */
     .liquid-glass-card-frame {
       background: linear-gradient(140deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.55) 45%, rgba(255, 255, 255, 0.72) 100%);
       backdrop-filter: blur(32px) saturate(160%);
@@ -68,6 +90,19 @@
         0 4px 16px -2px rgba(44, 26, 17, 0.03),
         inset 0 2px 2px 0 rgba(255, 255, 255, 0.98),
         inset 0 -1.5px 2px 0 rgba(223, 207, 192, 0.35);
+    }
+
+    /* Search Box Liquid Glass Frame */
+    .liquid-glass-search-frame {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.78) 0%, rgba(255, 255, 255, 0.48) 50%, rgba(255, 255, 255, 0.68) 100%);
+      backdrop-filter: blur(28px) saturate(160%);
+      -webkit-backdrop-filter: blur(28px) saturate(160%);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 
+        0 16px 40px -10px rgba(44, 26, 17, 0.07),
+        0 2px 8px rgba(44, 26, 17, 0.02),
+        inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.95),
+        inset 0 -1px 2px 0 rgba(223, 207, 192, 0.35);
     }
 
     ::-webkit-scrollbar {
@@ -88,42 +123,75 @@
   <div class="absolute left-[-80px] top-[100px] w-[600px] h-[600px] bg-[#8EC5FF]/20 rounded-full blur-[140px] pointer-events-none -z-10"></div>
   <div class="absolute right-[-60px] top-[40px] w-[500px] h-[500px] bg-white/70 rounded-full blur-[120px] pointer-events-none -z-10"></div>
 
-  <!-- Top Floating Navbar: Liquid Glass Frame with Generous Link Gaps (gap-12 lg:gap-14) -->
-  <div class="px-4 pt-4 sticky top-0 z-50">
-    <nav class="max-w-5xl mx-auto h-[64px] liquid-glass-frame rounded-full px-6 lg:px-9 flex items-center justify-between transition-all">
-      
-      <!-- Column 1 (Right): Brand Wordmark & Monogram -->
-      <div class="flex items-center gap-3">
-        <a href="#" class="flex items-center gap-3 group">
-          <div class="w-9 h-9 rounded-full bg-[#2C1A11] flex items-center justify-center shrink-0 shadow-xs transition-transform group-hover:scale-105">
-            <span class="text-[#F2E8DA] text-lg font-bold pt-0.5 leading-none">پ</span>
-          </div>
-          <div class="flex items-baseline gap-2">
-            <span class="font-bold text-lg lg:text-[18px] text-[#2C1A11] tracking-tight">پیرو</span>
-            <span class="text-[11.5px] font-medium text-[#5E4131] hidden sm:inline">مربی‌گری تخصصی نرم‌افزار</span>
-          </div>
-        </a>
-      </div>
+  <!-- Responsive Navbar Container: Full-width on Desktop/iPad, Hovering Island on Mobile -->
+  <header class="sticky top-0 z-50 pt-3 px-4 md:pt-0 md:px-0 transition-all">
+    <nav class="navbar-liquid-surface navbar-mobile-island navbar-desktop-full mx-auto h-[60px] md:h-[68px] w-full max-w-md md:max-w-none transition-all flex items-center justify-between">
+      <div class="w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-20 flex items-center justify-between">
+        
+        <!-- Column 1 (Right): Brand Wordmark & Monogram -->
+        <div class="flex items-center gap-3">
+          <a href="#" class="flex items-center gap-3 group">
+            <div class="w-9 h-9 rounded-full bg-[#2C1A11] flex items-center justify-center shrink-0 shadow-xs transition-transform group-hover:scale-105">
+              <span class="text-[#F2E8DA] text-lg font-bold pt-0.5 leading-none">پ</span>
+            </div>
+            <div class="flex items-baseline gap-2">
+              <span class="font-bold text-lg lg:text-[19px] text-[#2C1A11] tracking-tight">پیرو</span>
+              <span class="text-[12px] font-medium text-[#5E4131] hidden lg:inline">مربی‌گری تخصصی نرم‌افزار</span>
+            </div>
+          </a>
+        </div>
 
-      <!-- Column 2 (Center): Generous Spacing Between Nav Links (gap-12 lg:gap-14) -->
-      <div class="hidden md:flex items-center gap-12 lg:gap-14 text-[13.5px] font-medium text-[#2C1A11]/90">
-        <a href="#mentors" class="hover:text-[#2C1A11] transition-colors py-1">جستجوی منتورها</a>
-        <a href="#how-it-works" class="hover:text-[#2C1A11] transition-colors py-1">نحوه کارکرد</a>
-        <a href="#principles" class="hover:text-[#2C1A11] transition-colors py-1">اصول و کارمزد</a>
-      </div>
+        <!-- Column 2 (Center - Desktop & iPad View): Wide Link Gaps (gap-12 lg:gap-14) -->
+        <div class="hidden md:flex items-center gap-10 lg:gap-14 text-[13.5px] font-medium text-[#2C1A11]/90">
+          <a href="#mentors" class="hover:text-[#2C1A11] transition-colors py-1">جستجوی منتورها</a>
+          <a href="#how-it-works" class="hover:text-[#2C1A11] transition-colors py-1">نحوه کارکرد</a>
+          <a href="#principles" class="hover:text-[#2C1A11] transition-colors py-1">اصول و کارمزد</a>
+        </div>
 
-      <!-- Column 3 (Left): Actions (Clean Log In + Solid Sky Blue Pill Button) -->
-      <div class="flex items-center gap-5">
-        <a href="#login" class="text-[13.5px] font-medium text-[#5E4131] hover:text-[#2C1A11] transition-colors">
-          ورود
-        </a>
-        <a href="#booking-card" class="h-10 px-6 rounded-full bg-[#8EC5FF] hover:bg-[#78B4F5] text-[#2C1A11] font-bold text-xs tracking-wide inline-flex items-center justify-center transition-all shadow-xs active:scale-95">
-          رزرو جلسه
-        </a>
-      </div>
+        <!-- Column 3 (Left): Desktop/iPad Actions & Mobile Menu Toggle -->
+        <div class="flex items-center gap-3 sm:gap-5">
+          <!-- Desktop & iPad Log In -->
+          <a href="#login" class="hidden md:inline text-[13.5px] font-medium text-[#5E4131] hover:text-[#2C1A11] transition-colors">
+            ورود
+          </a>
 
+          <!-- Primary Book CTA Button -->
+          <a href="#booking-card" class="h-9 md:h-10 px-4 md:px-6 rounded-full bg-[#8EC5FF] hover:bg-[#78B4F5] text-[#2C1A11] font-bold text-xs tracking-wide inline-flex items-center justify-center transition-all shadow-xs active:scale-95">
+            رزرو جلسه
+          </a>
+
+          <!-- Mobile Hamburger Toggle (Visible only on phone view) -->
+          <button 
+            type="button" 
+            onclick="toggleMobileMenu()" 
+            class="md:hidden w-9 h-9 rounded-full bg-white/70 border border-[#DFCFC0] flex items-center justify-center text-[#2C1A11] focus:outline-none transition-colors active:scale-95"
+            aria-label="منوی موبایل"
+          >
+            <svg id="menu-icon-bars" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
+            </svg>
+            <svg id="menu-icon-close" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+      </div>
     </nav>
-  </div>
+
+    <!-- Mobile Floating Island Dropdown Menu (Smooth phone view sheet) -->
+    <div id="mobile-menu-drawer" class="hidden md:hidden max-w-md mx-auto mt-2 px-2 transition-all">
+      <div class="navbar-liquid-surface rounded-2xl p-5 border border-white/90 shadow-xl space-y-4 text-right">
+        <a href="#mentors" onclick="toggleMobileMenu()" class="block text-sm font-bold text-[#2C1A11] hover:text-[#5E4131] py-1.5 border-b border-[#DFCFC0]/60">جستجوی منتورها</a>
+        <a href="#how-it-works" onclick="toggleMobileMenu()" class="block text-sm font-bold text-[#2C1A11] hover:text-[#5E4131] py-1.5 border-b border-[#DFCFC0]/60">نحوه کارکرد</a>
+        <a href="#principles" onclick="toggleMobileMenu()" class="block text-sm font-bold text-[#2C1A11] hover:text-[#5E4131] py-1.5 border-b border-[#DFCFC0]/60">اصول و کارمزد</a>
+        <div class="pt-2 flex items-center justify-between">
+          <a href="#login" onclick="toggleMobileMenu()" class="text-sm font-semibold text-[#5E4131] hover:text-[#2C1A11]">ورود به حساب کاربری</a>
+          <a href="#booking-card" onclick="toggleMobileMenu()" class="h-9 px-5 rounded-full bg-[#8EC5FF] text-[#2C1A11] font-bold text-xs inline-flex items-center justify-center shadow-xs">رزرو نوبت</a>
+        </div>
+      </div>
+    </div>
+  </header>
 
   <!-- Editorial Hero Layout (RTL: Right = Copy & Search, Left = Booking Card) -->
   <main class="max-w-[1440px] mx-auto px-6 lg:px-20 py-10 lg:py-16">
@@ -148,7 +216,7 @@
 
         <!-- Topic Search Box (Liquid Glass Frame with Mirrored RTL Input & Button) -->
         <div class="w-full max-w-[560px] space-y-3">
-          <form onsubmit="handleSearch(event)" class="w-full h-[64px] liquid-glass-frame rounded-[24px] p-2 pr-4 flex items-center justify-between focus-within:border-[#2C1A11] transition-all">
+          <form onsubmit="handleSearch(event)" class="w-full h-[64px] liquid-glass-search-frame rounded-[24px] p-2 pr-4 flex items-center justify-between focus-within:border-[#2C1A11] transition-all">
             
             <div class="flex items-center gap-3 flex-1 ml-2">
               <svg class="w-5 h-5 text-[#5E4131] shrink-0" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -335,10 +403,28 @@
     </div>
   </main>
 
-  <!-- Interactive JavaScript Logic (Persian State Management) -->
+  <!-- Interactive JavaScript Logic (Persian State Management & Mobile Menu) -->
   <script>
     let selectedSlot = 1;
     let selectedSlotText = 'پنج‌شنبه ۲۲ آبان ۱۴۰۵، ساعت ۱۸:۰۰';
+    let isMobileMenuOpen = false;
+
+    function toggleMobileMenu() {
+      const drawer = document.getElementById('mobile-menu-drawer');
+      const iconBars = document.getElementById('menu-icon-bars');
+      const iconClose = document.getElementById('menu-icon-close');
+      isMobileMenuOpen = !isMobileMenuOpen;
+
+      if (isMobileMenuOpen) {
+        drawer.classList.remove('hidden');
+        iconBars.classList.add('hidden');
+        iconClose.classList.remove('hidden');
+      } else {
+        drawer.classList.add('hidden');
+        iconBars.classList.remove('hidden');
+        iconClose.classList.add('hidden');
+      }
+    }
 
     function selectSlot(slotNum, slotText) {
       selectedSlot = slotNum;
