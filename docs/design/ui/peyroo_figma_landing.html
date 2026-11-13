@@ -8,7 +8,7 @@
   <!-- Tailwind CSS -->
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   
-  <!-- Persian Fonts: Vazirmatn (Official standard Persian web typography) -->
+  <!-- Persian Fonts: Vazirmatn (Benchmark Persian typography with standard Persian numerals) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -40,9 +40,9 @@
       text-align: right;
     }
 
-    /* Persian Digit Enhancements */
-    .farsi-digits {
-      font-feature-settings: "ss01";
+    /* Force standard Persian glyph numerals */
+    .farsi-nums {
+      font-feature-settings: "ss01" on, "numr" on;
     }
 
     /* Liquid Glass Textures (Applied to Main Structural Frames) */
@@ -82,17 +82,17 @@
     }
   </style>
 </head>
-<body class="antialiased selection:bg-[#8EC5FF] selection:text-[#2C1A11]">
+<body class="antialiased selection:bg-[#8EC5FF] selection:text-[#2C1A11] farsi-nums">
 
-  <!-- Ambient Refraction Glows (Mirrored for RTL) -->
+  <!-- Subtle Ambient Glows -->
   <div class="absolute left-[-80px] top-[100px] w-[600px] h-[600px] bg-[#8EC5FF]/20 rounded-full blur-[140px] pointer-events-none -z-10"></div>
   <div class="absolute right-[-60px] top-[40px] w-[500px] h-[500px] bg-white/70 rounded-full blur-[120px] pointer-events-none -z-10"></div>
 
-  <!-- Top Floating Navbar: Liquid Glass Frame with Fully-Rounded Controls (RTL) -->
+  <!-- Top Floating Navbar: Liquid Glass Frame with Generous Link Gaps (gap-12 lg:gap-14) -->
   <div class="px-4 pt-4 sticky top-0 z-50">
-    <nav class="max-w-5xl mx-auto h-[64px] liquid-glass-frame rounded-full px-6 lg:px-8 flex items-center justify-between transition-all">
+    <nav class="max-w-5xl mx-auto h-[64px] liquid-glass-frame rounded-full px-6 lg:px-9 flex items-center justify-between transition-all">
       
-      <!-- Column 1 (Right in RTL): Brand Wordmark & Monogram -->
+      <!-- Column 1 (Right): Brand Wordmark & Monogram -->
       <div class="flex items-center gap-3">
         <a href="#" class="flex items-center gap-3 group">
           <div class="w-9 h-9 rounded-full bg-[#2C1A11] flex items-center justify-center shrink-0 shadow-xs transition-transform group-hover:scale-105">
@@ -105,14 +105,14 @@
         </a>
       </div>
 
-      <!-- Column 2 (Center): Persian Navigation Links -->
-      <div class="hidden md:flex items-center gap-8 text-[13.5px] font-medium text-[#2C1A11]/90">
-        <a href="#mentors" class="hover:text-[#2C1A11] transition-colors">جستجوی منتورها</a>
-        <a href="#how-it-works" class="hover:text-[#2C1A11] transition-colors">نحوه کارکرد</a>
-        <a href="#principles" class="hover:text-[#2C1A11] transition-colors">اصول و کارمزد</a>
+      <!-- Column 2 (Center): Generous Spacing Between Nav Links (gap-12 lg:gap-14) -->
+      <div class="hidden md:flex items-center gap-12 lg:gap-14 text-[13.5px] font-medium text-[#2C1A11]/90">
+        <a href="#mentors" class="hover:text-[#2C1A11] transition-colors py-1">جستجوی منتورها</a>
+        <a href="#how-it-works" class="hover:text-[#2C1A11] transition-colors py-1">نحوه کارکرد</a>
+        <a href="#principles" class="hover:text-[#2C1A11] transition-colors py-1">اصول و کارمزد</a>
       </div>
 
-      <!-- Column 3 (Left in RTL): Clean Log In + Solid Sky Blue Pill Button -->
+      <!-- Column 3 (Left): Actions (Clean Log In + Solid Sky Blue Pill Button) -->
       <div class="flex items-center gap-5">
         <a href="#login" class="text-[13.5px] font-medium text-[#5E4131] hover:text-[#2C1A11] transition-colors">
           ورود
@@ -125,14 +125,14 @@
     </nav>
   </div>
 
-  <!-- Editorial Hero Layout (RTL Grid: Right = Editorial Introduction, Left = Booking Card) -->
+  <!-- Editorial Hero Layout (RTL: Right = Copy & Search, Left = Booking Card) -->
   <main class="max-w-[1440px] mx-auto px-6 lg:px-20 py-10 lg:py-16">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
       
-      <!-- Right Column in RTL: Editorial Introduction (7 cols) -->
+      <!-- Right Column in RTL: Editorial Introduction -->
       <section class="lg:col-span-7 flex flex-col justify-center space-y-8 pt-4 lg:pt-6">
         
-        <!-- Headline (Dignified Persian Editorial Typography) -->
+        <!-- Headline -->
         <div class="space-y-2">
           <h1 class="text-4xl sm:text-5xl lg:text-[46px] font-extrabold leading-[1.3] text-[#2C1A11] tracking-tight">
             جلسات ۱ به ۱ و هدفمند<br>
@@ -141,7 +141,7 @@
           </h1>
         </div>
 
-        <!-- Description (Calm, Natural Persian Tech Manuscript) -->
+        <!-- Description -->
         <p class="text-base sm:text-[17px] text-[#5E4131] font-normal leading-[1.85] max-w-[570px]">
           رزرو مستقیم زمان‌های اختصاصی با معماران ارشد و مهندسان باسابقه سیستم. هر جلسه دارای دستور کار مدون و از پیش تعیین‌شده است—بدون اتلاف وقت و بدون سردرگمی ارتباطات بی‌نتیجه.
         </p>
@@ -151,13 +151,11 @@
           <form onsubmit="handleSearch(event)" class="w-full h-[64px] liquid-glass-frame rounded-[24px] p-2 pr-4 flex items-center justify-between focus-within:border-[#2C1A11] transition-all">
             
             <div class="flex items-center gap-3 flex-1 ml-2">
-              <!-- Search Icon (Right side in RTL) -->
               <svg class="w-5 h-5 text-[#5E4131] shrink-0" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M14.1667 8.75C14.1667 11.7415 11.7415 14.1667 8.75 14.1667C5.75846 14.1667 3.33333 11.7415 3.33333 8.75C3.33333 5.75846 5.75846 3.33333 8.75 3.33333C11.7415 3.33333 14.1667 5.75846 14.1667 8.75Z" stroke="#5E4131" stroke-width="1.33333"/>
                 <path d="M12.9167 12.9167L16.6667 16.6667" stroke="#5E4131" stroke-width="1.33333" stroke-linecap="round"/>
               </svg>
 
-              <!-- Search Input (RTL Placeholder & Typing) -->
               <input 
                 id="search-input" 
                 type="text" 
@@ -166,13 +164,12 @@
               />
             </div>
 
-            <!-- Search CTA Button (Left side of input in RTL) -->
             <button type="submit" class="h-[48px] px-6 rounded-[16px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-semibold text-[14px] transition-colors shrink-0 flex items-center justify-center active:scale-95 cursor-pointer shadow-xs">
               <span>جستجو</span>
             </button>
           </form>
 
-          <!-- Suggested Focus Areas (Persian Underlined Chips) -->
+          <!-- Suggested Focus Areas -->
           <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] font-medium text-[#5E4131] pt-1">
             <button type="button" onclick="selectTopic('سیستم‌های توزیع‌شده')" class="underline underline-offset-4 decoration-[#DFCFC0] hover:decoration-[#2C1A11] hover:text-[#2C1A11] transition-all">
               سیستم‌های توزیع‌شده
@@ -188,7 +185,7 @@
           </div>
         </div>
 
-        <!-- Invariant Guarantees (Mirrored 3-Column RTL Dividers) -->
+        <!-- Invariant Guarantees (Persian Formatted Metrics) -->
         <div class="w-full max-w-[560px] pt-6 border-t border-[#DFCFC0]">
           <div class="flex items-center text-[13.5px] font-medium text-[#2C1A11]">
             <div class="flex-1 text-right">
@@ -210,14 +207,14 @@
 
       </section>
 
-      <!-- Left Column in RTL: Liquid Glass Booking Card Frame (5 cols) -->
+      <!-- Left Column in RTL: Liquid Glass Booking Card Frame (Persian Currency & Jalali Date) -->
       <aside class="lg:col-span-5 flex justify-center lg:justify-start" id="booking-card">
         <div class="w-full max-w-[500px] liquid-glass-card-frame rounded-[28px] p-9 relative space-y-6">
           
-          <!-- Mentor Profile Header (Mirrored: Avatar right, Rating left) -->
+          <!-- Mentor Profile Header -->
           <div class="flex items-start justify-between">
             <div class="flex items-center gap-4">
-              <!-- Avatar with Persian Initials -->
+              <!-- Avatar -->
               <div class="w-[52px] h-[52px] rounded-2xl bg-[#F2E8DA] flex items-center justify-center shrink-0 border border-[#DFCFC0]">
                 <span class="font-bold text-[16px] text-[#2C1A11]">س‌ر</span>
               </div>
@@ -232,45 +229,54 @@
               </div>
             </div>
 
-            <!-- Rating Pill (Left side in RTL) -->
+            <!-- Rating Pill -->
             <div class="text-[13px] font-bold text-[#2C1A11] bg-white px-3 py-1 rounded-md border border-[#DFCFC0] flex items-center gap-1 shadow-2xs">
               <span class="text-amber-500 text-xs">★</span>
               <span class="pt-0.5">۴.۹</span>
             </div>
           </div>
 
-          <!-- Fee & Duration -->
+          <!-- Persian Currency Format: تومان (Toman) -->
           <div class="flex items-baseline gap-2">
-            <span class="text-[26px] font-extrabold text-[#2C1A11]">۲۵ دلار</span>
+            <span class="text-[26px] font-black text-[#2C1A11]">۲۵۰٬۰۰۰ تومان</span>
             <span class="text-[13.5px] text-[#5E4131]">/ جلسه ۴۵ دقیقه‌ای</span>
           </div>
 
           <!-- Hairline Divider -->
           <div class="h-px bg-[#DFCFC0]/80 w-full"></div>
 
-          <!-- Availability Slot Selection (RTL 2-Column Buttons) -->
+          <!-- Availability Slot Selection (Jalali Dates & IRST Tehran Timestamps) -->
           <div class="space-y-3">
-            <label class="text-[13.5px] font-bold text-[#2C1A11]">انتخاب زمان جلسه</label>
+            <div class="flex items-center justify-between">
+              <label class="text-[13.5px] font-bold text-[#2C1A11]">انتخاب زمان جلسه</label>
+              <span class="text-[11.5px] text-[#5E4131]">به وقت رسمی ایران (تهران)</span>
+            </div>
 
             <div class="grid grid-cols-2 gap-3.5">
-              <!-- Slot 1 (Selected State) -->
+              <!-- Slot 1 (Selected State: پنج‌شنبه ۲۲ آبان | ۱۸:۰۰) -->
               <button 
                 id="slot-1" 
-                onclick="selectSlot(1, 'فردا (پنج‌شنبه)، ساعت ۱۸:۰۰')" 
-                class="h-[56px] px-4 rounded-[18px] bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-right hover:scale-[1.01]" 
+                onclick="selectSlot(1, 'پنج‌شنبه ۲۲ آبان ۱۴۰۵، ساعت ۱۸:۰۰')" 
+                class="h-[60px] px-3.5 rounded-[18px] bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-right hover:scale-[1.01]" 
               >
-                <span class="text-[13px] font-medium text-[#2C1A11]">فردا</span>
-                <span class="text-[13.5px] font-bold text-[#2C1A11]">۱۸:۰۰</span>
+                <div class="flex flex-col">
+                  <span class="text-[12.5px] font-bold text-[#2C1A11]">پنج‌شنبه ۲۲ آبان</span>
+                  <span class="text-[11px] text-[#5E4131]">فردا</span>
+                </div>
+                <span class="text-[13px] font-extrabold text-[#2C1A11] bg-white px-2 py-1 rounded-md shadow-2xs">۱۸:۰۰</span>
               </button>
 
-              <!-- Slot 2 (Unselected State) -->
+              <!-- Slot 2 (جمعه ۲۳ آبان | ۱۹:۳۰) -->
               <button 
                 id="slot-2" 
-                onclick="selectSlot(2, 'جمعه، ساعت ۱۹:۳۰')" 
-                class="h-[56px] px-4 rounded-[18px] bg-white border border-[#DFCFC0] hover:border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-right hover:scale-[1.01]" 
+                onclick="selectSlot(2, 'جمعه ۲۳ آبان ۱۴۰۵، ساعت ۱۹:۳۰')" 
+                class="h-[60px] px-3.5 rounded-[18px] bg-white border border-[#DFCFC0] hover:border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-right hover:scale-[1.01]" 
               >
-                <span class="text-[13px] font-normal text-[#2C1A11]">جمعه</span>
-                <span class="text-[13.5px] font-semibold text-[#2C1A11]">۱۹:۳۰</span>
+                <div class="flex flex-col">
+                  <span class="text-[12.5px] font-semibold text-[#2C1A11]">جمعه ۲۳ آبان</span>
+                  <span class="text-[11px] text-[#5E4131]">پس‌فردا</span>
+                </div>
+                <span class="text-[13px] font-bold text-[#2C1A11] bg-white/70 px-2 py-1 rounded-md">۱۹:۳۰</span>
               </button>
             </div>
           </div>
@@ -290,7 +296,7 @@
             </div>
           </div>
 
-          <!-- Reservation Lock (RTL Lock Chip) -->
+          <!-- Reservation Lock (RTL Lock Chip: ۱۵ دقیقه) -->
           <div class="inline-flex items-center px-3.5 py-1.5 rounded-[14px] bg-[#F5E9CF] text-[#79551F] text-[11px] font-medium gap-2 shadow-2xs">
             <svg class="w-3.5 h-3.5 text-[#79551F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
@@ -298,18 +304,18 @@
             <span>قفل اختصاصی ۱۵:۰۰ دقیقه تضمین‌شده</span>
           </div>
 
-          <!-- Total & Platform Fee Breakdown -->
+          <!-- Total & Platform Fee Breakdown in Toman Currency (تومان) -->
           <div class="pt-2 border-t border-[#DFCFC0]/80 space-y-1">
             <div class="flex items-baseline justify-between">
               <span class="text-[15px] font-bold text-[#2C1A11]">مبلغ قابل پرداخت:</span>
-              <span class="text-[26px] font-black text-[#2C1A11]">۲۷.۵۰ دلار</span>
+              <span class="text-[26px] font-black text-[#2C1A11]">۲۷۵٬۰۰۰ تومان</span>
             </div>
             <p class="text-[11.5px] text-[#5E4131]">
-              شامل ۱۰٪ کارمزد شفاف پلتفرم
+              شامل ۲۵۰٬۰۰۰ تومان حق‌الزحمه منتور + ۲۵٬۰۰۰ تومان کارمزد پلتفرم (۱۰٪)
             </p>
           </div>
 
-          <!-- Solid Sky Blue Proceed CTA Button (Persian Label) -->
+          <!-- Proceed CTA Button -->
           <button 
             type="button" 
             onclick="handleProceed()" 
@@ -320,7 +326,7 @@
 
           <!-- Feedback Notice -->
           <div id="booking-feedback" class="hidden text-center text-xs font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-[14px] p-3 shadow-2xs">
-            زمان انتخابی برای شما قفل شد! فرصت تکمیل: ۱۵:۰۰ دقیقه. در حال انتقال...
+            زمان انتخابی برای شما قفل شد! فرصت پرداخت: ۱۵:۰۰ دقیقه. در حال انتقال به درگاه...
           </div>
 
         </div>
@@ -332,7 +338,7 @@
   <!-- Interactive JavaScript Logic (Persian State Management) -->
   <script>
     let selectedSlot = 1;
-    let selectedSlotText = 'فردا (پنج‌شنبه)، ساعت ۱۸:۰۰';
+    let selectedSlotText = 'پنج‌شنبه ۲۲ آبان ۱۴۰۵، ساعت ۱۸:۰۰';
 
     function selectSlot(slotNum, slotText) {
       selectedSlot = slotNum;
@@ -342,11 +348,11 @@
       const slot2 = document.getElementById('slot-2');
 
       if (slotNum === 1) {
-        slot1.className = "h-[56px] px-4 rounded-[18px] bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-right hover:scale-[1.01]";
-        slot2.className = "h-[56px] px-4 rounded-[18px] bg-white border border-[#DFCFC0] hover:border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-right hover:scale-[1.01]";
+        slot1.className = "h-[60px] px-3.5 rounded-[18px] bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-right hover:scale-[1.01]";
+        slot2.className = "h-[60px] px-3.5 rounded-[18px] bg-white border border-[#DFCFC0] hover:border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-right hover:scale-[1.01]";
       } else {
-        slot2.className = "h-[56px] px-4 rounded-[18px] bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-right hover:scale-[1.01]";
-        slot1.className = "h-[56px] px-4 rounded-[18px] bg-white border border-[#DFCFC0] hover:border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-right hover:scale-[1.01]";
+        slot2.className = "h-[60px] px-3.5 rounded-[18px] bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-right hover:scale-[1.01]";
+        slot1.className = "h-[60px] px-3.5 rounded-[18px] bg-white border border-[#DFCFC0] hover:border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-right hover:scale-[1.01]";
       }
     }
 
