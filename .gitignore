@@ -37,6 +37,10 @@ logs/
 *.temp
 tmp/
 temp/
+scratch/
+
+# Presentation deliverables (local presentation slides & materials)
+docs/presentation/
 
 # Build & Cache Placeholders (Technology-Neutral)
 dist/

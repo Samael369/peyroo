@@ -1,0 +1,2654 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>میز کار و مدیریت جلسات — پیرو (Peyroo)</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="../../../assets/brand/peyroo_favicon_32.svg">
+  <link rel="alternate icon" type="image/svg+xml" href="../../../assets/brand/peyroo_favicon_16.svg">
+  <link rel="apple-touch-icon" href="../../../assets/brand/peyroo_app_icon_cream.svg">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js">
+    // Become a Mentor Modal
+    
+
+    function switchAuthTab(tab) {
+      const btnLogin = document.getElementById('auth-tab-login');
+      const btnSignup = document.getElementById('auth-tab-signup');
+      if (tab === 'login') {
+        btnLogin.className = 'h-9 rounded-[12px] bg-[#2C1A11] text-white font-bold text-xs transition-all shadow-xs cursor-pointer text-center';
+        btnSignup.className = 'h-9 rounded-[12px] text-[#5E4131] hover:text-[#2C1A11] font-semibold text-xs transition-all cursor-pointer text-center';
+      } else {
+        btnSignup.className = 'h-9 rounded-[12px] bg-[#2C1A11] text-white font-bold text-xs transition-all shadow-xs cursor-pointer text-center';
+        btnLogin.className = 'h-9 rounded-[12px] text-[#5E4131] hover:text-[#2C1A11] font-semibold text-xs transition-all cursor-pointer text-center';
+      }
+    }
+
+    function simulateSocialLogin(provider) {
+      closeAuthModal();
+      alert(`ورود موفقیت‌آمیز با حساب ${provider}!`);
+    }
+
+    function handleAuthSubmit(e, mode) {
+      e.preventDefault();
+      closeAuthModal();
+      alert('ورود به حساب کاربری با موفقیت انجام گردید!');
+    }
+
+  </script>
+  
+  <!-- Persian Fonts: Vazirmatn (Persian typography with standard Persian numerals) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --color-cream-100: rgb(251, 245, 236);
+      --color-cream-200: rgb(242, 232, 218);
+      --color-cream-300: rgb(231, 231, 225);
+      --color-espresso: #2C1A11;
+      --color-espresso-muted: #5E4131;
+      --color-border: #DFCFC0;
+      --color-blue-accent: #8EC5FF;
+      --color-blue-hover: #78B4F5;
+      --color-amber-surface: #F5E9CF;
+      --color-amber-text: #79551F;
+    }
+
+    body {
+      font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--color-espresso);
+      min-height: 100vh;
+      background: linear-gradient(143.55deg, rgb(251, 245, 236) 8.33%, rgb(242, 232, 218) 50%, rgb(231, 231, 225) 91.67%);
+      background-attachment: fixed;
+      position: relative;
+      overflow-x: hidden;
+      direction: rtl;
+      text-align: right;
+    }
+
+    /* Force standard Persian glyph numerals with tabular alignment */
+    .farsi-nums {
+      font-feature-settings: "ss01" on, "tnum" on;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Standard Bank & Financial Input Typography */
+    .bank-input-num {
+      font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, sans-serif !important;
+      font-feature-settings: "tnum" on;
+      font-variant-numeric: tabular-nums;
+    }
+
+        /* Responsive Liquid Glass Surface with High-Fidelity Depth */
+    .navbar-liquid-surface {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.65) 50%, rgba(255, 255, 255, 0.82) 100%);
+      backdrop-filter: blur(28px) saturate(160%);
+      -webkit-backdrop-filter: blur(28px) saturate(160%);
+    }
+
+    /* Mobile: Floating Island Navigation with Immutable Top Radii & Silky Smooth Animation */
+    @media (max-width: 767px) {
+      .navbar-mobile-island {
+        /* Fixed explicit 28px radius on top corners: NEVER changes when menu opens or closes */
+        border-top-left-radius: 28px !important;
+        border-top-right-radius: 28px !important;
+        border-bottom-left-radius: 28px !important;
+        border-bottom-right-radius: 28px !important;
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        box-shadow: 
+          0 16px 40px -10px rgba(44, 26, 17, 0.12),
+          0 2px 8px rgba(44, 26, 17, 0.04),
+          inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.95),
+          inset 0 -1px 2px 0 rgba(223, 207, 192, 0.35);
+        transition: border-bottom-left-radius 260ms cubic-bezier(0.16, 1, 0.3, 1),
+                    border-bottom-right-radius 260ms cubic-bezier(0.16, 1, 0.3, 1),
+                    box-shadow 260ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .navbar-mobile-island.menu-open {
+        /* Top corners remain strictly 28px - completely immutable */
+        border-top-left-radius: 28px !important;
+        border-top-right-radius: 28px !important;
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+        border-bottom: none !important;
+        box-shadow: 0 4px 20px -4px rgba(44, 26, 17, 0.08) !important;
+      }
+      .island-drawer-open {
+        border-top-left-radius: 0 !important;
+        border-top-right-radius: 0 !important;
+        border-bottom-left-radius: 28px !important;
+        border-bottom-right-radius: 28px !important;
+        border-top: none !important;
+        border-left: 1px solid rgba(255, 255, 255, 0.9) !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.9) !important;
+        border-bottom: 1px solid rgba(223, 207, 192, 0.8) !important;
+        box-shadow: 
+          0 24px 50px -10px rgba(44, 26, 17, 0.15),
+          inset 0 -1px 2px 0 rgba(223, 207, 192, 0.35) !important;
+      }
+
+      /* Silky Smooth Hardware-Accelerated Dropdown Drawer Transitions */
+      #mobile-menu-drawer {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px) scale(0.985);
+        transform-origin: top center;
+        pointer-events: none;
+        transition: opacity 280ms cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 280ms cubic-bezier(0.16, 1, 0.3, 1),
+                    visibility 280ms cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: opacity, transform;
+      }
+      #mobile-menu-drawer.drawer-visible {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
+      }
+
+      /* Silky Smooth Ambient Backdrop Transitions */
+      #mobile-menu-backdrop {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 280ms cubic-bezier(0.16, 1, 0.3, 1),
+                    visibility 280ms cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: opacity;
+      }
+      #mobile-menu-backdrop.backdrop-visible {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+    }
+
+    /* Desktop & iPad View (md: 768px and up): Full-Width Bar */
+    @media (min-width: 768px) {
+      .navbar-desktop-full {
+        border-radius: 0 !important;
+        border-top: none !important;
+        border-left: none !important;
+        border-right: none !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.85) !important;
+        box-shadow: 
+          0 4px 24px -4px rgba(44, 26, 17, 0.04),
+          inset 0 -1px 1px 0 rgba(223, 207, 192, 0.35) !important;
+      }
+    }
+
+    /* Liquid Glass Cards */
+    .liquid-glass-card {
+      background: linear-gradient(140deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.62) 45%, rgba(255, 255, 255, 0.78) 100%);
+      backdrop-filter: blur(32px) saturate(160%);
+      -webkit-backdrop-filter: blur(32px) saturate(160%);
+      border: 1px solid rgba(255, 255, 255, 0.92);
+      box-shadow: 
+        0 20px 48px -12px rgba(44, 26, 17, 0.07),
+        0 4px 16px -2px rgba(44, 26, 17, 0.02),
+        inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.95),
+        inset 0 -1px 2px 0 rgba(223, 207, 192, 0.3);
+    }
+
+    /* Ambient Warm Studio Glows */
+    .ambient-glow-1 {
+      position: absolute;
+      top: 50px;
+      right: -100px;
+      width: 550px;
+      height: 550px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(245, 233, 207, 0.45) 0%, rgba(251, 245, 236, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient-glow-2 {
+      position: absolute;
+      top: 400px;
+      left: -80px;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(142, 197, 255, 0.15) 0%, rgba(251, 245, 236, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgb(242, 232, 218);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #DFCFC0;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #C4B09E;
+    }
+
+    .no-scrollbar {
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+    }
+  </style>
+</head>
+<body class="selection:bg-[#8EC5FF] selection:text-[#2C1A11]">
+
+  <!-- Ambient Decorative Glows -->
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+
+  <!-- ============================================================ -->
+  <!-- DEDICATED DASHBOARD NAVIGATION BAR -->
+  <!-- ============================================================ -->
+    <!-- ============================================================ -->
+  <!-- FLOATING ISLAND LIQUID GLASS NAVBAR (EXACT REPLICA OF LANDING) -->
+  <!-- ============================================================ -->
+    <!-- ============================================================ -->
+  <!-- FLOATING ISLAND LIQUID GLASS NAVBAR (LANDING SHAPE & EFFECTS + DASHBOARD CONTENTS) -->
+  <!-- ============================================================ -->
+  <header id="main-header" class="fixed top-0 inset-x-0 z-50 pt-3 px-4 md:pt-0 md:px-0 transition-transform duration-300 ease-in-out pointer-events-none">
+    
+    <!-- Floating Island Wrapper on Mobile (max-w-md centered), Full Width on Desktop -->
+    <div class="mx-auto w-full max-w-md md:max-w-none relative pointer-events-auto">
+      <nav class="navbar-liquid-surface navbar-mobile-island navbar-desktop-full mx-auto h-[60px] md:h-[68px] w-full transition-all flex items-center justify-between px-3 sm:px-6 md:px-8 lg:px-12">
+        <div class="w-full max-w-[1440px] mx-auto flex items-center justify-between">
+          
+          <!-- Column 1 (Right in RTL): Brand & Back to Home Link -->
+          <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+            <a href="peyroo_figma_landing.html" class="flex items-center gap-2 group" title="پیرو • Peyroo | بازگشت به صفحه کاوش">
+              <img 
+                src="../../../assets/brand/peyroo_logo_cropped_transparent.svg" 
+                onerror="this.onerror=null; this.src='peyroo_logo_cropped_transparent.svg'" 
+                alt="پیرو • Peyroo" 
+                class="h-7 sm:h-8 md:h-9 w-auto object-contain transition-transform group-hover:scale-105 shrink-0"
+              >
+              <span class="text-[10px] font-bold text-[#5E4131] px-2 py-0.5 rounded-full bg-[#EFE3D5]/80 border border-[#DFCFC0] hidden sm:inline-block">
+                میز کار مهندسی
+              </span>
+            </a>
+
+            <!-- Breadcrumb Link (Desktop Only) -->
+            <span class="text-[#DFCFC0] hidden lg:inline">|</span>
+            <a 
+              href="peyroo_figma_landing.html" 
+              class="hidden lg:inline-flex items-center gap-1.5 text-xs font-semibold text-[#5E4131] hover:text-[#2C1A11] transition-colors"
+            >
+              <svg class="w-3.5 h-3.5 rotate-180" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+              <span>بازگشت به کاوش منتورها و صفحه اصلی</span>
+            </a>
+          </div>
+
+          <!-- Column 2 (Left in RTL): Clean Controls Group -->
+          <!-- Order in RTL: Role Toggle -> Profile Picture -> Logout Button (All the way to the far left) -->
+          <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+            
+            <!-- 1. Role Toggle Switcher -->
+            <div id="nav-mode-switcher-container" class="w-[136px] sm:w-[168px] md:w-[176px] h-8 sm:h-9 md:h-10 flex items-center bg-[#EFE3D5] p-0.5 sm:p-1 rounded-[14px] sm:rounded-2xl border border-[#DFCFC0] shadow-2xs shrink-0">
+              <button 
+                type="button" 
+                id="nav-btn-mode-mentee" 
+                onclick="setDashboardMode('mentee')" 
+                class="w-[65px] sm:w-[79px] md:w-[83px] h-7 sm:h-7.5 md:h-8 rounded-[11px] bg-[#2C1A11] text-white font-bold text-[11px] sm:text-xs shadow-xs transition-all inline-flex items-center justify-center gap-1 cursor-pointer shrink-0 text-center"
+              >
+                <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                  <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                </svg>
+                <span>منتی</span>
+              </button>
+              <button 
+                type="button" 
+                id="nav-btn-mode-mentor" 
+                onclick="setDashboardMode('mentor')" 
+                class="w-[65px] sm:w-[79px] md:w-[83px] h-7 sm:h-7.5 md:h-8 rounded-[11px] text-[#5E4131] hover:text-[#2C1A11] font-semibold text-[11px] sm:text-xs transition-all inline-flex items-center justify-center gap-1 cursor-pointer shrink-0 text-center"
+              >
+                <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="20" height="14" x="2" y="7" rx="2" ry="2"/>
+                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                </svg>
+                <span>منتور</span>
+              </button>
+            </div>
+
+            <!-- 2. Profile Picture / User Monogram Pill -->
+            <div class="w-8 h-8 sm:w-auto sm:h-9 md:h-10 flex items-center gap-2 bg-white/80 border border-[#DFCFC0] p-0.5 sm:px-2.5 rounded-full shadow-2xs shrink-0">
+              <div id="nav-user-avatar" class="w-7 h-7 sm:w-7 sm:h-7 rounded-full bg-[#2C1A11] text-[#F2E8DA] flex items-center justify-center font-bold text-[11px] sm:text-xs shrink-0 border border-[#DFCFC0]">
+                <span>ع‌ع</span>
+              </div>
+              <div class="hidden sm:flex flex-col text-right w-[100px] md:w-[115px] shrink-0 overflow-hidden">
+                <span id="nav-user-name" class="text-[11px] sm:text-xs font-bold text-[#2C1A11] leading-tight truncate block">علیرضا عباسی</span>
+                <span id="nav-user-role" class="text-[9.5px] sm:text-[10px] text-[#5E4131] truncate block">منتی مهندسی نرم‌افزار</span>
+              </div>
+            </div>
+
+            <!-- 3. Logout Button (All the way to the far left) -->
+            <button 
+              type="button" 
+              onclick="handleDashboardLogout()" 
+              class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/80 hover:bg-[#F2E8DA] border border-[#DFCFC0] flex items-center justify-center text-[#5E4131] hover:text-[#2C1A11] transition-all cursor-pointer shadow-2xs shrink-0"
+              title="خروج / تغییر حساب کاربری"
+            >
+              <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/>
+              </svg>
+            </button>
+
+          </div>
+
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Header Spacer to prevent layout shift with fixed floating navbar -->
+  <div class="h-20 sm:h-24 md:h-28"></div>
+
+  <!-- ============================================================ -->
+  <!-- MAIN DASHBOARD CONTENT AREA -->
+  <!-- ============================================================ -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 pb-28 sm:pb-36 space-y-8 relative z-10">
+
+    <!-- Top Profile & Mode Header Banner -->
+    <section class="liquid-glass-card rounded-[32px] p-6 sm:p-8 space-y-6">
+      <div class="border-b border-[#DFCFC0]/60 pb-6">
+        
+        <!-- Profile Info -->
+        <div class="flex items-start sm:items-center gap-4">
+          <div id="main-user-avatar" class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#2C1A11] text-[#F2E8DA] flex items-center justify-center font-black text-xl shrink-0 border border-[#DFCFC0] shadow-xs">
+            <span>ع‌ع</span>
+          </div>
+          <div class="space-y-1">
+            <div class="flex flex-wrap items-center gap-2.5">
+              <h1 id="main-user-name" class="text-xl sm:text-2xl font-black text-[#2C1A11] tracking-tight">
+                میز کار علیرضا عباسی
+              </h1>
+              <span id="main-role-badge" class="px-3 py-0.5 rounded-full text-xs font-bold bg-[#8EC5FF]/30 text-[#2C1A11] border border-[#8EC5FF]/60 min-w-[140px] sm:min-w-[195px] inline-flex items-center justify-center shrink-0 text-center">
+                منتی (مهندس نرم‌افزار)
+              </span>
+              <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-100 text-emerald-800 border border-emerald-200 shrink-0">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>وضعیت: فعال</span>
+              </span>
+            </div>
+            <div class="min-h-[40px] sm:min-h-[24px] flex items-center">
+              <p id="main-user-subtitle" class="text-xs sm:text-sm text-[#5E4131] leading-relaxed">
+                مدیریت نشست‌های مشاوره تخصصی، پیگیری تصمیمات معماری (ADR)، اتاق‌های ویدئویی و تاریخچه پرداخت‌ها
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Dynamic Mode Metrics Row (Auto-swaps with active mode) -->
+      <div id="dashboard-metrics-container" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <!-- Populated dynamically by JavaScript -->
+      </div>
+    </section>
+
+    <!-- Become a Mentor Callout Banner (Mentee Mode Only) -->
+    <div id="dashboard-become-mentor-banner" class="bg-gradient-to-r from-amber-50/95 via-[#FDFBF7] to-[#FBF8F4] py-5 sm:py-6 px-6 sm:px-8 rounded-[28px] border border-amber-200/90 shadow-2xs flex flex-col md:flex-row items-center justify-between gap-5 transition-all">
+      <div class="flex items-center gap-4 text-right">
+        <div class="w-12 h-12 rounded-2xl bg-amber-100/90 border border-amber-300 text-amber-900 flex items-center justify-center shrink-0 shadow-2xs">
+          <svg class="w-6 h-6 text-amber-800" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </div>
+        <div class="space-y-1">
+          <h4 class="text-sm sm:text-[15px] font-bold text-[#2C1A11]">آیا خودتان سابقه ارشدیت یا هدایت تیم نرم‌افزاری دارید؟</h4>
+          <p class="text-xs text-[#5E4131] leading-relaxed">دانش معماری خود را به اشتراک بگذارید، جامعه مهندسی را توانمند سازید و ۹۰٪ درآمد جلسات را بدون واسطه دریافت کنید.</p>
+        </div>
+      </div>
+      <a 
+        href="peyroo_become_mentor.html" 
+        class="h-11 px-6 py-2.5 rounded-full bg-[#2C1A11] hover:bg-[#432A1C] text-white font-bold text-xs shrink-0 transition-all hover:scale-102 active:scale-98 shadow-xs cursor-pointer inline-flex items-center justify-center gap-2 whitespace-nowrap"
+      >
+        <span>+ ورود به فرآیند ثبت‌نام مربیان (سهم ۹۰٪)</span>
+        <svg class="w-3.5 h-3.5 text-[#8EC5FF] rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+    <!-- Mentee Technical Badges & Learning History -->
+    <section class="liquid-glass-card rounded-[32px] p-6 sm:p-8 space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#DFCFC0]/60 pb-5">
+        <div class="flex items-center gap-3.5">
+          <div class="w-11 h-11 rounded-2xl bg-purple-100 border border-purple-300 text-purple-900 flex items-center justify-center shrink-0 shadow-2xs">
+            <svg class="w-5.5 h-5.5 text-purple-800" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          </div>
+          <div class="space-y-0.5">
+            <h3 class="text-base sm:text-lg font-black text-[#2C1A11]">کارنامه یادگیری و نشان‌های فنی منتی</h3>
+            <p class="text-xs text-[#5E4131]">دستاوردهای مهارتی ثبت‌شده، نشان‌های اعتبارسنجی شده و تاریخچه تصمیم‌گیری‌های معماری (ADR)</p>
+          </div>
+        </div>
+        <div class="h-9 px-4.5 py-1.5 rounded-full bg-white/90 border border-[#DFCFC0] text-xs font-bold text-[#5E4131] inline-flex items-center justify-center shadow-2xs farsi-nums shrink-0">
+          <span>مجموع مشاوره تاییدشده: ۳.۵ ساعت</span>
+        </div>
+      </div>
+
+      <!-- 3 Verified Badges -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 pt-1">
+        
+        <!-- Badge 1 -->
+        <div class="bg-white/85 p-5 sm:p-5.5 rounded-[24px] border border-[#DFCFC0] hover:border-[#2C1A11] transition-all space-y-3.5 shadow-2xs group flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 font-bold text-xs group-hover:scale-105 transition-transform shadow-2xs">
+                <svg class="w-5 h-5 text-blue-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="2" width="20" height="8" rx="2" ry="2"/>
+                  <rect x="2" y="14" width="20" height="8" rx="2" ry="2"/>
+                  <line x1="6" y1="6" x2="6.01" y2="6"/>
+                  <line x1="6" y1="18" x2="6.01" y2="18"/>
+                </svg>
+              </div>
+              <span class="text-[10.5px] font-bold text-blue-900 bg-blue-100/90 px-2.5 py-1 rounded-full border border-blue-200">سطح نقره‌ای • ۲ جلسه</span>
+            </div>
+            <div>
+              <h4 class="text-sm font-black text-[#2C1A11]">معمار سیستم‌های توزیع‌شده</h4>
+              <p class="text-[11.5px] text-[#5E4131] mt-1">مربی: یاسین صمدی (دیجی‌کالا)</p>
+            </div>
+            <div class="text-[11px] text-[#5E4131] bg-[#FBF8F4] p-3 rounded-xl border border-[#DFCFC0]/60 space-y-1 leading-relaxed">
+              <span class="font-bold text-[#2C1A11] block">سند تصمیم فنی (ADR):</span>
+              <p class="line-clamp-2">پیاده‌سازی الگوی Saga و Outbox در تراکنش‌های توزیع‌شده بانکی.</p>
+            </div>
+          </div>
+          <button type="button" onclick="downloadSampleADR('ADR-001-Distributed-Saga.md')" class="w-full h-9 rounded-xl bg-[#F2E8DA] hover:bg-[#DFCFC0] text-[#2C1A11] text-[11.5px] font-bold inline-flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs active:scale-98">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            <span>دانلود خلاصه و سند ADR</span>
+          </button>
+        </div>
+
+        <!-- Badge 2 -->
+        <div class="bg-white/85 p-5 sm:p-5.5 rounded-[24px] border border-[#DFCFC0] hover:border-[#2C1A11] transition-all space-y-3.5 shadow-2xs group flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700 font-bold text-xs group-hover:scale-105 transition-transform shadow-2xs">
+                <svg class="w-5 h-5 text-amber-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                  <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                  <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                </svg>
+              </div>
+              <span class="text-[10.5px] font-bold text-amber-900 bg-amber-100/90 px-2.5 py-1 rounded-full border border-amber-200">سطح برنزی • ۱ جلسه</span>
+            </div>
+            <div>
+              <h4 class="text-sm font-black text-[#2C1A11]">بهینه‌سازی دیتابیس و پرفورمنس</h4>
+              <p class="text-[11.5px] text-[#5E4131] mt-1">مربی: کسری باقری (کافه‌بازار)</p>
+            </div>
+            <div class="text-[11px] text-[#5E4131] bg-[#FBF8F4] p-3 rounded-xl border border-[#DFCFC0]/60 space-y-1 leading-relaxed">
+              <span class="font-bold text-[#2C1A11] block">سند تصمیم فنی (ADR):</span>
+              <p class="line-clamp-2">کاهش زمان پاسخ‌دهی کوئری‌ها از ۲.۸ ثانیه به ۶۰ میلی‌ثانیه با ایندکس جزئی (Partial Index).</p>
+            </div>
+          </div>
+          <button type="button" onclick="downloadSampleADR('ADR-002-Postgres-Optimization.md')" class="w-full h-9 rounded-xl bg-[#F2E8DA] hover:bg-[#DFCFC0] text-[#2C1A11] text-[11.5px] font-bold inline-flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs active:scale-98">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            <span>دانلود خلاصه و سند ADR</span>
+          </button>
+        </div>
+
+        <!-- Badge 3 (In progress / upcoming) -->
+        <div class="bg-white/85 p-5 sm:p-5.5 rounded-[24px] border border-dashed border-[#DFCFC0] hover:border-[#2C1A11] transition-all space-y-3.5 shadow-2xs flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="w-10 h-10 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-center text-purple-700 font-bold text-xs shadow-2xs">
+                <svg class="w-5 h-5 text-purple-700 animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                </svg>
+              </div>
+              <span class="text-[10.5px] font-bold text-purple-900 bg-purple-100/90 px-2.5 py-1 rounded-full border border-purple-200">در انتظار جلسه فردا</span>
+            </div>
+            <div>
+              <h4 class="text-sm font-black text-[#2C1A11]">معماری رویدادمحور و پیام</h4>
+              <p class="text-[11.5px] text-[#5E4131] mt-1">مربی: مصطفی سدیدی (پنج‌شنبه ساعت ۱۸:۰۰)</p>
+            </div>
+            <div class="text-[11px] text-[#5E4131] bg-[#FBF8F4] p-3 rounded-xl border border-[#DFCFC0]/60 space-y-1 leading-relaxed">
+              <span class="font-bold text-[#2C1A11] block">دستورکار ثبت‌شده:</span>
+              <p class="line-clamp-2">بررسی معماری Kafka Consumer Groups و مدیریت پیام‌های ناموفق با DLQ.</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 pt-0.5">
+            <button type="button" onclick="downloadCalendarInvite()" class="flex-1 h-9 rounded-xl bg-white border border-[#DFCFC0] hover:bg-[#F2E8DA] text-[#2C1A11] text-[11px] font-bold inline-flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs active:scale-98">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+              <span>تقویم (.ics)</span>
+            </button>
+            <button type="button" onclick="openMaskedVideoModal()" class="flex-1 h-9 rounded-xl bg-[#2C1A11] hover:bg-[#432A1C] text-white text-[11px] font-bold inline-flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-xs active:scale-98">
+              <span>اتاق جلسه امن</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Sessions Section & Tabs -->
+    <section class="liquid-glass-card rounded-[32px] p-4 sm:p-8 md:p-10 space-y-6 sm:space-y-8">
+      
+      <!-- Tabs & Top Action Row -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6 border-b border-[#DFCFC0]/60 pb-5 sm:pb-6">
+        
+        <!-- Status Filter Tabs -->
+        <div class="grid grid-cols-3 sm:flex items-center gap-1.5 sm:gap-2.5 w-full sm:w-auto py-1">
+          <button 
+            type="button" 
+            id="tab-btn-upcoming" 
+            onclick="setSessionTab('upcoming')" 
+            class="h-10 sm:h-11 px-2.5 sm:px-4 sm:w-[150px] rounded-full bg-[#2C1A11] text-white font-bold text-xs sm:text-sm transition-all shadow-xs inline-flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 text-center whitespace-nowrap"
+          >
+            <span><span class="hidden sm:inline">جلسات </span>پیش‌رو</span>
+            <span id="tab-count-upcoming" class="w-5 h-5 rounded-full bg-white/20 text-white text-[10px] sm:text-[11px] font-bold inline-flex items-center justify-center shrink-0 farsi-nums">۱</span>
+          </button>
+          <button 
+            type="button" 
+            id="tab-btn-past" 
+            onclick="setSessionTab('past')" 
+            class="h-10 sm:h-11 px-2.5 sm:px-4 sm:w-[260px] rounded-full bg-white border border-[#DFCFC0] hover:border-[#2C1A11] text-[#5E4131] hover:text-[#2C1A11] font-semibold text-xs sm:text-sm transition-all inline-flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 text-center whitespace-nowrap"
+          >
+            <span><span class="hidden sm:inline">جلسات </span>پایان‌یافته<span class="hidden sm:inline"> و اسناد ADR</span></span>
+            <span id="tab-count-past" class="w-5 h-5 rounded-full bg-[#EFE3D5] text-[#2C1A11] text-[10px] sm:text-[11px] font-bold inline-flex items-center justify-center shrink-0 farsi-nums">۱</span>
+          </button>
+          <button 
+            type="button" 
+            id="tab-btn-cancelled" 
+            onclick="setSessionTab('cancelled')" 
+            class="h-10 sm:h-11 px-2.5 sm:px-4 sm:w-[124px] rounded-full bg-white border border-[#DFCFC0] hover:border-[#2C1A11] text-[#5E4131] hover:text-[#2C1A11] font-semibold text-xs sm:text-sm transition-all inline-flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 text-center whitespace-nowrap"
+          >
+            <span>لغو شده</span>
+            <span id="tab-count-cancelled" class="w-5 h-5 rounded-full bg-[#EFE3D5] text-[#2C1A11] text-[10px] sm:text-[11px] font-bold inline-flex items-center justify-center shrink-0 farsi-nums">۰</span>
+          </button>
+        </div>
+
+        <!-- Action on Left (in RTL) -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto">
+          <button 
+            type="button" 
+            id="dashboard-deposit-btn"
+            onclick="openDepositModal()" 
+            class="h-11 px-4 rounded-[16px] bg-[#F2E8DA] hover:bg-[#DFCFC0] text-[#2C1A11] font-bold text-xs sm:text-sm inline-flex items-center justify-center gap-2 transition-all border border-[#DFCFC0] shadow-2xs hover:scale-102 active:scale-98 cursor-pointer shrink-0"
+            title="افزایش اعتبار کیف پول"
+          >
+            <svg class="w-4 h-4 text-[#2C1A11]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="20" height="14" x="2" y="5" rx="2"/>
+              <line x1="2" x2="22" y1="10" y2="10"/>
+            </svg>
+            <span>شارژ کیف پول</span>
+          </button>
+          <button 
+            type="button" 
+            id="dashboard-action-btn"
+            onclick="handleDashboardAction()" 
+            class="w-full sm:w-auto sm:min-w-[220px] h-11 px-5 rounded-[16px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-bold text-xs sm:text-sm inline-flex items-center justify-center gap-2 transition-all shadow-xs hover:scale-102 active:scale-98 cursor-pointer text-center"
+          >
+            <span>+ رزرو جلسه جدید با منتور</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Dynamic Sessions List Container -->
+      <div id="dashboard-sessions-list" class="space-y-6">
+        <!-- Rendered by JavaScript -->
+      </div>
+
+      <!-- Interactive Review & Feedback Box (Expandable / Inline) -->
+      <div id="review-modal-box" class="hidden bg-[#FBF8F4] border-2 border-[#DFCFC0] rounded-[26px] p-6 sm:p-7 space-y-5 shadow-md transition-all">
+        <div class="flex items-center justify-between border-b border-[#DFCFC0]/70 pb-3.5">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 shrink-0">
+              <svg class="w-4 h-4 text-amber-500 fill-amber-400" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="text-sm sm:text-base font-bold text-[#2C1A11]">ثبت بازخورد کیفی و امتیاز به نشست مشاوره</h4>
+              <p class="text-xs text-[#5E4131]">دیدگاه تخصصی شما به مهندسان دیگر در انتخاب منتور کمک می‌کند.</p>
+            </div>
+          </div>
+          <button type="button" onclick="closeReviewBox()" class="text-xs text-[#5E4131] hover:text-[#2C1A11] font-bold p-1 cursor-pointer">
+            <svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> بستن فرم
+          </button>
+        </div>
+
+        <div class="space-y-4">
+          <div class="flex flex-wrap items-center gap-3 text-xs sm:text-[13px]">
+            <span class="text-[#5E4131] font-semibold">ارزیابی شما از تسلط و شفافیت منتور:</span>
+            <div class="flex items-center gap-1.5 text-amber-500 cursor-pointer" id="stars-row">
+              <span onclick="setRating(1)" onmouseover="previewRating(1)" onmouseout="restoreRating()" class="p-1 hover:scale-110 transition-transform"><svg class="w-5 h-5 text-amber-500 fill-amber-400 inline-block pointer-events-none" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+              <span onclick="setRating(2)" onmouseover="previewRating(2)" onmouseout="restoreRating()" class="p-1 hover:scale-110 transition-transform"><svg class="w-5 h-5 text-amber-500 fill-amber-400 inline-block pointer-events-none" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+              <span onclick="setRating(3)" onmouseover="previewRating(3)" onmouseout="restoreRating()" class="p-1 hover:scale-110 transition-transform"><svg class="w-5 h-5 text-amber-500 fill-amber-400 inline-block pointer-events-none" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+              <span onclick="setRating(4)" onmouseover="previewRating(4)" onmouseout="restoreRating()" class="p-1 hover:scale-110 transition-transform"><svg class="w-5 h-5 text-amber-500 fill-amber-400 inline-block pointer-events-none" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+              <span onclick="setRating(5)" onmouseover="previewRating(5)" onmouseout="restoreRating()" class="p-1 hover:scale-110 transition-transform"><svg class="w-5 h-5 text-amber-500 fill-amber-400 inline-block pointer-events-none" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+            </div>
+            <span id="rating-label" class="font-extrabold text-[#2C1A11] bg-white px-3.5 py-1 rounded-full border border-[#DFCFC0]">
+              ۵ از ۵ (عالی و عمیقاً راهگشا)
+            </span>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-[#5E4131] mb-2">دیدگاه و تجربیات شما از جلسه:</label>
+            <textarea 
+              id="review-comment" 
+              rows="3" 
+              placeholder="دیدگاه خود را درباره راهکارهای پیشنهادی معمار، تسلط بر مسأله و پیشنهادها برای نشست‌های بعدی بنویسید..." 
+              class="w-full p-4 rounded-[18px] bg-white border border-[#DFCFC0] text-xs sm:text-[13px] text-[#2C1A11] outline-none focus:border-[#2C1A11] focus:ring-2 focus:ring-[#8EC5FF]/40 transition-all resize-none leading-relaxed"
+            >جلسه بسیار عالی و فشرده بود. بهنود تسلط فوق‌العاده‌ای روی ایندکس‌های PostgreSQL داشت و مشکل کندی کوئری‌های تراکنشی ما در کمتر از نیم ساعت با ارائه یک استراتژی شفاف پارتیشن‌بندی حل شد.</textarea>
+          </div>
+
+          <div class="flex items-center justify-end gap-3 pt-1">
+            <button 
+              type="button" 
+              onclick="closeReviewBox()" 
+              class="h-10 px-5 rounded-[14px] bg-white border border-[#DFCFC0] text-[#5E4131] font-semibold text-xs transition-all hover:bg-stone-50 cursor-pointer"
+            >
+              انصراف
+            </button>
+            <button 
+              type="button" 
+              onclick="submitReview()" 
+              class="h-10 px-6 rounded-[14px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-bold text-xs transition-all shadow-xs cursor-pointer active:scale-95"
+            >
+              ثبت بازخورد در نمایه عمومی منتور
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Mentor Slot Management Modal (Opened only when in Mentor Mode) -->
+    <div 
+      id="mentor-slot-modal-backdrop" 
+      class="fixed inset-0 z-50 bg-[#2C1A11]/75 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto"
+      onclick="handleSlotBackdropClick(event)"
+    >
+      <div 
+        id="mentor-slot-dialog" 
+        class="liquid-glass-card w-full max-w-lg rounded-[28px] p-6 sm:p-8 space-y-5 text-right relative shadow-2xl"
+        onclick="event.stopPropagation()"
+      >
+        <div class="flex items-center justify-between border-b border-[#DFCFC0]/60 pb-3">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-full bg-[#EFE3D5]/80 border border-[#DFCFC0] flex items-center justify-center text-[#5E4131] shrink-0">
+              <svg class="w-4 h-4 text-[#5E4131]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="18" height="18" x="3" y="4" rx="2"/>
+                <path d="M16 2v4M8 2v4M3 10h18"/>
+              </svg>
+            </div>
+            <h3 class="text-base font-bold text-[#2C1A11]">تعریف اسلات زمانی جدید در تقویم منتور</h3>
+          </div>
+          <button type="button" onclick="closeMentorSlotModal()" class="w-8 h-8 rounded-full bg-white hover:bg-stone-100 border border-[#DFCFC0] flex items-center justify-center text-xs cursor-pointer"><svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+
+        <form onsubmit="handleSaveSlot(event)" class="space-y-4">
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold text-[#2C1A11]">روز و تاریخ برگزاری (تقویم شمسی):</label>
+            <input 
+              type="text" 
+              id="new-slot-date" 
+              value="شنبه ۲۴ آبان ۱۴۰۵" 
+              class="w-full h-11 px-3.5 rounded-[14px] bg-white border border-[#DFCFC0] text-xs font-semibold text-[#2C1A11] outline-none focus:border-[#2C1A11]"
+            />
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="space-y-1.5">
+              <label class="block text-xs font-bold text-[#2C1A11]">ساعت شروع جلسه:</label>
+              <input 
+                type="text" 
+                id="new-slot-time" 
+                value="۱۹:۳۰" 
+                class="w-full h-11 px-3.5 rounded-[14px] bg-white border border-[#DFCFC0] text-xs font-semibold text-[#2C1A11] outline-none focus:border-[#2C1A11]"
+              />
+            </div>
+            <div class="space-y-1.5">
+              <label class="block text-xs font-bold text-[#2C1A11]">مدت زمان نشست:</label>
+              <select class="w-full h-11 px-3 rounded-[14px] bg-white border border-[#DFCFC0] text-xs font-semibold text-[#2C1A11] outline-none">
+                <option value="45">۴۵ دقیقه (استاندارد پیرو)</option>
+                <option value="60">۶۰ دقیقه</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold text-[#2C1A11]">تعرفه پیشنهادی منتور (تومان):</label>
+            <input 
+              type="text" 
+              value="۲۵۰٬۰۰۰" 
+              class="w-full h-11 px-3.5 rounded-[14px] bg-white border border-[#DFCFC0] text-xs font-bold text-[#2C1A11] outline-none bank-input-num"
+            />
+            <p class="text-[10.5px] text-[#5E4131]">سهم شما ۹۰٪ (۲۲۵٬۰۰۰ تومان) + ۱۰٪ کارمزد پلتفرم پیرو (۲۵٬۰۰۰ تومان)</p>
+          </div>
+
+          <div class="pt-2 flex items-center justify-end gap-3">
+            <button 
+              type="button" 
+              onclick="closeMentorSlotModal()" 
+              class="h-10 px-4 rounded-[14px] bg-white border border-[#DFCFC0] text-xs font-bold text-[#5E4131] hover:bg-stone-50 cursor-pointer"
+            >
+              انصراف
+            </button>
+            <button 
+              type="submit" 
+              class="h-10 px-5 rounded-[14px] bg-[#2C1A11] hover:bg-[#432A1C] text-white text-xs font-bold transition-all shadow-xs cursor-pointer"
+            >
+              ذخیره و انتشار در نمایه
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Quick Deposit Modal (Mentee Wallet Top-Up) -->
+    <div 
+      id="deposit-modal-backdrop" 
+      class="fixed inset-0 z-50 bg-[#2C1A11]/75 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto"
+      onclick="handleDepositBackdropClick(event)"
+    >
+      <div 
+        id="deposit-dialog" 
+        class="liquid-glass-card w-full max-w-md rounded-[28px] p-6 sm:p-7 space-y-4.5 text-right relative shadow-2xl"
+        onclick="event.stopPropagation()"
+      >
+        <!-- Modal Header -->
+        <div class="flex items-center justify-between border-b border-[#DFCFC0]/60 pb-3">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-full bg-[#EFE3D5]/80 border border-[#DFCFC0] flex items-center justify-center text-[#5E4131] shrink-0">
+              <svg class="w-4 h-4 text-[#2C1A11]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="20" height="14" x="2" y="5" rx="2"/>
+                <line x1="2" x2="22" y1="10" y2="10"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-[#2C1A11]">افزایش موجودی کیف پول</h3>
+              <p class="text-[11px] text-[#5E4131]">شارژ آنی اعتبار جهت رزرو سریع نشست‌ها</p>
+            </div>
+          </div>
+          <button type="button" onclick="closeDepositModal()" class="w-8 h-8 rounded-full bg-white hover:bg-stone-100 border border-[#DFCFC0] flex items-center justify-center text-xs cursor-pointer"><svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+
+        <!-- Current Balance Callout -->
+        <div class="bg-[#FBF8F4] p-3.5 rounded-[18px] border border-[#DFCFC0] flex items-center justify-between">
+          <span class="text-xs text-[#5E4131]">موجودی فعلی شما:</span>
+          <span id="deposit-modal-current-balance" class="text-sm font-black text-[#2C1A11] farsi-nums">۰ تومان</span>
+        </div>
+
+        <form onsubmit="handleExecuteDeposit(event)" class="space-y-4">
+          <!-- Preset Amount Chips -->
+          <div class="space-y-2">
+            <label class="block text-xs font-bold text-[#2C1A11]">انتخاب سریع مبلغ شارژ:</label>
+            <div class="grid grid-cols-3 gap-2">
+              <button 
+                type="button" 
+                data-amt="100000"
+                onclick="selectPresetAmount(100000)" 
+                class="preset-chip py-2 px-2 rounded-[14px] bg-white hover:bg-[#F2E8DA] border border-[#DFCFC0] text-xs font-bold text-[#2C1A11] transition-all cursor-pointer text-center"
+              >
+                ۱۰۰٬۰۰۰ تومان
+              </button>
+              <button 
+                type="button" 
+                data-amt="250000"
+                onclick="selectPresetAmount(250000)" 
+                class="preset-chip py-2 px-2 rounded-[14px] bg-[#2C1A11] text-white border border-[#2C1A11] text-xs font-bold transition-all cursor-pointer text-center"
+              >
+                ۲۵۰٬۰۰۰ تومان
+              </button>
+              <button 
+                type="button" 
+                data-amt="500000"
+                onclick="selectPresetAmount(500000)" 
+                class="preset-chip py-2 px-2 rounded-[14px] bg-white hover:bg-[#F2E8DA] border border-[#DFCFC0] text-xs font-bold text-[#2C1A11] transition-all cursor-pointer text-center"
+              >
+                ۵۰۰٬۰۰۰ تومان
+              </button>
+            </div>
+          </div>
+
+          <!-- Custom Amount Input -->
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold text-[#2C1A11]">یا مبلغ دلخواه (تومان):</label>
+            <div class="relative">
+              <input 
+                type="number" 
+                id="deposit-custom-amount" 
+                value="250000" 
+                min="50000" 
+                step="50000"
+                class="w-full h-11 pl-12 pr-3.5 rounded-[14px] bg-white border border-[#DFCFC0] text-xs font-bold text-[#2C1A11] outline-none focus:border-[#2C1A11]"
+              />
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-[#5E4131] pointer-events-none font-semibold">تومان</span>
+            </div>
+            <p class="text-[10.5px] text-[#5E4131]">حداقل مبلغ شارژ ۵۰٬۰۰۰ تومان است.</p>
+          </div>
+
+          <!-- Payment Gateway Selection -->
+          <div class="space-y-2">
+            <label class="block text-xs font-bold text-[#2C1A11]">درگاه پرداخت آنلاین:</label>
+            <div class="flex items-center gap-2 p-2.5 rounded-[14px] bg-white border border-[#DFCFC0]">
+              <div class="w-7 h-7 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 shrink-0">
+                <svg class="w-3.5 h-3.5 text-emerald-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+                  <path d="m9 12 2 2 4-4"/>
+                </svg>
+              </div>
+              <div class="flex-1 text-right">
+                <span class="text-xs font-bold text-[#2C1A11] block">درگاه امن شتاب (شاپرک)</span>
+                <span class="text-[10px] text-[#5E4131]">اتصال به پروتکل امن بانکی با رمز دوم پویا</span>
+              </div>
+              <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">SSL فعال</span>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="pt-2 flex items-center justify-end gap-3">
+            <button 
+              type="button" 
+              onclick="closeDepositModal()" 
+              class="h-10 px-4 rounded-[14px] bg-white border border-[#DFCFC0] text-xs font-bold text-[#5E4131] hover:bg-stone-50 cursor-pointer"
+            >
+              انصراف
+            </button>
+            <button 
+              type="submit" 
+              class="flex-1 h-10 px-5 rounded-[14px] bg-[#2C1A11] hover:bg-[#432A1C] text-white text-xs font-bold transition-all shadow-xs cursor-pointer flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <span>شارژ و افزایش موجودی</span>
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL: BECOME A MENTOR APPLICATION FORM -->
+    <!-- ========================================== -->
+    <div 
+      id="auth-modal-backdrop" 
+      class="fixed inset-0 z-50 bg-[#2C1A11]/75 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-5 md:p-6 overflow-y-auto"
+      onclick="handleAuthBackdropClick(event)"
+    >
+      <div 
+        id="auth-dialog" 
+        class="liquid-glass-card-frame w-full max-w-md rounded-[32px] p-6 sm:p-8 shadow-2xl relative max-h-[92vh] overflow-y-auto space-y-5 text-right no-scrollbar"
+        onclick="event.stopPropagation()"
+      >
+        <div class="flex items-center justify-between border-b border-[#DFCFC0]/60 pb-3.5">
+          <div class="flex items-center gap-2.5">
+            <img 
+              src="../../../assets/brand/peyroo_logo_cropped_transparent.svg" 
+              onerror="this.onerror=null; this.src='peyroo_logo_cropped_transparent.svg'" 
+              alt="پیرو" 
+              class="h-7 w-auto object-contain"
+            />
+            <h3 id="auth-modal-title" class="text-base font-bold text-[#2C1A11]">ورود به حساب کاربری</h3>
+          </div>
+          <button 
+            type="button" 
+            onclick="closeAuthModal()" 
+            class="w-8 h-8 rounded-full bg-white hover:bg-stone-100 border border-[#DFCFC0] flex items-center justify-center text-xs font-bold text-[#2C1A11] cursor-pointer transition-colors shadow-2xs"
+            title="بستن"
+          >
+            <svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-1 bg-[#EFE3D5] p-1 rounded-[16px] border border-[#DFCFC0]">
+          <button 
+            type="button" 
+            id="auth-tab-login" 
+            onclick="switchAuthTab('login')" 
+            class="h-9 rounded-[12px] bg-[#2C1A11] text-white font-bold text-xs transition-all shadow-xs cursor-pointer text-center"
+          >
+            ورود به حساب
+          </button>
+          <button 
+            type="button" 
+            id="auth-tab-signup" 
+            onclick="switchAuthTab('signup')" 
+            class="h-9 rounded-[12px] text-[#5E4131] hover:text-[#2C1A11] font-semibold text-xs transition-all cursor-pointer text-center"
+          >
+            ثبت‌نام کاربر جدید
+          </button>
+        </div>
+
+        <div class="space-y-2">
+          <button 
+            type="button" 
+            onclick="simulateSocialLogin('GitHub')" 
+            class="w-full h-11 px-4 rounded-[14px] bg-white hover:bg-[#F2E8DA] border border-[#DFCFC0] text-xs font-bold text-[#2C1A11] transition-all flex items-center justify-center gap-2.5 cursor-pointer shadow-2xs hover:scale-[1.01] active:scale-[0.99]"
+          >
+            <svg class="w-4 h-4 text-[#2C1A11]" viewBox="0 0 24 24" fill="currentColor">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+            </svg>
+            <span>ورود سریع با حساب GitHub</span>
+          </button>
+          <button 
+            type="button" 
+            onclick="simulateSocialLogin('Google')" 
+            class="w-full h-11 px-4 rounded-[14px] bg-white hover:bg-[#F2E8DA] border border-[#DFCFC0] text-xs font-bold text-[#2C1A11] transition-all flex items-center justify-center gap-2.5 cursor-pointer shadow-2xs hover:scale-[1.01] active:scale-[0.99]"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            <span>ورود با حساب Google</span>
+          </button>
+        </div>
+
+        <form onsubmit="handleAuthSubmit(event, 'login')" class="space-y-3.5 text-xs">
+          <div class="space-y-1.5">
+            <label class="block font-bold text-[#2C1A11]">شماره موبایل یا ایمیل:</label>
+            <input 
+              type="text" 
+              required 
+              value="09123456789"
+              class="w-full h-12 px-4 py-3 rounded-[16px] bg-white border border-[#DFCFC0] focus:border-[#2C1A11] outline-none text-xs sm:text-sm text-[#2C1A11] font-bold text-left dir-ltr shadow-2xs"
+            />
+          </div>
+          <div class="space-y-1.5">
+            <label class="block font-bold text-[#2C1A11]">رمز عبور یا کد یکبارمصرف:</label>
+            <input 
+              type="password" 
+              required 
+              value="password123"
+              class="w-full h-12 px-4 py-3 rounded-[16px] bg-white border border-[#DFCFC0] focus:border-[#2C1A11] outline-none text-xs sm:text-sm text-[#2C1A11] text-left dir-ltr shadow-2xs"
+            />
+          </div>
+          <button 
+            type="submit" 
+            class="w-full h-12 rounded-[16px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-bold text-xs sm:text-sm transition-all shadow-xs hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-center gap-2 mt-3"
+          >
+            <span>ورود به حساب کاربری پیرو</span>
+            <svg class="w-4 h-4 text-[#8EC5FF] rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Cancellation Confirmation Modal -->
+    <div 
+      id="cancel-modal-backdrop" 
+      class="fixed inset-0 z-50 bg-[#2C1A11]/75 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto"
+      onclick="handleCancelBackdropClick(event)"
+    >
+      <div 
+        id="cancel-dialog" 
+        class="liquid-glass-card w-full max-w-md rounded-[28px] p-6 space-y-4 text-right relative shadow-2xl"
+        onclick="event.stopPropagation()"
+      >
+        <div class="w-12 h-12 rounded-full bg-rose-50 border border-rose-200 text-rose-700 flex items-center justify-center mx-auto">
+          <svg class="w-6 h-6 text-rose-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </div>
+        <div class="text-center space-y-1.5">
+          <h3 class="text-base font-bold text-[#2C1A11]">آیا از لغو این جلسه اطمینان دارید؟</h3>
+          <p class="text-xs text-[#5E4131] leading-relaxed">
+            طبق «ضمانت استرداد ۲۴ ساعته پیرو»، چون زمان جلسه بیش از ۲۴ ساعت آینده است، 
+            <strong class="text-emerald-700 font-bold">۱۰۰٪ مبلغ پرداختی (۲۷۵٬۰۰۰ تومان)</strong> 
+            بلافاصله بدون کسر هرگونه جریمه به کیف پول شما برگشت داده خواهد شد.
+          </p>
+        </div>
+
+        <div class="bg-[#FBF8F4] p-3 rounded-[16px] border border-[#DFCFC0] text-xs space-y-1">
+          <div class="flex justify-between">
+            <span class="text-[#5E4131]">مبلغ پرداختی شما:</span>
+            <span class="font-bold text-[#2C1A11]">۲۷۵٬۰۰۰ تومان</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-[#5E4131]">وضعیت استرداد:</span>
+            <span class="font-bold text-emerald-700">استرداد آنی ۱۰۰٪</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 pt-2">
+          <button 
+            type="button" 
+            onclick="confirmCancellationExecution()" 
+            class="flex-1 h-11 rounded-[14px] bg-rose-700 hover:bg-rose-800 text-white font-bold text-xs transition-all cursor-pointer shadow-xs"
+          >
+            بله، لغو شود و وجه مسترد گردد
+          </button>
+          <button 
+            type="button" 
+            onclick="closeCancelModal()" 
+            class="px-4 h-11 rounded-[14px] bg-white border border-[#DFCFC0] text-xs font-bold text-[#5E4131] hover:bg-stone-50 cursor-pointer"
+          >
+            انصراف
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Academic Security & Guarantee Footer -->
+    <!-- Footer: Spacious & Ergonomic Padding -->
+    <footer class="bg-white/90 border border-[#DFCFC0] rounded-[28px] p-6 sm:p-8 md:p-10 mt-10 sm:mt-16 space-y-6 text-xs text-[#5E4131] shadow-xs">
+      
+      <!-- Top Row: Navigation and Brand Links -->
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4 pb-6 border-b border-[#DFCFC0]/60">
+        <div class="flex items-center gap-3">
+          <img 
+            src="../../../assets/brand/peyroo_logo_cropped_transparent.svg" 
+            onerror="this.onerror=null; this.src='peyroo_logo_cropped_transparent.svg'" 
+            alt="پیرو • Peyroo" 
+            class="h-7 sm:h-8 w-auto object-contain"
+          >
+          <div class="text-right">
+            <span class="font-bold text-xs sm:text-sm text-[#2C1A11] block">میز کار مهندسی پیرو (Peyroo Workspace)</span>
+            <span class="text-[10.5px] text-[#5E4131]">مدیریت یکپارچه جلسات مشاوره، اسپرینت‌ها و تصمیمات معماری (ADR)</span>
+          </div>
+        </div>
+
+        <!-- Quick Navigation Links -->
+        <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-5 text-xs font-semibold text-[#5E4131]">
+          <a href="peyroo_figma_landing.html" class="hover:text-[#2C1A11] transition-colors inline-flex items-center gap-1">
+            <span>صفحه اصلی کاوش</span>
+            <svg class="w-3 h-3 rotate-180" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </a>
+          <a href="peyroo_become_mentor.html" class="hover:text-[#2C1A11] transition-colors">درخواست منتور شدن (سهم ۹۰٪)</a>
+          <button type="button" onclick="alert('پشتیبانی ۲۴/۷ پیرو: برای ارتباط فوری در تلگرام با @peyroo_support در تماس باشید.')" class="hover:text-[#2C1A11] transition-colors cursor-pointer">مرکز پشتیبانی</button>
+          <button type="button" onclick="handleDashboardLogout()" class="hover:text-red-700 text-red-600 transition-colors cursor-pointer">خروج از حساب</button>
+        </div>
+      </div>
+
+      <!-- Bottom Row: Security Guarantees & Version Meta -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-1">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 shrink-0">
+            <svg class="w-4 h-4 text-emerald-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+          </div>
+          <span class="leading-relaxed text-xs sm:text-[12.5px] text-[#5E4131]">
+            کلیه جلسات تحت پوشش توافق‌نامه رسمی عدم افشای اطلاعات فنی (NDA) دوطرفه و ضمانت استرداد وجه قرار دارند.
+          </span>
+        </div>
+
+        <div class="flex items-center gap-2.5 shrink-0">
+          <span class="text-[11px] font-mono text-[#5E4131] bg-[#FBF8F4] px-3 py-1.5 rounded-xl border border-[#DFCFC0]">
+            v1.4.0 (Dual-Mode Architecture)
+          </span>
+          <span class="text-[10.5px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-xl flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+            همگام با سرور
+          </span>
+        </div>
+      </div>
+
+    </footer>
+
+  </main>
+
+  <!-- ============================================================ -->
+  <!-- JAVASCRIPT STATE MANAGEMENT (DUAL-MODE & SESSIONS LIFECYCLE) -->
+  <!-- ============================================================ -->
+  <script>
+    let currentDashboardMode = 'mentee';
+    let currentSessionTab = 'upcoming';
+    let isSessionCancelled = false;
+    let userReviewRating = 5;
+    let selectedRatingTemp = 5;
+    let userWalletBalance = 0;
+
+    // Check URL parameters (e.g. ?mode=mentor)
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const modeParam = urlParams.get('mode');
+      if (modeParam === 'mentor') {
+        setDashboardMode('mentor');
+      } else {
+        setDashboardMode('mentee');
+      }
+    });
+
+    function toggleDashboardMode() {
+      if (currentDashboardMode === 'mentee') {
+        setDashboardMode('mentor');
+      } else {
+        setDashboardMode('mentee');
+      }
+    }
+
+        let isMobileMenuOpen = false;
+
+    function toggleMobileMenu(forceClose = false) {
+      const drawer = document.getElementById('mobile-menu-drawer');
+      const backdrop = document.getElementById('mobile-menu-backdrop');
+      const iconBars = document.getElementById('menu-icon-bars');
+      const iconClose = document.getElementById('menu-icon-close');
+      const navElement = document.querySelector('#main-header nav');
+      const headerEl = document.getElementById('main-header');
+
+      if (forceClose) {
+        isMobileMenuOpen = false;
+      } else {
+        isMobileMenuOpen = !isMobileMenuOpen;
+      }
+
+      if (isMobileMenuOpen) {
+        if (headerEl) {
+          headerEl.classList.remove('-translate-y-full');
+        }
+        if (drawer) {
+          drawer.classList.add('drawer-visible');
+        }
+        if (backdrop) {
+          backdrop.classList.add('backdrop-visible');
+        }
+        if (iconBars) iconBars.classList.add('hidden');
+        if (iconClose) iconClose.classList.remove('hidden');
+        if (navElement) {
+          navElement.classList.add('menu-open');
+        }
+        document.body.classList.add('overflow-hidden');
+      } else {
+        if (drawer) {
+          drawer.classList.remove('drawer-visible');
+        }
+        if (backdrop) {
+          backdrop.classList.remove('backdrop-visible');
+        }
+        if (iconBars) iconBars.classList.remove('hidden');
+        if (iconClose) iconClose.classList.add('hidden');
+        if (navElement) {
+          navElement.classList.remove('menu-open');
+        }
+        document.body.classList.remove('overflow-hidden');
+      }
+    }
+
+    function setDashboardMode(mode) {
+      currentDashboardMode = mode;
+      
+      const navBtnMentee = document.getElementById('nav-btn-mode-mentee');
+      const navBtnMentor = document.getElementById('nav-btn-mode-mentor');
+      const navAvatar = document.getElementById('nav-user-avatar');
+      const navName = document.getElementById('nav-user-name');
+      const navRole = document.getElementById('nav-user-role');
+
+      const mainAvatar = document.getElementById('main-user-avatar');
+      const mainName = document.getElementById('main-user-name');
+      const mainRole = document.getElementById('main-role-badge');
+      const mainSubtitle = document.getElementById('main-user-subtitle');
+      const actionBtn = document.getElementById('dashboard-action-btn');
+
+      if (mode === 'mentee') {
+        // Navbar Buttons
+        navBtnMentee.className = 'w-[65px] sm:w-[79px] md:w-[83px] h-7 sm:h-7.5 md:h-8 rounded-[11px] bg-[#2C1A11] text-white font-bold text-[11px] sm:text-xs shadow-xs transition-all inline-flex items-center justify-center gap-1 cursor-pointer shrink-0 text-center';
+        navBtnMentor.className = 'w-[65px] sm:w-[79px] md:w-[83px] h-7 sm:h-7.5 md:h-8 rounded-[11px] text-[#5E4131] hover:text-[#2C1A11] font-semibold text-[11px] sm:text-xs transition-all inline-flex items-center justify-center gap-1 cursor-pointer shrink-0 text-center';
+        navAvatar.innerHTML = '<span>ع‌ع</span>';
+        navName.textContent = 'علیرضا عباسی';
+        navRole.textContent = 'منتی مهندسی نرم‌افزار';
+
+        // Main Profile Header
+        mainAvatar.innerHTML = '<span>ع‌ع</span>';
+        mainName.textContent = 'میز کار علیرضا عباسی';
+        mainRole.textContent = 'منتی (مهندس نرم‌افزار)';
+        mainRole.className = 'px-3 py-0.5 rounded-full text-xs font-bold bg-[#8EC5FF]/30 text-[#2C1A11] border border-[#8EC5FF]/60 min-w-[140px] sm:min-w-[195px] inline-flex items-center justify-center shrink-0 text-center';
+        mainSubtitle.textContent = 'مدیریت نشست‌های مشاوره تخصصی، پیگیری تصمیمات معماری (ADR)، اتاق‌های ویدئویی و تاریخچه پرداخت‌ها';
+        
+        const depositBtn = document.getElementById('dashboard-deposit-btn');
+        if (depositBtn) depositBtn.classList.remove('hidden');
+        const becomeMentorBanner = document.getElementById('dashboard-become-mentor-banner');
+        if (becomeMentorBanner) becomeMentorBanner.classList.remove('hidden');
+        const navMentorBtn = document.getElementById('nav-become-mentor-btn');
+        if (navMentorBtn) navMentorBtn.classList.remove('hidden');
+
+        if (actionBtn) {
+          actionBtn.innerHTML = '<span>+ رزرو جلسه جدید با منتور</span>';
+          actionBtn.className = 'w-full sm:w-auto sm:min-w-[220px] h-11 px-5 rounded-[16px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-bold text-xs sm:text-sm inline-flex items-center justify-center gap-2 transition-all shadow-xs hover:scale-102 active:scale-98 cursor-pointer text-center';
+        }
+      } else {
+        // Mentor Mode
+        navBtnMentor.className = 'w-[65px] sm:w-[79px] md:w-[83px] h-7 sm:h-7.5 md:h-8 rounded-[11px] bg-[#2C1A11] text-white font-bold text-[11px] sm:text-xs shadow-xs transition-all inline-flex items-center justify-center gap-1 cursor-pointer shrink-0 text-center';
+        navBtnMentee.className = 'w-[65px] sm:w-[79px] md:w-[83px] h-7 sm:h-7.5 md:h-8 rounded-[11px] text-[#5E4131] hover:text-[#2C1A11] font-semibold text-[11px] sm:text-xs transition-all inline-flex items-center justify-center gap-1 cursor-pointer shrink-0 text-center';
+        navAvatar.innerHTML = '<span>م‌س</span>';
+        navName.textContent = 'مصطفی سدیدی';
+        navRole.textContent = 'منتور ارشد معماری';
+
+        // Main Profile Header
+        mainAvatar.innerHTML = '<span>م‌س</span>';
+        mainName.textContent = 'میز کار مهندس مصطفی سدیدی';
+        mainRole.textContent = 'منتور ارشد (معمار سیستم‌های توزیع‌شده)';
+        mainRole.className = 'px-3 py-0.5 rounded-full text-xs font-bold bg-amber-200/60 text-[#79551F] border border-amber-300 min-w-[140px] sm:min-w-[195px] inline-flex items-center justify-center shrink-0 text-center';
+        mainSubtitle.textContent = 'مدیریت زمان‌های آزاد تقویم، بررسی چالش‌های فنی و دستور کار مراجعین، و تسویه درآمدهای حاصله';
+        
+        const depositBtn = document.getElementById('dashboard-deposit-btn');
+        if (depositBtn) depositBtn.classList.add('hidden');
+        const becomeMentorBanner = document.getElementById('dashboard-become-mentor-banner');
+        if (becomeMentorBanner) becomeMentorBanner.classList.add('hidden');
+        const navMentorBtn = document.getElementById('nav-become-mentor-btn');
+        if (navMentorBtn) navMentorBtn.classList.add('hidden');
+
+        if (actionBtn) {
+          actionBtn.innerHTML = '<span>+ تعریف اسلات زمانی جدید در تقویم</span>';
+          actionBtn.className = 'w-full sm:w-auto sm:min-w-[235px] h-11 px-5 rounded-[16px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-bold text-xs sm:text-sm inline-flex items-center justify-center gap-2 transition-all shadow-xs hover:scale-102 active:scale-98 cursor-pointer text-center';
+        }
+      }
+
+      renderDashboardMetrics();
+      renderDashboardSessions();
+    }
+
+    function setSessionTab(tab) {
+      currentSessionTab = tab;
+      const btnUpcoming = document.getElementById('tab-btn-upcoming');
+      const btnPast = document.getElementById('tab-btn-past');
+      const btnCancelled = document.getElementById('tab-btn-cancelled');
+
+      const tabs = [
+        { el: btnUpcoming, id: 'upcoming' },
+        { el: btnPast, id: 'past' },
+        { el: btnCancelled, id: 'cancelled' }
+      ];
+
+      tabs.forEach(t => {
+        const badge = document.getElementById('tab-count-' + t.id);
+        const widthClass = t.id === 'upcoming' ? 'sm:w-[150px]' : (t.id === 'past' ? 'sm:w-[260px]' : 'sm:w-[124px]');
+        if (t.id === tab) {
+          t.el.className = `h-10 px-1 sm:px-4 ${widthClass} rounded-full bg-[#2C1A11] text-white font-bold text-xs sm:text-sm transition-all shadow-xs inline-flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 text-center whitespace-nowrap`;
+          if (badge) badge.className = 'w-5 h-5 rounded-full bg-white/20 text-white text-[10px] sm:text-[11px] font-bold inline-flex items-center justify-center shrink-0 farsi-nums';
+        } else {
+          t.el.className = `h-10 px-1 sm:px-4 ${widthClass} rounded-full bg-white border border-[#DFCFC0] hover:border-[#2C1A11] text-[#5E4131] hover:text-[#2C1A11] font-semibold text-xs sm:text-sm transition-all inline-flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 text-center whitespace-nowrap`;
+          if (badge) badge.className = 'w-5 h-5 rounded-full bg-[#EFE3D5] text-[#2C1A11] text-[10px] sm:text-[11px] font-bold inline-flex items-center justify-center shrink-0 farsi-nums';
+        }
+      });
+
+      renderDashboardSessions();
+    }
+
+    function renderDashboardMetrics() {
+      const container = document.getElementById('dashboard-metrics-container');
+      if (!container) return;
+
+      if (currentDashboardMode === 'mentee') {
+        const upcomingCount = isSessionCancelled ? '۰ جلسه' : '۱ جلسه';
+        const upcomingBadge = isSessionCancelled 
+          ? '<span class="text-[11px] font-bold text-[#5E4131] bg-[#F2E8DA] px-2.5 py-0.5 rounded-full border border-[#DFCFC0]">بدون نوبت فعال</span>'
+          : '<span class="text-[11px] font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-200">نوبت فردا</span>';
+        const upcomingSubtitle = isSessionCancelled 
+          ? 'نوبت لغو شد؛ می‌توانید نوبت جدید رزرو کنید'
+          : 'لینک اتاق جلسه تصویری و دستور کار آماده است';
+
+        const walletBadge = isSessionCancelled
+          ? '<span class="text-[11px] font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-200">استرداد آنی ۱۰۰٪</span>'
+          : (userWalletBalance > 0 
+              ? '<span class="text-[11px] font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-200">اعتبار فعال</span>' 
+              : '<span class="text-[11px] font-bold text-[#5E4131] bg-[#F2E8DA] px-2.5 py-0.5 rounded-full border border-[#DFCFC0]">اعتبار نقدی</span>');
+
+        const walletSubtitle = isSessionCancelled
+          ? 'وجه بازگشتی نوبت به حساب'
+          : (userWalletBalance > 0 
+              ? 'کسر خودکار از رزرو بعدی' 
+              : 'کسر خودکار از رزرو بعدی');
+
+        container.innerHTML = `
+          <div class="bg-white/85 p-5 sm:p-5.5 rounded-[24px] border border-[#DFCFC0] shadow-2xs flex flex-col justify-between h-[148px] sm:h-[154px] shrink-0">
+            <span class="text-xs text-[#5E4131] block font-semibold truncate h-4.5">جلسات تاییدشده و فعال</span>
+            <div class="flex items-baseline justify-between h-8">
+              <span class="text-2xl font-black text-[#2C1A11] farsi-nums">${upcomingCount}</span>
+              ${upcomingBadge}
+            </div>
+            <p class="text-[11px] text-[#5E4131] leading-snug h-6 flex items-center truncate">${upcomingSubtitle}</p>
+          </div>
+          <div class="bg-white/85 p-5 sm:p-5.5 rounded-[24px] border border-[#DFCFC0] shadow-2xs flex flex-col justify-between h-[148px] sm:h-[154px] shrink-0">
+            <span class="text-xs text-[#5E4131] block font-semibold truncate h-4.5">مجموع ساعات مشاوره دریافت‌شده</span>
+            <div class="flex items-baseline justify-between h-8">
+              <span class="text-2xl font-black text-[#2C1A11] farsi-nums">۳.۵ ساعت</span>
+              <span class="text-[11px] font-bold text-[#2C1A11] bg-[#F2E8DA] px-2.5 py-0.5 rounded-full border border-[#DFCFC0]">۳ نشست پیشین</span>
+            </div>
+            <p class="text-[11px] text-[#5E4131] leading-snug h-6 flex items-center truncate">آرشیو یادداشت‌های معماری (ADR) در دسترس</p>
+          </div>
+          <div class="bg-[#FFFDFB] p-5 sm:p-5.5 rounded-[24px] border-2 border-[#2C1A11]/20 hover:border-[#2C1A11]/45 shadow-xs flex flex-col justify-between h-[148px] sm:h-[154px] shrink-0 transition-all">
+            <div class="flex items-center justify-between h-4.5">
+              <div class="flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 text-[#2C1A11]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="20" height="14" x="2" y="5" rx="2"/>
+                  <line x1="2" x2="22" y1="10" y2="10"/>
+                </svg>
+                <span class="text-xs font-bold text-[#2C1A11] truncate">موجودی کیف پول و اعتبار</span>
+              </div>
+              ${walletBadge}
+            </div>
+            <div class="flex items-baseline justify-between h-7">
+              <span class="text-2xl font-black text-[#2C1A11] farsi-nums">${userWalletBalance.toLocaleString('fa-IR')} تومان</span>
+              <span class="text-[10.5px] text-[#5E4131] truncate">${walletSubtitle}</span>
+            </div>
+            <button 
+              type="button" 
+              onclick="openDepositModal()" 
+              class="w-full h-9 rounded-[13px] bg-[#2C1A11] hover:bg-[#432A1C] text-white text-xs sm:text-[13px] font-bold transition-all shadow-xs hover:shadow-md hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-center gap-2 shrink-0"
+              title="شارژ و افزایش موجودی کیف پول"
+            >
+              <svg class="w-3.5 h-3.5 text-[#8EC5FF]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14M5 12h14"/>
+              </svg>
+              <span>شارژ و افزایش موجودی کیف پول</span>
+            </button>
+          </div>
+        `;
+      } else {
+        const mentorEarnings = isSessionCancelled ? '۱٬۶۰۰٬۰۰۰ تومان' : '۱٬۸۵۰٬۰۰۰ تومان';
+        const mentorSubtitle = isSessionCancelled
+          ? '۱ نوبت توسط منتی لغو و زمان آن در تقویم آزاد شد'
+          : 'واریز منظم هفتگی پایا به شماره شبا بدون کارمزد';
+
+        container.innerHTML = `
+          <div class="bg-white/85 p-5 sm:p-5.5 rounded-[24px] border border-[#DFCFC0] shadow-2xs flex flex-col justify-between h-[148px] sm:h-[154px] shrink-0">
+            <span class="text-xs text-[#5E4131] block font-semibold truncate h-4.5">درآمد خالص حاصل از جلسات (۹۰٪)</span>
+            <div class="flex items-baseline justify-between h-8">
+              <span class="text-2xl font-black text-emerald-800 farsi-nums">${mentorEarnings}</span>
+              <span class="text-[11px] font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-200">آماده تسویه</span>
+            </div>
+            <p class="text-[11px] text-[#5E4131] leading-snug h-6 flex items-center truncate">${mentorSubtitle}</p>
+          </div>
+          <div class="bg-white/85 p-5 sm:p-5.5 rounded-[24px] border border-[#DFCFC0] shadow-2xs flex flex-col justify-between h-[148px] sm:h-[154px] shrink-0">
+            <span class="text-xs text-[#5E4131] block font-semibold truncate h-4.5">سهم شفاف کارمزد پلتفرم پیرو (۱۰٪)</span>
+            <div class="flex items-baseline justify-between h-8">
+              <span class="text-2xl font-black text-[#2C1A11] farsi-nums">۱۸۵٬۰۰۰ تومان</span>
+              <span class="text-[11px] font-bold text-[#5E4131] bg-[#F2E8DA] px-2.5 py-0.5 rounded-full border border-[#DFCFC0]">زیرساخت و امنیت</span>
+            </div>
+            <p class="text-[11px] text-[#5E4131] leading-snug h-6 flex items-center truncate">صورت‌حساب رسمی و مالیاتی شفاف در دسترس</p>
+          </div>
+          <div class="bg-white/85 p-5 sm:p-5.5 rounded-[24px] border border-[#DFCFC0] shadow-2xs flex flex-col justify-between h-[148px] sm:h-[154px] shrink-0">
+            <span class="text-xs text-[#5E4131] block font-semibold truncate h-4.5">شاخص رضایت و رتبه‌بندی کیفی</span>
+            <div class="flex items-baseline justify-between h-8">
+              <span class="text-2xl font-black text-[#2C1A11] farsi-nums"><svg class="w-5 h-5 text-amber-500 fill-amber-400 inline-block shrink-0 ml-1.5" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> ۴.۹۵</span>
+              <span class="text-[11px] font-bold text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full border border-amber-300">از ۱۲ جلسه</span>
+            </div>
+            <p class="text-[11px] text-[#5E4131] leading-snug h-6 flex items-center truncate">منتور سطح طلایی در حوزه مهندسی سیستم</p>
+          </div>
+        `;
+      }
+    }
+
+    function renderDashboardSessions() {
+      const container = document.getElementById('dashboard-sessions-list');
+      if (!container) return;
+
+      if (currentSessionTab === 'upcoming') {
+        if (isSessionCancelled) {
+          if (currentDashboardMode === 'mentee') {
+            container.innerHTML = `
+              <div class="bg-[#FBF8F4] border border-[#DFCFC0] rounded-[28px] p-12 sm:p-14 text-center space-y-4">
+                <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#EFE3D5]/70 border border-[#DFCFC0] flex items-center justify-center mx-auto text-[#5E4131]">
+                  <svg class="w-7 h-7 sm:w-8 sm:h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="18" x="3" y="4" rx="3"/>
+                    <path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/>
+                  </svg>
+                </div>
+                <h4 class="text-base sm:text-lg font-extrabold text-[#2C1A11]">هیچ جلسه پیش‌رویی ندارید</h4>
+                <p class="text-xs sm:text-sm text-[#5E4131] max-w-md mx-auto leading-relaxed">
+                  نوبت قبلی شما با موفقیت لغو شد و ۱۰۰٪ وجه آن به کیف پول شما مسترد گردید. برای رزرو جلسه جدید، از کاتالوگ منتورها اقدام نمایید.
+                </p>
+                <div class="pt-2">
+                  <a href="peyroo_figma_landing.html#catalog-section" class="h-10 px-5 rounded-[14px] bg-[#2C1A11] hover:bg-[#432A1C] text-white text-xs font-bold inline-flex items-center gap-2 shadow-xs transition-all">
+                    <span>+ رزرو جلسه جدید با منتور</span>
+                  </a>
+                </div>
+              </div>
+            `;
+          } else {
+            container.innerHTML = `
+              <div class="bg-[#FBF8F4] border border-[#DFCFC0] rounded-[28px] p-12 sm:p-14 text-center space-y-4">
+                <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#EFE3D5]/70 border border-[#DFCFC0] flex items-center justify-center mx-auto text-[#5E4131]">
+                  <svg class="w-7 h-7 sm:w-8 sm:h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="18" x="3" y="4" rx="3"/>
+                    <path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/>
+                  </svg>
+                </div>
+                <h4 class="text-base sm:text-lg font-extrabold text-[#2C1A11]">هیچ جلسه فعالی در انتظار برگزاری نیست</h4>
+                <p class="text-xs sm:text-sm text-[#5E4131] max-w-md mx-auto leading-relaxed">
+                  نوبت رزروشده توسط منتی لغو شد و اسلات زمانی مجدداً در تقویم شما برای رزرو سایر مراجعین آزاد گردید.
+                </p>
+                <div class="pt-2">
+                  <button type="button" onclick="openMentorSlotModal()" class="h-10 px-5 rounded-[14px] bg-[#2C1A11] hover:bg-[#432A1C] text-white text-xs font-bold inline-flex items-center gap-2 shadow-xs transition-all cursor-pointer">
+                    <span>+ تعریف اسلات زمانی جدید در تقویم</span>
+                  </button>
+                </div>
+              </div>
+            `;
+          }
+          return;
+        }
+
+        if (currentDashboardMode === 'mentee') {
+          container.innerHTML = `
+            <div class="bg-white rounded-[28px] p-6 sm:p-8 md:p-9 border-2 border-[#8EC5FF] shadow-sm space-y-6 transition-all">
+              
+              <!-- Session Header -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#DFCFC0]/60 pb-5">
+                <div class="flex items-center gap-4">
+                  <div class="w-14 h-14 rounded-full bg-[#2C1A11] text-[#F2E8DA] flex items-center justify-center font-bold text-base shrink-0 border border-[#DFCFC0] shadow-2xs">
+                    <span>م‌س</span>
+                  </div>
+                  <div class="space-y-1">
+                    <div class="flex flex-wrap items-center gap-2.5">
+                      <h4 class="font-black text-[#2C1A11] text-base sm:text-lg">جلسه ۱ به ۱ با مهندس مصطفی سدیدی</h4>
+                      <span class="px-3 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                        تایید و قطعی‌شده
+                      </span>
+                    </div>
+                    <p class="text-xs sm:text-[13px] text-[#5E4131]">معمار ارشد سیستم • ۴۵ دقیقه مشاوره تخصصی معماری</p>
+                  </div>
+                </div>
+
+                <div class="text-right sm:text-left bg-[#FBF8F4] px-4.5 py-2.5 sm:px-5 sm:py-3 rounded-[18px] border border-[#DFCFC0]/80 space-y-0.5">
+                  <span class="text-[11px] text-[#5E4131] block">زمان موعد برگزاری:</span>
+                  <span class="text-xs sm:text-sm font-extrabold text-[#2C1A11]">پنج‌شنبه ۲۲ آبان ۱۴۰۵، ساعت ۱۸:۰۰</span>
+                </div>
+              </div>
+
+              <!-- Agenda Details Box -->
+              <div class="bg-[#FBF8F4] p-5 sm:p-6 rounded-[22px] border border-[#DFCFC0]/80 space-y-2.5 text-xs sm:text-[13px]">
+                <div class="flex items-center justify-between">
+                  <span class="font-extrabold text-[#5E4131]">دستور کار مصوب جلسه:</span>
+                  <span class="text-[11px] text-[#5E4131] bg-white px-3 py-1 rounded-md border border-[#DFCFC0]/60">
+                    مخزن گیت‌هاب ضمیمه شده است
+                  </span>
+                </div>
+                <p class="text-[#2C1A11] font-medium leading-[1.85]">
+                  بررسی علت افت توان عملیاتی و Lag در فرآیند بازتوازن (Rebalance) پارتیشن‌های Kafka در سناریوهای ترافیک نامتقارن و بهینه‌سازی پارامترهای Fetch Min Bytes و Commit Sync.
+                </p>
+              </div>
+
+              <!-- Room Link & Protected URL Container -->
+              <div class="bg-[#FBF8F4]/70 p-4.5 sm:p-5 rounded-[22px] border border-[#DFCFC0] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div class="flex flex-wrap items-center gap-2.5 text-xs sm:text-[13px] text-[#2C1A11]">
+                  <span class="font-bold text-[#5E4131] shrink-0">آدرس اتاق جلسه:</span>
+                  <code id="session-meet-url" class="font-mono text-xs sm:text-[12.5px] bg-white px-3.5 py-1.5 rounded-[12px] border border-[#DFCFC0] text-[#2C1A11] select-all shadow-2xs">
+                    https://meet.google.com/pyr-sara-9842
+                  </code>
+                </div>
+
+                <!-- Calendar Support -->
+                <div class="flex items-center gap-2">
+                  <button 
+                    type="button" 
+                    onclick="exportToGoogleCalendar()" 
+                    class="h-9 px-3.5 rounded-[12px] bg-white hover:bg-stone-50 border border-[#DFCFC0] text-xs font-semibold text-[#2C1A11] inline-flex items-center gap-1.5 shadow-2xs transition-all active:scale-95 cursor-pointer"
+                    title="افزودن به تقویم گوگل"
+                  >
+                    <svg class="w-3.5 h-3.5 text-[#5E4131] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect width="18" height="18" x="3" y="4" rx="2"/>
+                      <path d="M16 2v4M8 2v4M3 10h18"/>
+                    </svg>
+                    <span>افزودن به تقویم</span>
+                  </button>
+                  <button 
+                    type="button" 
+                    onclick="alert('پشتیبانی از پلتفرم بومی و تقویم در دست توسعه رفیق شما فعال شد (قابلیت افزونه‌پذیر در نقشه راه گام ۸).');" 
+                    class="h-9 px-3.5 rounded-[12px] bg-[#EBF3FF] hover:bg-[#DCEBFF] border border-[#B8D7FF] text-xs font-bold text-[#1D5BD8] inline-flex items-center gap-1.5 shadow-2xs transition-all active:scale-95 cursor-pointer"
+                    title="اتصال به پلتفرم بومی جلسه و تقویم همکار"
+                  >
+                    <svg class="w-3.5 h-3.5 text-[#1D5BD8] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/>
+                      <rect x="2" y="6" width="14" height="12" rx="2"/>
+                    </svg>
+                    <span>پلتفرم بومی</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Actions Row -->
+              <div class="flex flex-wrap items-center justify-between gap-4 pt-3 sm:pt-4 border-t border-[#DFCFC0]/50">
+                <div class="flex flex-wrap items-center gap-3">
+                  <a 
+                    href="https://meet.google.com/pyr-sara-9842" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="h-11 px-6 rounded-[16px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-bold text-xs sm:text-sm flex items-center gap-2 transition-all shadow-xs hover:scale-102 active:scale-95 cursor-pointer"
+                  >
+                    <span>ورود به اتاق جلسه تصویری</span>
+                    <svg class="w-4 h-4 rotate-180" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                  </a>
+
+                  <button 
+                    type="button" 
+                    onclick="copySessionUrl()" 
+                    id="copy-session-url-btn"
+                    class="w-[155px] h-11 rounded-[16px] bg-[#F2E8DA] hover:bg-[#DFCFC0] text-[#2C1A11] font-bold text-xs sm:text-[13px] inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer shrink-0 text-center"
+                  >
+                    <span id="copy-session-label">کپی لینک جلسه</span>
+                  </button>
+                </div>
+
+                <button 
+                  type="button" 
+                  onclick="openCancelModal()" 
+                  class="h-11 px-4 rounded-[14px] text-xs font-bold text-rose-700 hover:text-rose-900 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition-all cursor-pointer flex items-center gap-1.5"
+                >
+                  <span>لغو نوبت (استرداد ۱۰۰٪ وجه طبق ضمانت ۲۴ ساعته)</span>
+                </button>
+              </div>
+
+            </div>
+          `;
+        } else {
+          // Mentor Mode Upcoming
+          container.innerHTML = `
+            <div class="bg-white rounded-[28px] p-6 sm:p-8 md:p-9 border-2 border-[#8EC5FF] shadow-sm space-y-6 transition-all">
+              
+              <!-- Session Header -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#DFCFC0]/60 pb-5">
+                <div class="flex items-center gap-4">
+                  <div class="w-14 h-14 rounded-full bg-[#2C1A11] text-[#F2E8DA] flex items-center justify-center font-bold text-base shrink-0 border border-[#DFCFC0] shadow-2xs">
+                    <span>ع‌ع</span>
+                  </div>
+                  <div class="space-y-1">
+                    <div class="flex flex-wrap items-center gap-2.5">
+                      <h4 class="font-black text-[#2C1A11] text-base sm:text-lg">جلسه رزروشده توسط: علیرضا عباسی</h4>
+                      <span class="px-3 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 text-blue-800 border border-blue-300">
+                        منتی تاییدشده
+                      </span>
+                    </div>
+                    <p class="text-xs sm:text-[13px] text-[#5E4131]">۴۵ دقیقه نشست معماری تخصصی • سهم خالص واریزی به شما: ۲۵۰٬۰۰۰ تومان</p>
+                  </div>
+                </div>
+
+                <div class="text-right sm:text-left bg-[#FBF8F4] px-4.5 py-2.5 sm:px-5 sm:py-3 rounded-[18px] border border-[#DFCFC0]/80 space-y-0.5">
+                  <span class="text-[11px] text-[#5E4131] block">زمان موعد جلسه:</span>
+                  <span class="text-xs sm:text-sm font-extrabold text-[#2C1A11]">پنج‌شنبه ۲۲ آبان ۱۴۰۵، ساعت ۱۸:۰۰</span>
+                </div>
+              </div>
+
+              <!-- Mentor Pre-Session Prep Card -->
+              <div class="bg-[#FFF9EE] border border-[#F5E9CF] rounded-[22px] p-5 sm:p-6 space-y-2.5 text-xs sm:text-[13px]">
+                <div class="flex items-center justify-between text-[#79551F] font-bold">
+                  <span>چالش فنی ارسالی منتی (جهت مطالعه پیش از جلسه):</span>
+                  <span class="bg-white px-3 py-1 rounded-md border border-[#F5E9CF] text-[11px]">
+                    مستندات دیاگرام معماری و ریپازیتوری ضمیمه است
+                  </span>
+                </div>
+                <p class="text-[#2C1A11] font-medium leading-[1.85]">
+                  بررسی علت افت توان عملیاتی و Lag در فرآیند بازتوازن (Rebalance) پارتیشن‌های Kafka در سناریوهای ترافیک نامتقارن و بهینه‌سازی پارامترهای Fetch Min Bytes و Commit Sync.
+                </p>
+              </div>
+
+              <!-- Mentor Actions Row -->
+              <div class="flex flex-wrap items-center justify-between gap-4 pt-3 sm:pt-4 border-t border-[#DFCFC0]/50">
+                <div class="flex flex-wrap items-center gap-3">
+                  <a 
+                    href="https://meet.google.com/pyr-sara-9842" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="h-11 px-6 rounded-[16px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-bold text-xs sm:text-sm flex items-center gap-2 transition-all shadow-xs hover:scale-102 active:scale-95 cursor-pointer"
+                  >
+                    <span>شروع میزبانی در اتاق جلسه تصویری</span>
+                    <svg class="w-4 h-4 rotate-180" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                  </a>
+
+                  <button 
+                    type="button" 
+                    onclick="alert('اسناد پیوست، دیاگرام معماری و لینک گیت‌هاب منتی باز شد.');" 
+                    class="h-11 px-5 rounded-[16px] bg-[#F2E8DA] hover:bg-[#DFCFC0] text-[#2C1A11] font-bold text-xs sm:text-[13px] transition-all cursor-pointer"
+                  >
+                    بررسی دیاگرام و کدها
+                  </button>
+                </div>
+
+                <span class="text-xs font-bold text-emerald-800 bg-emerald-50 px-4 py-2 rounded-full border border-emerald-200">
+                  تسویه + ۲۵۰٬۰۰۰ تومان بلافاصله پس از اتمام نشست
+                </span>
+              </div>
+
+            </div>
+          `;
+        }
+      } else if (currentSessionTab === 'past') {
+        container.innerHTML = `
+          <div class="bg-white rounded-[28px] p-6 sm:p-8 md:p-9 border border-[#DFCFC0] shadow-2xs space-y-6 transition-all">
+            
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#DFCFC0]/60 pb-5">
+              <div class="flex items-center gap-4">
+                <div class="w-14 h-14 rounded-full bg-[#5E4131] text-[#F2E8DA] flex items-center justify-center font-bold text-base shrink-0 border border-[#DFCFC0] shadow-2xs">
+                  <span>ب‌د</span>
+                </div>
+                <div class="space-y-1">
+                  <div class="flex flex-wrap items-center gap-2.5">
+                    <h4 class="font-black text-[#2C1A11] text-base sm:text-lg">جلسه برگزارشده با مهندس بهنود دهقان</h4>
+                    <span class="px-3 py-0.5 rounded-full text-[11px] font-bold bg-[#EFE3D5] text-[#5E4131]">
+                      پایان‌یافته
+                    </span>
+                  </div>
+                  <p class="text-xs sm:text-[13px] text-[#5E4131]">معمار ارشد زیرساخت پایگاه داده • تاریخ: ۱۵ آبان ۱۴۰۵</p>
+                </div>
+              </div>
+
+              <div class="text-right sm:text-left">
+                <span class="text-xs font-extrabold text-amber-700 bg-amber-50 border border-amber-300 px-3.5 py-2 rounded-full">
+                  <span class="inline-flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5 text-amber-600 fill-amber-500" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                    <span>امتیاز ثبت‌شده: ۵ از ۵</span>
+                  </span>
+                </span>
+              </div>
+            </div>
+
+            <div class="bg-[#FBF8F4] p-5 sm:p-6 rounded-[22px] border border-[#DFCFC0]/80 text-xs sm:text-[13px] space-y-2">
+              <span class="font-extrabold text-[#5E4131]">موضوع و چالش بررسی‌شده:</span>
+              <p class="text-[#2C1A11] leading-[1.85]">
+                طراحی ایندکس‌های BRIN و پارتیشن‌بندی زمانی جداول مالی با بیش از ۵۰ میلیون رکورد در PostgreSQL و استراتژی کاهش سربار خلاءسازی خودکار (Vacuum).
+              </p>
+            </div>
+
+            <!-- Actions Row -->
+            <div class="flex flex-wrap items-center justify-between gap-4 pt-3 sm:pt-4 border-t border-[#DFCFC0]/50">
+              <button 
+                type="button" 
+                onclick="downloadAdrSimulation()" 
+                class="h-11 px-5 rounded-[14px] bg-[#F2E8DA] hover:bg-[#DFCFC0] text-[#2C1A11] font-bold text-xs sm:text-[13px] flex items-center gap-2 transition-all cursor-pointer"
+              >
+                <svg class="w-3.5 h-3.5 text-[#2C1A11] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+                  <path d="M14 2v4a2 2 0 0 0 2 2h4M10 9H8M16 13H8M16 17H8"/>
+                </svg>
+                <span>دانلود سند رسمی تصمیمات معماری (ADR-1042.md)</span>
+              </button>
+              
+              <button 
+                type="button" 
+                onclick="openReviewBox()" 
+                class="h-11 px-5 rounded-[14px] bg-white border border-[#DFCFC0] hover:border-[#2C1A11] text-[#2C1A11] font-bold text-xs sm:text-[13px] transition-all cursor-pointer"
+              >
+                <span class="inline-flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5 text-amber-500 fill-amber-400" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  </svg>
+                  <span>ویرایش بازخورد کیفی</span>
+                </span>
+              </button>
+            </div>
+
+          </div>
+        `;
+      } else {
+        // Cancelled Tab
+        if (!isSessionCancelled) {
+          container.innerHTML = `
+            <div class="bg-[#FBF8F4] border border-[#DFCFC0] rounded-[28px] p-12 sm:p-14 text-center space-y-3.5">
+              <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-emerald-50 border border-emerald-200/80 flex items-center justify-center mx-auto text-emerald-600">
+                <svg class="w-7 h-7 sm:w-8 sm:h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+                  <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+                </svg>
+              </div>
+              <h4 class="text-base sm:text-lg font-extrabold text-[#2C1A11]">هیچ جلسه لغو شده‌ای وجود ندارد</h4>
+              <p class="text-xs sm:text-sm text-[#5E4131] max-w-md mx-auto leading-relaxed">
+                کلیه جلسات رزروشده در موعد مقرر با موفقیت برگزار شده‌اند. در صورت لغو هر جلسه طبق ضمانت ۲۴ ساعته، ۱۰۰٪ مبلغ پرداختی مسترد خواهد شد.
+              </p>
+            </div>
+          `;
+        } else {
+          // Render Cancelled Session Card
+          if (currentDashboardMode === 'mentee') {
+            container.innerHTML = `
+              <div class="bg-white rounded-[28px] p-6 sm:p-8 md:p-9 border-2 border-rose-200 shadow-sm space-y-6 transition-all">
+                
+                <!-- Header -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#DFCFC0]/60 pb-5">
+                  <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-full bg-rose-100 text-rose-800 flex items-center justify-center font-bold text-base shrink-0 border border-rose-200/90 shadow-2xs">
+                      <span>م‌س</span>
+                    </div>
+                    <div class="space-y-1">
+                      <div class="flex flex-wrap items-center gap-2.5">
+                        <h4 class="font-black text-[#2C1A11] text-base sm:text-lg">جلسه لغو شده با مهندس مصطفی سدیدی</h4>
+                        <span class="px-3 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-800 border border-rose-300">
+                          لغو شده و استرداد کامل وجه
+                        </span>
+                      </div>
+                      <p class="text-xs sm:text-[13px] text-[#5E4131]">معمار ارشد سیستم • اسلات نوبت آزاد گردید</p>
+                    </div>
+                  </div>
+
+                  <div class="text-right sm:text-left bg-[#FBF8F4] px-4.5 py-2.5 sm:px-5 sm:py-3 rounded-[18px] border border-[#DFCFC0]/80 space-y-0.5">
+                    <span class="text-[11px] text-[#5E4131] block">زمان موعد نوبت:</span>
+                    <span class="text-xs sm:text-sm font-extrabold text-[#2C1A11]">پنج‌شنبه ۲۲ آبان ۱۴۰۵، ساعت ۱۸:۰۰</span>
+                  </div>
+                </div>
+
+                <!-- Financial Refund Breakdown Box -->
+                <div class="bg-[#FFF8F8] border border-rose-200/90 rounded-[22px] p-5 sm:p-6 space-y-3.5 text-xs sm:text-[13px]">
+                  <div class="flex flex-wrap items-center justify-between gap-2 text-rose-950 font-bold border-b border-rose-200/60 pb-3">
+                    <span class="flex items-center gap-2">
+                      <div class="w-6 h-6 rounded-full bg-emerald-100/80 border border-emerald-200 flex items-center justify-center text-emerald-800 shrink-0">
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <rect width="20" height="14" x="2" y="5" rx="2"/>
+                          <line x1="2" x2="22" y1="10" y2="10"/>
+                        </svg>
+                      </div>
+                      <span>وضعیت استرداد مالی طبق «ضمانت ۲۴ ساعته بازگشت وجه پیرو»:</span>
+                    </span>
+                    <span class="bg-emerald-100 text-emerald-900 border border-emerald-300 px-3 py-1 rounded-full text-xs font-bold">
+                      ۱۰۰٪ وجه مسترد شد <svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    </span>
+                  </div>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                    <div class="bg-white p-3.5 rounded-[16px] border border-rose-100 shadow-2xs space-y-1">
+                      <span class="text-[#5E4131] block text-[11px]">مبلغ کل پرداخت‌شده:</span>
+                      <span class="font-extrabold text-[#2C1A11] text-sm sm:text-base farsi-nums">۲۷۵٬۰۰۰ تومان</span>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-[16px] border border-emerald-200 shadow-2xs space-y-1">
+                      <span class="text-[#5E4131] block text-[11px]">مبلغ برگشت‌داده‌شده به کاربر:</span>
+                      <span class="font-extrabold text-emerald-800 text-sm sm:text-base farsi-nums">۲۷۵٬۰۰۰ تومان (کامل)</span>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-[16px] border border-rose-100 shadow-2xs space-y-1">
+                      <span class="text-[#5E4131] block text-[11px]">شناسه پیگیری استرداد:</span>
+                      <code class="font-mono text-[#2C1A11] text-xs font-bold block">REF-984210-PYR</code>
+                    </div>
+                  </div>
+
+                  <p class="text-[#5E4131] text-xs leading-relaxed pt-1">
+                    طبق قوانین شفاف پلتفرم، هیچ‌گونه کارمزدی کسر نگردید و کل مبلغ به اعتبار حساب شما بازگشت داده شد که در رزروهای آینده به صورت خودکار قابل اعمال است.
+                  </p>
+                </div>
+
+                <!-- Actions Row -->
+                <div class="flex flex-wrap items-center justify-between gap-4 pt-3 sm:pt-4 border-t border-[#DFCFC0]/50">
+                  <div class="flex flex-wrap items-center gap-3">
+                    <a 
+                      href="peyroo_figma_landing.html#catalog-section" 
+                      class="h-11 px-5.5 rounded-[16px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-bold text-xs sm:text-sm flex items-center gap-2 transition-all shadow-xs cursor-pointer"
+                    >
+                      <span>رزرو نوبت مجدد با مصطفی سدیدی</span>
+                    </a>
+
+                    <button 
+                      type="button" 
+                      onclick="alert('رسید الکترونیکی استرداد وجه و لغو نوبت (REF-984210.pdf) دانلود شد.');" 
+                      class="h-11 px-4.5 rounded-[16px] bg-[#F2E8DA] hover:bg-[#DFCFC0] text-[#2C1A11] font-bold text-xs sm:text-[13px] transition-all cursor-pointer"
+                    >
+                      <svg class="w-3.5 h-3.5 text-[#2C1A11] shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+                        <path d="M14 2v4a2 2 0 0 0 2 2h4M10 9H8M16 13H8M16 17H8"/>
+                      </svg>
+                      <span>دانلود رسید استرداد وجه (PDF)</span>
+                    </button>
+                  </div>
+
+                  <span class="text-xs text-[#5E4131] bg-[#FBF8F4] px-3.5 py-1.5 rounded-full border border-[#DFCFC0]">
+                    اسلات پنج‌شنبه ساعت ۱۸:۰۰ به تقویم عمومی منتور بازگردانده شد.
+                  </span>
+                </div>
+
+              </div>
+            `;
+          } else {
+            // Mentor mode cancelled
+            container.innerHTML = `
+              <div class="bg-white rounded-[28px] p-6 sm:p-8 md:p-9 border-2 border-rose-200 shadow-sm space-y-6 transition-all">
+                
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#DFCFC0]/60 pb-5">
+                  <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-2xl bg-rose-100 text-rose-800 flex items-center justify-center font-bold text-base shrink-0 shadow-xs">
+                      <span>ع‌ع</span>
+                    </div>
+                    <div class="space-y-1">
+                      <div class="flex flex-wrap items-center gap-2.5">
+                        <h4 class="font-black text-[#2C1A11] text-base sm:text-lg">نوبت لغوشده توسط: علیرضا عباسی</h4>
+                        <span class="px-3 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-800 border border-rose-300">
+                          لغو شده توسط منتی (ضمانت ۲۴ ساعته)
+                        </span>
+                      </div>
+                      <p class="text-xs sm:text-[13px] text-[#5E4131]">اسلات زمانی به تقویم شما بازگشت داده شد و آماده رزرو سایر مراجعین است.</p>
+                    </div>
+                  </div>
+
+                  <div class="text-right sm:text-left bg-[#FBF8F4] px-4.5 py-2.5 sm:px-5 sm:py-3 rounded-[18px] border border-[#DFCFC0]/80 space-y-0.5">
+                    <span class="text-[11px] text-[#5E4131] block">زمان موعد لغوشده:</span>
+                    <span class="text-xs sm:text-sm font-extrabold text-[#2C1A11]">پنج‌شنبه ۲۲ آبان ۱۴۰۵، ساعت ۱۸:۰۰</span>
+                  </div>
+                </div>
+
+                <div class="bg-[#FFF8F8] border border-rose-200 rounded-[22px] p-5 space-y-2 text-xs sm:text-[13px]">
+                  <span class="font-bold text-rose-900 block">گزارش وضعیت تقویم منتور:</span>
+                  <p class="text-[#5E4131] leading-relaxed">
+                    منتی بیش از ۲۴ ساعت مانده به نشست، جلسه را طبق قوانین پلتفرم لغو نمود. هیچ‌گونه امتیازی از شاخص کیفیت شما کسر نگردید و اسلات مربوطه در تقویم رزرو شما آزاد گردید.
+                  </p>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-between gap-4 pt-3 sm:pt-4 border-t border-[#DFCFC0]/50">
+                  <button 
+                    type="button" 
+                    onclick="openMentorSlotModal()" 
+                    class="h-11 px-5 rounded-[16px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-bold text-xs sm:text-sm transition-all cursor-pointer"
+                  >
+                    + مدیریت اسلات‌های تقویم
+                  </button>
+                  <span class="text-xs text-[#5E4131]">
+                    وضعیت اسلات: آزاد برای رزرو مجدد
+                  </span>
+                </div>
+
+              </div>
+            `;
+          }
+        }
+      }
+    }
+
+    function handleDashboardAction() {
+      if (currentDashboardMode === 'mentee') {
+        window.location.href = 'peyroo_figma_landing.html#catalog-section';
+      } else {
+        openMentorSlotModal();
+      }
+    }
+
+    function copySessionUrl() {
+      const urlText = document.getElementById('session-meet-url');
+      const label = document.getElementById('copy-session-label');
+      if (urlText) {
+        navigator.clipboard.writeText(urlText.textContent.trim()).then(() => {
+          if (label) {
+            label.textContent = 'کپی شد! <svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+            label.className = 'text-emerald-800 font-bold';
+            setTimeout(() => {
+              label.textContent = 'کپی لینک جلسه';
+              label.className = '';
+            }, 2000);
+          }
+        }).catch(() => {
+          if (label) label.textContent = 'کپی شد! <svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+        });
+      }
+    }
+
+    function exportToGoogleCalendar() {
+      const title = encodeURIComponent('جلسه منتورشیپ پیرو: مهندس مصطفی سدیدی');
+      const details = encodeURIComponent('دستور کار: بررسی Lag در Kafka\nلینک ورود: https://meet.google.com/pyr-sara-9842\nپلتفرم پیرو (Peyroo)');
+      const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&location=https://meet.google.com/pyr-sara-9842`;
+      window.open(gcalUrl, '_blank');
+    }
+
+    function downloadAdrSimulation() {
+      alert('سند رسمی یادداشت‌های تصمیم‌گیری معماری (ADR-1042.md) با فرمت مارک‌داون استاندارد دانشگاهی با موفقیت دانلود شد.');
+    }
+
+    // Quick Deposit Modal
+    function openDepositModal() {
+      const modal = document.getElementById('deposit-modal-backdrop');
+      const balanceDisplay = document.getElementById('deposit-modal-current-balance');
+      if (balanceDisplay) {
+        balanceDisplay.textContent = userWalletBalance.toLocaleString('fa-IR') + ' تومان';
+      }
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeDepositModal() {
+      const modal = document.getElementById('deposit-modal-backdrop');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function handleDepositBackdropClick(e) {
+      if (e.target.id === 'deposit-modal-backdrop') {
+        closeDepositModal();
+      }
+    }
+
+    function selectPresetAmount(amt) {
+      const input = document.getElementById('deposit-custom-amount');
+      if (input) input.value = amt;
+      
+      const chips = document.querySelectorAll('.preset-chip');
+      chips.forEach(chip => {
+        if (chip.getAttribute('data-amt') === String(amt)) {
+          chip.className = 'preset-chip py-2 px-2 rounded-[14px] bg-[#2C1A11] text-white border border-[#2C1A11] text-xs font-bold transition-all cursor-pointer text-center';
+        } else {
+          chip.className = 'preset-chip py-2 px-2 rounded-[14px] bg-white hover:bg-[#F2E8DA] border border-[#DFCFC0] text-xs font-bold text-[#2C1A11] transition-all cursor-pointer text-center';
+        }
+      });
+    }
+
+    function handleExecuteDeposit(e) {
+      e.preventDefault();
+      const input = document.getElementById('deposit-custom-amount');
+      const amount = parseInt(input?.value || '0', 10);
+      
+      if (isNaN(amount) || amount < 50000) {
+        alert('لطفاً مبلغ معتبری (حداقل ۵۰٬۰۰۰ تومان) وارد نمایید.');
+        return;
+      }
+      
+      userWalletBalance += amount;
+      closeDepositModal();
+      renderDashboardMetrics();
+      alert(`مبلغ ${amount.toLocaleString('fa-IR')} تومان با موفقیت از طریق درگاه امن شاپرک به کیف پول شما افزوده شد.\nموجودی جدید: ${userWalletBalance.toLocaleString('fa-IR')} تومان`);
+    }
+
+    // Cancellation Modal
+    function openCancelModal() {
+      const modal = document.getElementById('cancel-modal-backdrop');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeCancelModal() {
+      const modal = document.getElementById('cancel-modal-backdrop');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function handleCancelBackdropClick(e) {
+      if (e.target.id === 'cancel-modal-backdrop') {
+        closeCancelModal();
+      }
+    }
+
+    function confirmCancellationExecution() {
+      closeCancelModal();
+      if (!isSessionCancelled) {
+        isSessionCancelled = true;
+        userWalletBalance += 275000;
+      }
+      alert('نوبت با موفقیت لغو شد. مبلغ ۲۷۵٬۰۰۰ تومان (۱۰۰٪ وجه) طبق ضمانت ۲۴ ساعته به کیف پول شما واریز گردید.');
+      
+      const countUpcoming = document.getElementById('tab-count-upcoming');
+      const countCancelled = document.getElementById('tab-count-cancelled');
+      if (countUpcoming) countUpcoming.textContent = '۰';
+      if (countCancelled) countCancelled.textContent = '۱';
+
+      renderDashboardMetrics();
+      setSessionTab('cancelled');
+    }
+
+    // Mentor Slot Modal
+    function openMentorSlotModal() {
+      const modal = document.getElementById('mentor-slot-modal-backdrop');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeMentorSlotModal() {
+      const modal = document.getElementById('mentor-slot-modal-backdrop');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function handleSlotBackdropClick(e) {
+      if (e.target.id === 'mentor-slot-modal-backdrop') {
+        closeMentorSlotModal();
+      }
+    }
+
+    function handleSaveSlot(e) {
+      e.preventDefault();
+      const date = document.getElementById('new-slot-date')?.value || 'شنبه ۲۴ آبان ۱۴۰۵';
+      const time = document.getElementById('new-slot-time')?.value || '۱۹:۳۰';
+      closeMentorSlotModal();
+      alert(`اسلات زمانی جدید (${date} ساعت ${time}) با موفقیت به تقویم مشاوره شما اضافه شد و در صفحه عمومی منتور به نمایش درآمد.`);
+    }
+
+    // Review Modal & Rating Form
+    function openReviewBox() {
+      const box = document.getElementById('review-modal-box');
+      if (box) {
+        box.classList.remove('hidden');
+        box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    function closeReviewBox() {
+      const box = document.getElementById('review-modal-box');
+      if (box) box.classList.add('hidden');
+    }
+
+    function previewRating(stars) {
+      updateStarsUI(stars);
+    }
+
+    function restoreRating() {
+      updateStarsUI(userReviewRating);
+    }
+
+    function setRating(stars) {
+      userReviewRating = stars;
+      updateStarsUI(stars);
+      const label = document.getElementById('rating-label');
+      if (label) {
+        const labels = {
+          1: '۱ از ۵ (ضعیف)',
+          2: '۲ از ۵ (متوسط)',
+          3: '۳ از ۵ (خوب)',
+          4: '۴ از ۵ (خیلی خوب)',
+          5: '۵ از ۵ (عالی و عمیقاً راهگشا)'
+        };
+        label.textContent = labels[stars] || `${stars} از ۵`;
+      }
+    }
+
+    function updateStarsUI(stars) {
+      const starsRow = document.getElementById('stars-row');
+      if (!starsRow) return;
+      const spans = starsRow.querySelectorAll('span');
+      spans.forEach((s, idx) => {
+        if (idx < stars) {
+          s.style.color = '#F59E0B'; // Amber
+        } else {
+          s.style.color = '#D1D5DB'; // Gray
+        }
+      });
+    }
+
+    function submitReview() {
+      alert(`دیدگاه و امتیاز کیفی شما (${userReviewRating} از ۵) با موفقیت ثبت شد و در پروفایل عمومی منتور درج گردید.`);
+      closeReviewBox();
+    }
+
+    // Auto-Hiding Navbar on Scroll Down / Reveal on Scroll Up
+    let lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
+    const header = document.getElementById('main-header');
+    const scrollThreshold = 10;
+
+    window.addEventListener('scroll', () => {
+      const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+      if (!header) return;
+
+      // Always show at top of page
+      if (currentScrollY <= 25) {
+        header.classList.remove('-translate-y-full');
+        lastScrollY = currentScrollY;
+        return;
+      }
+
+      // Check scroll direction with threshold
+      if (currentScrollY > lastScrollY + scrollThreshold) {
+        // Scrolling DOWN -> smoothly hide navbar
+        header.classList.add('-translate-y-full');
+      } else if (currentScrollY < lastScrollY - scrollThreshold) {
+        // Scrolling UP -> smoothly show navbar
+        header.classList.remove('-translate-y-full');
+      }
+
+      lastScrollY = currentScrollY;
+    }, { passive: true });
+
+    // Tiny Sticky Support CTA Controls
+    function toggleSupportModal(force) {
+      const dialog = document.getElementById('support-modal-dialog');
+      if (!dialog) return;
+      if (typeof force === 'boolean') {
+        if (force) dialog.classList.remove('hidden');
+        else dialog.classList.add('hidden');
+      } else {
+        dialog.classList.toggle('hidden');
+      }
+      if (!dialog.classList.contains('hidden')) {
+        const input = document.getElementById('support-message-input');
+        if (input) setTimeout(() => input.focus(), 100);
+      }
+    }
+
+    function sendQuickSupportMessage() {
+      const input = document.getElementById('support-message-input');
+      const feedback = document.getElementById('support-status-feedback');
+      if (!input || !input.value.trim()) return;
+
+      input.value = '';
+      if (feedback) {
+        feedback.textContent = '<svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> پیام شما دریافت شد؛ کارشناس شیفت در کمتر از ۲ دقیقه پاسخ می‌دهد.';
+        feedback.classList.remove('hidden');
+        setTimeout(() => {
+          feedback.classList.add('hidden');
+        }, 5000);
+      }
+    }
+
+    // Keyboard ESC to close any modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeCancelModal();
+        closeMentorSlotModal();
+        closeReviewBox();
+        toggleSupportModal(false);
+      }
+    });
+  
+    // ==========================================
+    // Video Room & Interactive Features
+    // ==========================================
+    function openMaskedVideoModal() {
+      const modal = document.getElementById('masked-video-modal-backdrop');
+      if (modal) modal.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+    }
+
+    function closeMaskedVideoModal() {
+      const modal = document.getElementById('masked-video-modal-backdrop');
+      if (modal) modal.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    function handleMaskedVideoBackdrop(e) {
+      if (e.target.id === 'masked-video-modal-backdrop') {
+        closeMaskedVideoModal();
+      }
+    }
+
+    function toggleMicTest(btn) {
+      const label = document.getElementById('mic-label');
+      if (label.textContent.includes('فعال')) {
+        label.textContent = 'میکروفون: قطع (Muted)';
+        btn.classList.add('bg-rose-900/60');
+      } else {
+        label.textContent = 'میکروفون: فعال';
+        btn.classList.remove('bg-rose-900/60');
+      }
+    }
+
+    function toggleCamTest(btn) {
+      const label = document.getElementById('cam-label');
+      if (label.textContent.includes('فعال')) {
+        label.textContent = 'دوربین: خاموش';
+        btn.classList.add('bg-rose-900/60');
+      } else {
+        label.textContent = 'دوربین: فعال';
+        btn.classList.remove('bg-rose-900/60');
+      }
+    }
+
+    function downloadCalendarInvite() {
+      const ics = 
+`BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Peyroo Mentorship Platform//IR
+CALSCALE:GREGORIAN
+METHOD:REQUEST
+BEGIN:VEVENT
+UID:pyr-session-${Date.now()}@peyroo.ir
+DTSTAMP:20261114T180000Z
+DTSTART:20261115T143000Z
+DTEND:20261115T151500Z
+SUMMARY:جلسه مربی‌گری تخصصی پیرو با مهندس مصطفی سدیدی
+DESCRIPTION:نوبت مشاوره معماری نرم‌افزار در پلتفرم پیرو\nدستورکار: بازتوازن پارتیشن‌های Kafka\nلینک اتاق گفتگوی امن: https://meet.peyroo.ir/room/pyr-sara-9842
+LOCATION:https://meet.peyroo.ir/room/pyr-sara-9842
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR`;
+
+      const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `peyroo-session-sara-rad.ics`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      alert('فایل استاندارد تقویم (.ics) دانلود شد و در تمام اپلیکیشن‌های تقویم موبایل و دسکتاپ قابل باز شدن است.');
+    }
+
+    function downloadSampleADR(filename) {
+      const adrContent = 
+`# سند تصمیم‌گیری معماری (ADR) — پلتفرم پیرو
+**شناسه سند:** ${filename}
+**منتی:** علیرضا عباسی (مهندس نرم‌افزار)
+**مربی راهبر:** مهندس یاسین صمدی / کسری باقری
+**وضعیت:** مصوب و اجرایی شده (Accepted)
+**تاریخ:** آبان ۱۴۰۵
+
+## ۱. صورت مسئله (Context)
+نیاز به هماهنگی تراکنش‌ها در ۳ میکروسرویس مستقل بدون افت کارایی و جلوگیری از توقف عملیات در صورت قطعی شبکه.
+
+## ۲. گزینه‌های بررسی‌شده
+- رویکرد ۲PC (Two-Phase Commit): رد شد به دلیل قفل‌شدگی منابع و عدم مقیاس‌پذیری.
+- رویکرد Saga Orchestration: انتخاب شد با پیاده‌سازی مکانیزم Outbox Pattern.
+
+## ۳. تصمیم نهایی (Decision)
+پیاده‌سازی Saga Pattern با پشتیبانی از رویدادهای Compensating Transaction جهت عودت وجه در سناریوهای ناموفق.
+
+## ۴. پیامدها (Consequences)
+- افزایش ثبات سیستم و تضمین Eventual Consistency.
+- کاهش زمان پاسخ‌دهی به کلاینت از طریق صف‌های غیرهمزمان.
+`;
+
+      const blob = new Blob([adrContent], { type: 'text/markdown;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      alert(`سند تصمیم معماری (${filename}) با موفقیت دانلود شد.`);
+    }
+
+    function downloadCurrentSessionNotes() {
+      const notes = document.getElementById('live-adr-notes')?.value || 'یادداشت‌های جلسه';
+      const blob = new Blob([notes], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `session-notes-${Date.now()}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      alert('یادداشت‌های جلسه با موفقیت دانلود شدند.');
+    }
+
+
+    // ========================================================
+    // LOGOUT & NOTIFICATION HANDLERS
+    // ========================================================
+    function handleDashboardLogout() {
+      const modal = document.getElementById('logout-modal-backdrop');
+      if (modal) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeLogoutModal() {
+      const modal = document.getElementById('logout-modal-backdrop');
+      if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function handleLogoutBackdropClick(e) {
+      if (e.target.id === 'logout-modal-backdrop') {
+        closeLogoutModal();
+      }
+    }
+
+    function switchAccountFromLogout() {
+      closeLogoutModal();
+      if (typeof openAuthModal === 'function') {
+        openAuthModal('login');
+      } else {
+        window.location.href = 'peyroo_figma_landing.html';
+      }
+    }
+
+    function showDashboardToast(msg) {
+      const toast = document.getElementById('dashboard-toast');
+      const text = document.getElementById('dashboard-toast-message');
+      if (toast && text) {
+        text.textContent = msg;
+        toast.classList.remove('opacity-0', '-translate-y-2');
+        toast.classList.add('opacity-100', 'translate-y-0');
+        setTimeout(() => {
+          toast.classList.remove('opacity-100', 'translate-y-0');
+          toast.classList.add('opacity-0', '-translate-y-2');
+        }, 2500);
+      }
+    }
+
+    function confirmLogout() {
+      // Clear persistent session state
+      try {
+        localStorage.removeItem('peyroo_auth_user');
+        localStorage.removeItem('peyroo_user_logged_in');
+        sessionStorage.clear();
+      } catch (e) {
+        console.warn(e);
+      }
+      
+      closeLogoutModal();
+      showDashboardToast('با موفقیت از حساب کاربری خارج شدید. در حال انتقال به صفحه کاوش پیرو...');
+      
+      setTimeout(() => {
+        window.location.href = 'peyroo_figma_landing.html';
+      }, 800);
+    }
+
+    // Escape key listener to close modals
+    window.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeLogoutModal();
+        if (typeof closeAuthModal === 'function') closeAuthModal();
+      }
+    });
+</script>
+
+  <!-- ============================================================ -->
+  <!-- TINY STICKY CTA BUTTON FOR SUPPORT (BOTTOM LEFT) -->
+  <!-- ============================================================ -->
+  <div class="fixed bottom-5 left-5 z-50 select-none">
+    <!-- Support Trigger Button -->
+    <button 
+      type="button" 
+      id="support-sticky-btn" 
+      onclick="toggleSupportModal()" 
+      class="group relative h-10 sm:h-11 px-3 sm:px-4 rounded-full bg-[#2C1A11] hover:bg-[#432A1C] text-[#F2E8DA] shadow-lg shadow-[#2C1A11]/30 hover:shadow-xl hover:shadow-[#2C1A11]/45 transition-all duration-300 flex items-center gap-2 cursor-pointer border border-[#DFCFC0]/30 hover:scale-105 active:scale-95"
+      aria-label="پشتیبانی آنلاین پیرو"
+    >
+      <!-- Green Pulse Status Indicator -->
+      <span class="relative flex h-2 w-2">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+      </span>
+
+      <!-- Support Headset Icon -->
+      <svg class="w-4 h-4 text-[#F2E8DA] group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+      </svg>
+
+      <!-- Label -->
+      <span class="text-xs font-bold text-[#F2E8DA] group-hover:text-white">
+        پشتیبانی<span class="hidden sm:inline font-normal text-[#DFCFC0]"> آنلاین</span>
+      </span>
+    </button>
+
+    <!-- Support Floating Quick Dialog -->
+    <div 
+      id="support-modal-dialog" 
+      class="hidden absolute bottom-14 left-0 w-[310px] sm:w-[350px] rounded-[24px] p-5 liquid-glass-card shadow-2xl border border-[#DFCFC0] text-right space-y-4"
+    >
+      <!-- Dialog Header -->
+      <div class="flex items-center justify-between border-b border-[#DFCFC0]/70 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-[#2C1A11] text-[#F2E8DA] flex items-center justify-center text-xs shrink-0 border border-[#DFCFC0]/60">
+            <svg class="w-4 h-4 text-[#F2E8DA]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/>
+            </svg>
+          </div>
+          <div>
+            <h4 class="text-xs sm:text-sm font-black text-[#2C1A11]">پشتیبانی همراه پیرو</h4>
+            <div class="flex items-center gap-1.5 text-[10px] text-emerald-700 font-semibold">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              <span>پاسخ‌گویی فوری (زیر ۲ دقیقه)</span>
+            </div>
+          </div>
+        </div>
+        <button 
+          type="button" 
+          onclick="toggleSupportModal(false)" 
+          class="w-7 h-7 rounded-full bg-[#EFE3D5]/60 hover:bg-[#DFCFC0] text-[#5E4131] flex items-center justify-center text-xs font-bold transition-colors cursor-pointer"
+        >
+          <svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="space-y-2 text-xs">
+        <a 
+          href="tel:02188990011" 
+          class="flex items-center justify-between p-2.5 rounded-xl bg-white/80 hover:bg-white border border-[#DFCFC0]/70 text-[#2C1A11] transition-all group"
+        >
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-full bg-[#EFE3D5]/80 border border-[#DFCFC0] flex items-center justify-center text-[#2C1A11] shrink-0">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+            </div>
+            <div class="text-right">
+              <span class="font-bold block text-xs">تماس اضطراری اتاق جلسه</span>
+              <span class="text-[10px] text-[#5E4131]">حل فوری اختلال صدا یا لینک ویدئو</span>
+            </div>
+          </div>
+          <span class="text-[11px] font-mono font-bold text-[#5E4131] group-hover:text-[#2C1A11] direction-ltr">۰۲۱-۸۸۹۹۰۰۱۱</span>
+        </a>
+
+        <div class="p-2.5 rounded-xl bg-[#F4EBE1]/60 border border-[#DFCFC0]/60 space-y-1">
+          <div class="flex items-center gap-1.5 text-[11px] font-bold text-[#2C1A11]">
+            <svg class="w-3.5 h-3.5 text-emerald-700 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+            <span>ضمانت ۱۰۰٪ استرداد وجه</span>
+          </div>
+          <p class="text-[10px] text-[#5E4131] leading-relaxed">
+            در صورت هرگونه نارضایتی فنی یا تاخیر، کل مبلغ جلسه در کمتر از ۳ ساعت به کیف پول عودت داده می‌شود.
+          </p>
+        </div>
+      </div>
+
+      <!-- Live Chat Input Simulation -->
+      <div class="space-y-1.5 pt-1 border-t border-[#DFCFC0]/50">
+        <label class="block text-[11px] font-bold text-[#2C1A11]">ارسال پیام به اپراتور شیفت:</label>
+        <div class="relative">
+          <input 
+            type="text" 
+            id="support-message-input" 
+            placeholder="پیام یا پرسش خود را تایپ کنید..." 
+            class="w-full h-9 px-3 rounded-xl bg-white border border-[#DFCFC0] focus:border-[#2C1A11] text-xs text-[#2C1A11] placeholder:text-[#5E4131]/50 outline-hidden transition-all pl-16"
+            onkeydown="if(event.key === 'Enter') sendQuickSupportMessage()"
+          />
+          <button 
+            type="button" 
+            onclick="sendQuickSupportMessage()" 
+            class="absolute left-1.5 top-1.5 h-6 px-2.5 rounded-lg bg-[#2C1A11] hover:bg-[#432A1C] text-white text-[10px] font-bold transition-all cursor-pointer"
+          >
+            ارسال
+          </button>
+        </div>
+        <p id="support-status-feedback" class="text-[10px] text-emerald-800 font-semibold hidden"></p>
+      </div>
+
+    </div>
+  </div>
+  <!-- ============================================================ -->
+  <!-- Masked Video Meeting Room Modal -->
+  <!-- ============================================================ -->
+  <div 
+    id="masked-video-modal-backdrop" 
+    class="fixed inset-0 z-50 bg-[#2C1A11]/60 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 transition-all duration-200 hidden"
+    onclick="handleMaskedVideoBackdrop(event)"
+  >
+    <div 
+      class="bg-white rounded-[32px] w-full max-w-3xl border-2 border-[#8EC5FF] shadow-2xl p-6 sm:p-8 space-y-6 text-right max-h-[92vh] overflow-y-auto no-scrollbar"
+      onclick="event.stopPropagation()"
+    >
+      <div class="flex items-center justify-between border-b border-[#DFCFC0]/60 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-[#2C1A11] text-[#8EC5FF] flex items-center justify-center font-bold text-sm">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-base sm:text-lg font-black text-[#2C1A11]">اتاق گفتگوی اختصاصی و رمزنگاری‌شده پیرو</h3>
+              <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                WebRTC E2EE
+              </span>
+            </div>
+            <p class="text-xs text-[#5E4131]">طرفین جلسه: علیرضا عباسی (منتی) • مصطفی سدیدی (معمار ارشد)</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeMaskedVideoModal()" class="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 text-[#2C1A11] flex items-center justify-center font-bold cursor-pointer">
+          <svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Video Feed Simulation -->
+      <div class="bg-[#2C1A11] rounded-[24px] aspect-video w-full flex flex-col justify-between p-4 sm:p-6 text-white relative overflow-hidden shadow-inner">
+        <!-- Room ID Header -->
+        <div class="flex items-center justify-between text-xs font-mono">
+          <span class="bg-black/40 px-3 py-1 rounded-full border border-white/20">ROOM: https://meet.peyroo.ir/room/pyr-sara-9842</span>
+          <span class="text-emerald-400 font-bold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            کیفیت اتصال: عالی (HD 1080p)
+          </span>
+        </div>
+
+        <!-- Participants Visual Center -->
+        <div class="flex items-center justify-center gap-6 my-auto">
+          <div class="flex flex-col items-center gap-2">
+            <div class="w-20 h-20 rounded-full bg-[#F2E8DA] text-[#2C1A11] flex items-center justify-center font-black text-2xl border-4 border-[#8EC5FF] shadow-lg">
+              م‌س
+            </div>
+            <span class="text-xs font-bold text-white bg-black/60 px-3 py-0.5 rounded-full">مصطفی سدیدی (مربی)</span>
+          </div>
+
+          <div class="flex flex-col items-center gap-2">
+            <div class="w-20 h-20 rounded-full bg-stone-700 text-white flex items-center justify-center font-black text-2xl border-4 border-white/40 shadow-lg">
+              ع‌ع
+            </div>
+            <span class="text-xs font-bold text-white bg-black/60 px-3 py-0.5 rounded-full">علیرضا عباسی (شما)</span>
+          </div>
+        </div>
+
+        <!-- Controls Toolbar -->
+        <div class="flex items-center justify-center gap-3 pt-2">
+          <button type="button" onclick="toggleMicTest(this)" class="h-10 px-4 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs font-bold flex items-center gap-2 transition-all cursor-pointer">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
+            <span id="mic-label">میکروفون: فعال</span>
+          </button>
+          <button type="button" onclick="toggleCamTest(this)" class="h-10 px-4 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs font-bold flex items-center gap-2 transition-all cursor-pointer">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+            <span id="cam-label">دوربین: فعال</span>
+          </button>
+          <button type="button" onclick="alert('اشتراک‌گذاری صفحه نمایش (Screen Share) در محیط وبینار فعال شد.')" class="h-10 px-4 rounded-full bg-[#8EC5FF] hover:bg-[#78B4F5] text-[#2C1A11] text-xs font-bold flex items-center gap-2 transition-all cursor-pointer">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="12" x="3" y="4" rx="2"/><path d="M8 20h8M12 16v4"/></svg>
+            <span>اشتراک صفحه</span>
+          </button>
+          <button type="button" onclick="closeMaskedVideoModal()" class="h-10 px-5 rounded-full bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-all cursor-pointer">
+            خروج از اتاق
+          </button>
+        </div>
+      </div>
+
+      <!-- Collaborative ADR Notes Box -->
+      <div class="bg-[#FBF8F4] p-4.5 rounded-[22px] border border-[#DFCFC0] space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-[#2C1A11]">صورت‌جلسه هم‌زمان و تصمیمات معماری (ADR Live Note):</span>
+          <button type="button" onclick="downloadCurrentSessionNotes()" class="text-[11px] font-bold text-blue-700 hover:underline">
+            ذخیره و دانلود یادداشت‌ها
+          </button>
+        </div>
+        <textarea id="live-adr-notes" rows="3" class="w-full p-3 rounded-xl bg-white border border-[#DFCFC0] text-xs font-medium text-[#2C1A11] leading-relaxed resize-none outline-none">• تصمیمات اتخاذ شده در جلسه:
+۱. تنظیم Fetch Min Bytes روی 1MB و Commit Interval روی 500ms
+۲. ایزوله‌سازی Consumer Group کند از پایپ‌لاین بلادرنگ پرداخت
+۳. ایجاد Dead Letter Queue اختصاصی در کلاستر کافکا</textarea>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ======================================================= -->
+  <!-- LOGOUT CONFIRMATION MODAL                               -->
+  <!-- ======================================================= -->
+  <div 
+    id="logout-modal-backdrop" 
+    class="fixed inset-0 z-50 bg-[#2C1A11]/70 backdrop-blur-md hidden flex items-center justify-center p-4 transition-all duration-200"
+    onclick="handleLogoutBackdropClick(event)"
+  >
+    <div 
+      id="logout-dialog" 
+      class="bg-[#FBF8F4] border border-[#DFCFC0] w-full max-w-md rounded-[28px] p-6 sm:p-7 shadow-2xl relative text-right space-y-5"
+      onclick="event.stopPropagation()"
+    >
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-[#DFCFC0]/60 pb-3.5">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-red-50 border border-red-200 text-red-600 flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-[#2C1A11]">خروج از حساب کاربری</h3>
+            <p id="logout-user-subtitle" class="text-[11px] text-[#5E4131]">علیرضا عباسی • منتی مهندسی نرم‌افزار</p>
+          </div>
+        </div>
+        <button 
+          type="button" 
+          onclick="closeLogoutModal()" 
+          class="w-8 h-8 rounded-full bg-white hover:bg-stone-100 border border-[#DFCFC0] flex items-center justify-center text-xs font-bold text-[#2C1A11] cursor-pointer transition-colors shadow-2xs"
+          title="بستن"
+        >
+          <svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="space-y-3 text-xs sm:text-[13px] text-[#5E4131] leading-relaxed">
+        <p>
+          آیا مطمئن هستید که می‌خواهید از میز کار پیرو خارج شوید؟
+        </p>
+        <p class="text-[11.5px] bg-[#EFE3D5]/60 p-3 rounded-2xl border border-[#DFCFC0]">
+          با خروج از حساب، نشست فعال شما منقضی شده و برای دسترسی مجدد به جلسات فعال، یادداشت‌های معماری و درگاه‌ها، نیاز به ورود مجدد خواهید داشت.
+        </p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="space-y-2.5 pt-2">
+        <button 
+          type="button" 
+          onclick="confirmLogout()" 
+          class="w-full h-11 sm:h-12 rounded-[16px] bg-red-600 hover:bg-red-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-xs active:scale-98 cursor-pointer"
+        >
+          <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          <span>خروج قطعی و بازگشت به صفحه اصلی</span>
+        </button>
+
+        <button 
+          type="button" 
+          onclick="switchAccountFromLogout()" 
+          class="w-full h-10 sm:h-11 rounded-[16px] bg-white hover:bg-[#F2E8DA] border border-[#DFCFC0] text-xs font-bold text-[#2C1A11] flex items-center justify-center gap-2 transition-all cursor-pointer shadow-2xs"
+        >
+          <svg class="w-3.5 h-3.5 text-[#5E4131]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <line x1="19" y1="8" x2="19" y2="14"/>
+            <line x1="22" y1="11" x2="16" y2="11"/>
+          </svg>
+          <span>ورود با حسابی دیگر (تغییر کاربر)</span>
+        </button>
+
+        <button 
+          type="button" 
+          onclick="closeLogoutModal()" 
+          class="w-full h-9 rounded-[14px] text-xs font-semibold text-[#5E4131] hover:text-[#2C1A11] hover:bg-[#EFE3D5]/50 transition-colors cursor-pointer text-center"
+        >
+          انصراف و ادامه کار در میز کار
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="dashboard-toast" class="fixed top-20 inset-x-0 z-50 flex justify-center pointer-events-none transition-all duration-300 opacity-0 -translate-y-2">
+    <div class="bg-[#2C1A11] text-white px-5 py-3 rounded-full text-xs font-bold shadow-xl border border-[#DFCFC0]/40 flex items-center gap-2 pointer-events-auto">
+      <svg class="w-4 h-4 text-emerald-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+        <polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+      <span id="dashboard-toast-message">پیام سیستم</span>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Peyroo Official App Icon (Sky Baby Blue Accent Edition) -->
+  <defs>
+    <filter id="blueGlow" x="-8%" y="-8%" width="116%" height="116%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="16" stdDeviation="24" flood-color="#8EC5FF" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- Squircle Base -->
+  <rect x="8" y="8" width="496" height="496" rx="112" fill="#8EC5FF" stroke="#BCE0FD" stroke-width="4" filter="url(#blueGlow)"/>
+
+  <!-- Brand Mark -->
+  <g transform="translate(0, 4)">
+    <!-- 4-Pointed Star -->
+    <path d="M 238 92 C 238 126 226 138 202 138 C 226 138 238 150 238 184 C 238 150 250 138 274 138 C 250 138 238 126 238 92 Z" fill="#2C1A11" />
+    
+    <!-- Mentee Head -->
+    <circle cx="186" cy="236" r="38" fill="#2C1A11" />
+    
+    <!-- Mentee Body -->
+    <path d="M 116 404 C 116 348 142 292 190 292 C 218 292 242 308 252 334 C 224 354 184 376 116 404 Z" fill="#2C1A11" />
+    
+    <!-- Flowing Stream -->
+    <path d="M 108 448 L 204 448 C 178 418 184 394 220 370 C 258 344 308 324 340 270 C 322 288 276 312 236 332 C 182 358 138 388 108 448 Z" fill="#FFFFFF" />
+    
+    <!-- Mentor Head -->
+    <circle cx="328" cy="182" r="46" fill="#2C1A11" />
+    
+    <!-- Mentor Body -->
+    <path d="M 276 254 C 298 244 326 248 356 274 C 392 304 404 354 388 406 C 372 444 334 442 308 428 C 352 398 376 354 358 312 C 342 276 296 268 276 254 Z" fill="#2C1A11" />
+  </g>
+</svg>

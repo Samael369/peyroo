@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نشان رسمی و نظام آیکون مستقل پیرو (Peyroo Official Standalone Icon System)</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="../../../assets/brand/peyroo_favicon_32.svg">
+  <link rel="alternate icon" type="image/svg+xml" href="../../../assets/brand/peyroo_favicon_16.svg">
+  <link rel="apple-touch-icon" href="../../../assets/brand/peyroo_app_icon_cream.svg">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  
+  <!-- Persian Font: Vazirmatn & Latin Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&family=JetBrains+Mono:wght@400;600;800&family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #F2E8DA;
+      color: #2C1A11;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    
+    .font-mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .font-latin-brand {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* Ambient Decorative Glows */
+    .ambient-glow-1 {
+      position: absolute;
+      top: 30px;
+      right: -100px;
+      width: 650px;
+      height: 650px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(245, 233, 207, 0.55) 0%, rgba(242, 232, 218, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient-glow-2 {
+      position: absolute;
+      top: 900px;
+      left: -80px;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(142, 197, 255, 0.22) 0%, rgba(242, 232, 218, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .liquid-glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(28px) saturate(160%);
+      -webkit-backdrop-filter: blur(28px) saturate(160%);
+      border: 1px solid rgba(223, 207, 192, 0.85);
+      box-shadow: 0 16px 40px -12px rgba(44, 26, 17, 0.07), 0 2px 6px -1px rgba(44, 26, 17, 0.03);
+    }
+
+    /* Grid Paper Texture */
+    .blueprint-grid {
+      background-size: 24px 24px;
+      background-image: 
+        linear-gradient(to right, rgba(223, 207, 192, 0.50) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(223, 207, 192, 0.50) 1px, transparent 1px);
+    }
+  </style>
+</head>
+<body class="selection:bg-[#8EC5FF] selection:text-[#2C1A11] min-h-screen relative">
+
+  <!-- Ambient Glow Backgrounds -->
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+
+  <!-- Header Navigation -->
+  <header class="sticky top-0 z-40 w-full bg-white/85 backdrop-blur-xl border-b border-[#DFCFC0]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-18 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+        <a href="../ui/peyroo_figma_landing.html" class="flex items-center gap-2 group">
+          <img src="../../../assets/brand/peyroo_logo_cropped_transparent.svg" alt="پیرو" class="h-8 w-auto object-contain transition-transform group-hover:scale-105">
+        </a>
+        <span class="text-[#DFCFC0]">|</span>
+        <a href="../ui/peyroo_dashboard.html" class="flex items-center gap-1.5 text-xs font-semibold text-[#5E4131] hover:text-[#2C1A11] transition-colors">
+          <span>میز کار</span>
+        </a>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Figma Direct Link Pill -->
+        <a 
+          href="https://www.figma.com/design/Fg9BRHVc9e7iI2cI6NKGgj" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#2C1A11] text-[#F2E8DA] hover:bg-[#43281C] transition-all shadow-sm"
+        >
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 24C10.2091 24 12 22.2091 12 20V16H8C5.79086 16 4 17.7909 4 20C4 22.2091 5.79086 24 8 24Z" fill="#0ACF83"/>
+            <path d="M4 12C4 9.79086 5.79086 8 8 8H12V16H8C5.79086 16 4 14.2091 4 12Z" fill="#A259FF"/>
+            <path d="M4 4C4 1.79086 5.79086 0 8 0H12V8H8C5.79086 8 4 6.20914 4 4Z" fill="#F24E1E"/>
+            <path d="M12 0H16C18.2091 0 20 1.79086 20 4C20 6.20914 18.2091 8 16 8H12V0Z" fill="#FF7262"/>
+            <path d="M20 12C20 14.2091 18.2091 16 16 16C13.7909 16 12 14.2091 12 12C12 9.79086 13.7909 8 16 8C18.2091 8 20 9.79086 20 12Z" fill="#1ABCFE"/>
+          </svg>
+          <span>مشاهده مستقیم در فیگما (Figma File)</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Showcase Container -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 space-y-12 relative z-10">
+
+    <!-- Hero Title & Architecture -->
+    <section class="text-center space-y-4 max-w-3xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/80 border border-[#DFCFC0] text-xs font-bold text-[#5E4131] shadow-2xs">
+        <span class="w-2 h-2 rounded-full bg-[#8EC5FF]"></span>
+        <span>طراحی اصیل پیرو • تجسم منتی، جریان هدایت، منتور و ستاره قطبی</span>
+      </div>
+      
+      <h1 class="text-3xl sm:text-5xl font-black text-[#2C1A11] tracking-tight leading-tight">
+        سیستم آیکون مستقل و فاوی‌کان پیرو (Peyroo)
+      </h1>
+      
+      <p class="text-sm sm:text-base text-[#5E4131] leading-relaxed">
+        توسعه هندسه برداری مستقل بر اساس طرح نهایی و تایید شده، بهینه‌سازی شده برای بالاترین وضوح در ابعاد کوچک (<span class="font-mono-code font-bold text-[#2C1A11]">16px</span>، <span class="font-mono-code font-bold text-[#2C1A11]">32px</span>، <span class="font-mono-code font-bold text-[#2C1A11]">64px</span>)، آیکون اپلیکیشن، تصویر پروفایل و فاوی‌کان مرورگر، همراه با انتقال کامل برداری به فیگما.
+      </p>
+
+      <!-- Figma Badge Banner -->
+      <div class="p-4 rounded-2xl bg-white/90 border border-[#DFCFC0] shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 text-right">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-[#2C1A11] flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none">
+              <path d="M8 24C10.2091 24 12 22.2091 12 20V16H8C5.79086 16 4 17.7909 4 20C4 22.2091 5.79086 24 8 24Z" fill="#0ACF83"/>
+              <path d="M4 12C4 9.79086 5.79086 8 8 8H12V16H8C5.79086 16 4 14.2091 4 12Z" fill="#A259FF"/>
+              <path d="M4 4C4 1.79086 5.79086 0 8 0H12V8H8C5.79086 8 4 6.20914 4 4Z" fill="#F24E1E"/>
+              <path d="M12 0H16C18.2091 0 20 1.79086 20 4C20 6.20914 18.2091 8 16 8H12V0Z" fill="#FF7262"/>
+              <path d="M20 12C20 14.2091 18.2091 16 16 16C13.7909 16 12 14.2091 12 12C12 9.79086 13.7909 8 16 8C18.2091 8 20 9.79086 20 12Z" fill="#1ABCFE"/>
+            </svg>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-[#2C1A11]">پرونده برداری فیگما آماده و همگام است</div>
+            <div class="text-[11px] text-[#5E4131] font-mono-code">File Key: Fg9BRHVc9e7iI2cI6NKGgj • 7 Vector Layers Placed</div>
+          </div>
+        </div>
+        <a 
+          href="https://www.figma.com/design/Fg9BRHVc9e7iI2cI6NKGgj" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="px-4 py-2 rounded-xl bg-[#8EC5FF]/20 text-[#2C1A11] border border-[#8EC5FF] hover:bg-[#8EC5FF]/30 font-bold text-xs transition-colors whitespace-nowrap"
+        >
+          باز کردن در فیگما ↗
+        </a>
+      </div>
+    </section>
+
+    <!-- SECTION 1: MASTER IDENTITY SIGNATURE (User's Exact Brand Mark) -->
+    <section class="liquid-glass-card rounded-3xl p-6 sm:p-10 space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#DFCFC0] gap-2">
+        <div>
+          <span class="text-[10px] font-bold text-[#8EC5FF] uppercase tracking-wider font-mono-code">Master Lockup</span>
+          <h2 class="text-xl sm:text-2xl font-black text-[#2C1A11]">نشان کامل رسمی پیرو (لوگو و نام‌واره)</h2>
+        </div>
+        <div class="text-xs text-[#5E4131] flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-[#8EC5FF]"></span>
+          <span>ترکیب متعادل: کرم گرم ۶۰٪ • کاکائو ۳۰٪ • آبی آسمانی ۱۰٪</span>
+        </div>
+      </div>
+
+      <!-- Master Lockup Visual -->
+      <div class="blueprint-grid rounded-2xl p-8 sm:p-16 flex items-center justify-center border border-[#DFCFC0] bg-[#F2E8DA]/60">
+        <div class="flex items-center gap-8 sm:gap-14 flex-wrap justify-center">
+          
+          <!-- Standalone Vector Mark -->
+          <svg width="180" height="180" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" class="drop-shadow-sm">
+            <!-- 4-Pointed Star -->
+            <path d="M 238 92 C 238 126 226 138 202 138 C 226 138 238 150 238 184 C 238 150 250 138 274 138 C 250 138 238 126 238 92 Z" fill="#8EC5FF" />
+            <!-- Mentee Head -->
+            <circle cx="186" cy="236" r="38" fill="#2C1A11" />
+            <!-- Mentee Body -->
+            <path d="M 116 404 C 116 348 142 292 190 292 C 218 292 242 308 252 334 C 224 354 184 376 116 404 Z" fill="#2C1A11" />
+            <!-- Flowing Stream -->
+            <path d="M 108 448 L 204 448 C 178 418 184 394 220 370 C 258 344 308 324 340 270 C 322 288 276 312 236 332 C 182 358 138 388 108 448 Z" fill="#8EC5FF" />
+            <!-- Mentor Head -->
+            <circle cx="328" cy="182" r="46" fill="#2C1A11" />
+            <!-- Mentor Body -->
+            <path d="M 276 254 C 298 244 326 248 356 274 C 392 304 404 354 388 406 C 372 444 334 442 308 428 C 352 398 376 354 358 312 C 342 276 296 268 276 254 Z" fill="#2C1A11" />
+          </svg>
+
+          <!-- Vertical Divider Bar -->
+          <div class="w-[2px] h-32 bg-[#DFCFC0]"></div>
+
+          <!-- Persian & English Typography -->
+          <div class="flex flex-col items-center sm:items-start text-center sm:text-right">
+            <span class="text-6xl sm:text-7xl font-black text-[#2C1A11] tracking-normal leading-none" style="font-family:'Vazirmatn';">
+              پیرو
+            </span>
+            <span class="text-sm sm:text-base font-bold text-[#2C1A11] tracking-[0.45em] uppercase font-latin-brand mt-3 pr-1">
+              P e y r o o
+            </span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Geometry Metaphor Breakdown -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
+        <div class="p-4 rounded-xl bg-white/70 border border-[#DFCFC0] space-y-1">
+          <div class="flex items-center gap-1.5 font-bold text-[#2C1A11]">
+            <span class="w-2 h-2 rounded-full bg-[#8EC5FF]"></span>
+            <span>ستاره قطبی (۴ پره)</span>
+          </div>
+          <p class="text-[#5E4131]">نماد هدف غایی، الهام و چشم‌انداز معماری که بالاتر از منتی می‌درخشد.</p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-white/70 border border-[#DFCFC0] space-y-1">
+          <div class="flex items-center gap-1.5 font-bold text-[#2C1A11]">
+            <span class="w-2 h-2 rounded-full bg-[#2C1A11]"></span>
+            <span>منتی (مشاوره‌گیرنده)</span>
+          </div>
+          <p class="text-[#5E4131]">فیگور چپ؛ در حال یادگیری و آغاز مسیر مهندسی با نگاه رو به بالا.</p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-white/70 border border-[#DFCFC0] space-y-1">
+          <div class="flex items-center gap-1.5 font-bold text-[#2C1A11]">
+            <span class="w-2 h-2 rounded-full bg-[#8EC5FF]"></span>
+            <span>رودخانه هدایت (Stream)</span>
+          </div>
+          <p class="text-[#5E4131]">جریان سیال آبی رنگ؛ بستر انتقال دانش، مستندات ADR و بازخورد پیوسته.</p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-white/70 border border-[#DFCFC0] space-y-1">
+          <div class="flex items-center gap-1.5 font-bold text-[#2C1A11]">
+            <span class="w-2 h-2 rounded-full bg-[#2C1A11]"></span>
+            <span>منتور (راهبر معمار)</span>
+          </div>
+          <p class="text-[#5E4131]">فیگور راست و افراشته‌تر؛ با قوس حامیانه که منتی و مسیر را در بر می‌گیرد.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: STANDALONE ICON SYSTEM (App Icons, Social, Micro Favicon) -->
+    <section class="space-y-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <span class="text-[10px] font-bold text-[#8EC5FF] uppercase tracking-wider font-mono-code">Standalone Variants</span>
+          <h2 class="text-2xl font-black text-[#2C1A11]">خانواده آیکون‌های مستقل (Standalone Icon Suite)</h2>
+        </div>
+        <span class="text-xs text-[#5E4131] hidden sm:inline">مناسب برای آیکون دسکتاپ، موبایل، فاوی‌کان و پروفایل</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        <!-- 1. Master Cream App Icon -->
+        <div class="liquid-glass-card rounded-2xl p-6 flex flex-col items-center text-center space-y-4">
+          <span class="text-xs font-bold text-[#5E4131]">آیکون اپلیکیشن (کرم گرم اصلی)</span>
+          
+          <div class="w-32 h-32 rounded-[28px] bg-[#F2E8DA] border-2 border-[#DFCFC0] p-4 flex items-center justify-center shadow-lg hover:scale-105 transition-transform">
+            <img src="../../../assets/brand/peyroo_app_icon_cream.svg" alt="Peyroo Cream App Icon" class="w-full h-full">
+          </div>
+
+          <div class="text-[11px] text-[#5E4131] font-mono-code">peyroo_app_icon_cream.svg</div>
+          <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#F2E8DA] text-[#2C1A11] border border-[#DFCFC0]">
+            پالت اصلی پلتفرم (Default)
+          </span>
+        </div>
+
+        <!-- 2. Dark Cacao App Icon -->
+        <div class="liquid-glass-card rounded-2xl p-6 flex flex-col items-center text-center space-y-4">
+          <span class="text-xs font-bold text-[#5E4131]">آیکون اپلیکیشن (حالت تیره / Dark)</span>
+          
+          <div class="w-32 h-32 rounded-[28px] bg-[#2C1A11] border-2 border-[#4A3427] p-4 flex items-center justify-center shadow-lg hover:scale-105 transition-transform">
+            <img src="../../../assets/brand/peyroo_app_icon_dark.svg" alt="Peyroo Dark App Icon" class="w-full h-full">
+          </div>
+
+          <div class="text-[11px] text-[#5E4131] font-mono-code">peyroo_app_icon_dark.svg</div>
+          <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#2C1A11] text-[#F2E8DA]">
+            کنتراست بالا در Dark Mode
+          </span>
+        </div>
+
+        <!-- 3. Sky Blue Accent Icon -->
+        <div class="liquid-glass-card rounded-2xl p-6 flex flex-col items-center text-center space-y-4">
+          <span class="text-xs font-bold text-[#5E4131]">آیکون اکسنت (آبی آسمانی)</span>
+          
+          <div class="w-32 h-32 rounded-[28px] bg-[#8EC5FF] border-2 border-[#BCE0FD] p-4 flex items-center justify-center shadow-lg hover:scale-105 transition-transform">
+            <img src="../../../assets/brand/peyroo_app_icon_blue.svg" alt="Peyroo Blue App Icon" class="w-full h-full">
+          </div>
+
+          <div class="text-[11px] text-[#5E4131] font-mono-code">peyroo_app_icon_blue.svg</div>
+          <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#8EC5FF]/30 text-[#2C1A11] border border-[#8EC5FF]">
+            نسخه متمایز و پرانرژی
+          </span>
+        </div>
+
+        <!-- 4. Profile Picture Avatar -->
+        <div class="liquid-glass-card rounded-2xl p-6 flex flex-col items-center text-center space-y-4">
+          <span class="text-xs font-bold text-[#5E4131]">تصویر پروفایل رسمی (Avatar)</span>
+          
+          <div class="w-32 h-32 rounded-full bg-[#F2E8DA] border-2 border-[#DFCFC0] p-4 flex items-center justify-center shadow-lg hover:scale-105 transition-transform overflow-hidden">
+            <img src="../../../assets/brand/peyroo_avatar_profile.svg" alt="Peyroo Profile Avatar" class="w-full h-full">
+          </div>
+
+          <div class="text-[11px] text-[#5E4131] font-mono-code">peyroo_avatar_profile.svg</div>
+          <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-white text-[#2C1A11] border border-[#DFCFC0]">
+            برش دایره‌ای لینکدین و گیت‌هاب
+          </span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 3: SMALL-SCALE OPTICAL CLARITY & FAVICON TESTER -->
+    <section class="liquid-glass-card rounded-3xl p-6 sm:p-10 space-y-8">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#DFCFC0] gap-2">
+        <div>
+          <span class="text-[10px] font-bold text-[#8EC5FF] uppercase tracking-wider font-mono-code">Optical Calibration</span>
+          <h2 class="text-xl sm:text-2xl font-black text-[#2C1A11]">وضوح در ابعاد خرد (Favicon & Micro-Scale Testing)</h2>
+        </div>
+        <div class="text-xs text-[#5E4131]">
+          بهینه‌سازی شکاف‌های منفی (Negative Space) و ضخامت ستاره برای نمایشگرهای ۱۶ و ۳۲ پیکسل
+        </div>
+      </div>
+
+      <!-- Real Context Mockups -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Mockup A: Browser Tab Preview -->
+        <div class="p-5 rounded-2xl bg-[#EBE1D3] border border-[#DFCFC0] space-y-3">
+          <span class="text-xs font-bold text-[#2C1A11] block">۱. پیش‌نمایش تب مرورگر (16px Favicon)</span>
+          
+          <!-- Mock Browser Chrome -->
+          <div class="rounded-xl bg-white border border-[#DFCFC0] p-2 space-y-2 shadow-xs">
+            <div class="flex items-center gap-1.5 px-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#FF5F56]"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-[#27C93F]"></span>
+            </div>
+            
+            <!-- Tab -->
+            <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#F2E8DA]/80 border border-[#DFCFC0] max-w-[240px]">
+              <!-- Favicon 16px -->
+              <div class="w-4 h-4 rounded shrink-0 overflow-hidden">
+                <img src="../../../assets/brand/peyroo_favicon_16.svg" alt="16px Favicon" class="w-full h-full">
+              </div>
+              <span class="text-[11px] font-bold text-[#2C1A11] truncate">پیرو | پلتفرم تخصصی منتورشیپ</span>
+              <span class="text-[9px] text-[#5E4131] mr-auto">✕</span>
+            </div>
+          </div>
+          <p class="text-[11px] text-[#5E4131]">
+            در اندازه ۱۶ پیکسل، ستاره قطبی تقویت شده و شکاف بین سر و تنه عریض‌تر نگه داشته شده تا عناصر روی هم نلغزند.
+          </p>
+        </div>
+
+        <!-- Mockup B: macOS Dock / App Switcher -->
+        <div class="p-5 rounded-2xl bg-[#EBE1D3] border border-[#DFCFC0] space-y-3">
+          <span class="text-xs font-bold text-[#2C1A11] block">۲. آیکون داک سیستم‌عامل (64px App Icon)</span>
+          
+          <div class="rounded-xl bg-white/60 border border-[#DFCFC0] p-4 flex items-center justify-center gap-3">
+            <!-- Finder Dummy -->
+            <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-xs font-bold text-blue-700 opacity-60">Finder</div>
+            <!-- Peyroo Icon -->
+            <div class="w-16 h-16 rounded-[18px] shadow-md hover:scale-110 transition-transform">
+              <img src="../../../assets/brand/peyroo_app_icon_cream.svg" alt="64px Icon" class="w-full h-full">
+            </div>
+            <!-- VS Code Dummy -->
+            <div class="w-12 h-12 rounded-xl bg-sky-100 flex items-center justify-center text-xs font-bold text-sky-700 opacity-60">Code</div>
+          </div>
+          <p class="text-[11px] text-[#5E4131]">
+            شعاع انحنای سوپربیضی (Squircle) با استانداردهای اپل و گوگل همگام است و حاشیه امن ۱۵٪ را رعایت می‌کند.
+          </p>
+        </div>
+
+        <!-- Mockup C: Mobile Notification / Push Alert -->
+        <div class="p-5 rounded-2xl bg-[#EBE1D3] border border-[#DFCFC0] space-y-3">
+          <span class="text-xs font-bold text-[#2C1A11] block">۳. اعلان نوتیفیکیشن موبایل (24px - 32px)</span>
+          
+          <div class="rounded-xl bg-white border border-[#DFCFC0] p-3 shadow-xs space-y-1.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="w-5 h-5 rounded-md overflow-hidden">
+                  <img src="../../../assets/brand/peyroo_favicon_32.svg" alt="32px Icon" class="w-full h-full">
+                </div>
+                <span class="text-xs font-bold text-[#2C1A11]">پیرو • Peyroo</span>
+              </div>
+              <span class="text-[9px] text-[#5E4131]">همین حالا</span>
+            </div>
+            <p class="text-[11px] text-[#5E4131] leading-tight pr-7">
+              منتور مصطفی سدیدی یادداشت تصمیم معماری (ADR) نشست شما را ثبت کرد.
+            </p>
+          </div>
+          <p class="text-[11px] text-[#5E4131]">
+            رنگ پس‌زمینه کرم گرم و پیکره‌های کاکائویی در کنار آبی آسمانی، در بنرهای روشن و تاریک سریعاً قابل تشخیص است.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Live Interactive Scale Slider -->
+      <div class="p-6 rounded-2xl bg-white/80 border border-[#DFCFC0] space-y-4">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-[#2C1A11]">آزمایش زنده مقیاس‌پذیری وضوح (Dynamic Scale Slider)</span>
+          <span id="scale-indicator" class="text-xs font-mono-code font-bold text-[#2C1A11] px-2.5 py-0.5 rounded-md bg-[#F2E8DA] border border-[#DFCFC0]">
+            64 × 64 px
+          </span>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <span class="text-xs font-mono-code text-[#5E4131]">16px</span>
+          <input 
+            type="range" 
+            id="scale-slider" 
+            min="16" 
+            max="180" 
+            value="64" 
+            step="4"
+            class="w-full h-2 bg-[#EFE3D5] rounded-lg appearance-none cursor-pointer accent-[#2C1A11]"
+            oninput="updateInteractiveScale(this.value)"
+          >
+          <span class="text-xs font-mono-code text-[#5E4131]">180px</span>
+        </div>
+
+        <div class="flex items-center justify-center p-8 bg-[#F2E8DA]/50 rounded-xl border border-[#DFCFC0] min-h-[200px]">
+          <div id="scalable-icon-container" class="transition-all flex items-center justify-center" style="width: 64px; height: 64px;">
+            <img src="../../../assets/brand/peyroo_icon_standalone.svg" alt="Scalable Peyroo Mark" class="w-full h-full">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: FIGMA CLOUD ASSETS AND REPOSITORY PATHS -->
+    <section class="liquid-glass-card rounded-3xl p-6 sm:p-10 space-y-6">
+      <div class="flex items-center justify-between pb-4 border-b border-[#DFCFC0]">
+        <div>
+          <span class="text-[10px] font-bold text-[#8EC5FF] uppercase tracking-wider font-mono-code">Figma & Code Integration</span>
+          <h2 class="text-xl sm:text-2xl font-black text-[#2C1A11]">فهرست نودهای فیگما و فایل‌های محلی مخزن</h2>
+        </div>
+        <span class="text-xs font-mono-code text-[#5E4131]">Status: 100% Deployed</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-right text-xs">
+          <thead>
+            <tr class="border-b border-[#DFCFC0] text-[#5E4131]">
+              <th class="py-3 px-4 font-bold">نام دارایی (Asset)</th>
+              <th class="py-3 px-4 font-bold">ابعاد مبنا</th>
+              <th class="py-3 px-4 font-bold">شناسه نود در فیگما (Node ID)</th>
+              <th class="py-3 px-4 font-bold">مسیر در پروژه (Local Path)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#DFCFC0]/60">
+            <tr class="hover:bg-white/40">
+              <td class="py-3 px-4 font-bold text-[#2C1A11]">نشان مستقل برداری (Standalone Mark)</td>
+              <td class="py-3 px-4 font-mono-code">512 × 512 px</td>
+              <td class="py-3 px-4 font-mono-code text-blue-700 font-bold">1:2</td>
+              <td class="py-3 px-4 font-mono-code text-[#5E4131]">assets/brand/peyroo_icon_standalone.svg</td>
+            </tr>
+            <tr class="hover:bg-white/40">
+              <td class="py-3 px-4 font-bold text-[#2C1A11]">آیکون اپلیکیشن کرم (App Icon Cream)</td>
+              <td class="py-3 px-4 font-mono-code">512 × 512 px</td>
+              <td class="py-3 px-4 font-mono-code text-blue-700 font-bold">1:9</td>
+              <td class="py-3 px-4 font-mono-code text-[#5E4131]">assets/brand/peyroo_app_icon_cream.svg</td>
+            </tr>
+            <tr class="hover:bg-white/40">
+              <td class="py-3 px-4 font-bold text-[#2C1A11]">آیکون اپلیکیشن دارک (App Icon Dark)</td>
+              <td class="py-3 px-4 font-mono-code">512 × 512 px</td>
+              <td class="py-3 px-4 font-mono-code text-blue-700 font-bold">1:18</td>
+              <td class="py-3 px-4 font-mono-code text-[#5E4131]">assets/brand/peyroo_app_icon_dark.svg</td>
+            </tr>
+            <tr class="hover:bg-white/40">
+              <td class="py-3 px-4 font-bold text-[#2C1A11]">آیکون اپلیکیشن آبی (App Icon Blue)</td>
+              <td class="py-3 px-4 font-mono-code">512 × 512 px</td>
+              <td class="py-3 px-4 font-mono-code text-blue-700 font-bold">1:27</td>
+              <td class="py-3 px-4 font-mono-code text-[#5E4131]">assets/brand/peyroo_app_icon_blue.svg</td>
+            </tr>
+            <tr class="hover:bg-white/40">
+              <td class="py-3 px-4 font-bold text-[#2C1A11]">تصویر پروفایل مدور (Profile Avatar)</td>
+              <td class="py-3 px-4 font-mono-code">512 × 512 px</td>
+              <td class="py-3 px-4 font-mono-code text-blue-700 font-bold">1:36</td>
+              <td class="py-3 px-4 font-mono-code text-[#5E4131]">assets/brand/peyroo_avatar_profile.svg</td>
+            </tr>
+            <tr class="hover:bg-white/40">
+              <td class="py-3 px-4 font-bold text-[#2C1A11]">فاوی‌کان رتینا (Favicon 32px)</td>
+              <td class="py-3 px-4 font-mono-code">32 × 32 px</td>
+              <td class="py-3 px-4 font-mono-code text-blue-700 font-bold">1:50</td>
+              <td class="py-3 px-4 font-mono-code text-[#5E4131]">assets/brand/peyroo_favicon_32.svg</td>
+            </tr>
+            <tr class="hover:bg-white/40">
+              <td class="py-3 px-4 font-bold text-[#2C1A11]">فاوی‌کان استاندارد (Favicon 16px)</td>
+              <td class="py-3 px-4 font-mono-code">16 × 16 px</td>
+              <td class="py-3 px-4 font-mono-code text-blue-700 font-bold">1:60</td>
+              <td class="py-3 px-4 font-mono-code text-[#5E4131]">assets/brand/peyroo_favicon_16.svg</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Interactive JavaScript for Live Slider -->
+  <script>
+    function updateInteractiveScale(val) {
+      const container = document.getElementById('scalable-icon-container');
+      const indicator = document.getElementById('scale-indicator');
+      container.style.width = val + 'px';
+      container.style.height = val + 'px';
+      indicator.textContent = val + ' × ' + val + ' px';
+    }
+  </script>
+
+</body>
+</html>

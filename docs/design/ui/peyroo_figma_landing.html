@@ -5,10 +5,194 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>پیرو (Peyroo) — پلتفرم مربی‌گری و منتورشیپ مهندسی نرم‌افزار</title>
   
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="../../../assets/brand/peyroo_favicon_32.svg">
+  <link rel="alternate icon" type="image/svg+xml" href="../../../assets/brand/peyroo_favicon_16.svg">
+  <link rel="apple-touch-icon" href="../../../assets/brand/peyroo_app_icon_cream.svg">
+  
   <!-- Tailwind CSS -->
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+
+  <script>
+    // ==========================================
+    // AUTH MODAL & LOGIC (ورود / ثبت‌نام)
+    // Default Guest State: User is NOT logged in initially
+    // ==========================================
+    let currentUser = {
+      isLoggedIn: false,
+      name: '',
+      role: '',
+      monogram: ''
+    };
+
+    function openAuthModal(tab = 'login') {
+      const modal = document.getElementById('auth-modal-backdrop');
+      if (modal) modal.classList.remove('hidden');
+      switchAuthTab(tab);
+      document.body.classList.add('overflow-hidden');
+    }
+
+    function closeAuthModal() {
+      const modal = document.getElementById('auth-modal-backdrop');
+      if (modal) modal.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    function handleAuthBackdropClick(e) {
+      if (e.target.id === 'auth-modal-backdrop') {
+        closeAuthModal();
+      }
+    }
+
+    function handleSignupRoleToggle(role) {
+      const menteeCard = document.getElementById('signup-role-mentee-card');
+      const mentorCard = document.getElementById('signup-role-mentor-card');
+      if (!menteeCard || !mentorCard) return;
+
+      const menteeRadio = menteeCard.querySelector('input[type="radio"]');
+      const mentorRadio = mentorCard.querySelector('input[type="radio"]');
+
+      if (role === 'mentor') {
+        if (mentorRadio) mentorRadio.checked = true;
+        mentorCard.className = 'role-card-option p-3.5 sm:p-4 rounded-[16px] min-h-[58px] bg-[#FBF8F4] border-2 border-[#2C1A11] flex items-center gap-2.5 cursor-pointer shadow-xs transition-all';
+        menteeCard.className = 'role-card-option p-3.5 sm:p-4 rounded-[16px] min-h-[58px] bg-white border border-[#DFCFC0] hover:border-[#2C1A11]/60 flex items-center gap-2.5 cursor-pointer shadow-2xs transition-all';
+      } else {
+        if (menteeRadio) menteeRadio.checked = true;
+        menteeCard.className = 'role-card-option p-3.5 sm:p-4 rounded-[16px] min-h-[58px] bg-[#FBF8F4] border-2 border-[#2C1A11] flex items-center gap-2.5 cursor-pointer shadow-xs transition-all';
+        mentorCard.className = 'role-card-option p-3.5 sm:p-4 rounded-[16px] min-h-[58px] bg-white border border-[#DFCFC0] hover:border-[#2C1A11]/60 flex items-center gap-2.5 cursor-pointer shadow-2xs transition-all';
+      }
+    }
+
+    function switchAuthTab(tab) {
+      const btnLogin = document.getElementById('auth-tab-login');
+      const btnSignup = document.getElementById('auth-tab-signup');
+      const formLogin = document.getElementById('auth-form-login');
+      const formSignup = document.getElementById('auth-form-signup');
+      const title = document.getElementById('auth-modal-title');
+
+      if (tab === 'login') {
+        btnLogin.className = 'h-9 rounded-[12px] bg-[#2C1A11] text-white font-bold text-xs transition-all shadow-xs cursor-pointer text-center';
+        btnSignup.className = 'h-9 rounded-[12px] text-[#5E4131] hover:text-[#2C1A11] font-semibold text-xs transition-all cursor-pointer text-center';
+        formLogin.classList.remove('hidden');
+        formSignup.classList.add('hidden');
+        if (title) title.textContent = 'ورود به حساب کاربری پیرو';
+      } else {
+        btnSignup.className = 'h-9 rounded-[12px] bg-[#2C1A11] text-white font-bold text-xs transition-all shadow-xs cursor-pointer text-center';
+        btnLogin.className = 'h-9 rounded-[12px] text-[#5E4131] hover:text-[#2C1A11] font-semibold text-xs transition-all cursor-pointer text-center';
+        formSignup.classList.remove('hidden');
+        formLogin.classList.add('hidden');
+        if (title) title.textContent = 'ثبت‌نام کاربر جدید در پیرو';
+
+        // Synchronize active role card styling with checked radio
+        const checkedRadio = document.querySelector('input[name="signup-role"]:checked');
+        handleSignupRoleToggle(checkedRadio ? checkedRadio.value : 'mentee');
+      }
+    }
+
+    function simulateSocialLogin(provider) {
+      currentUser.isLoggedIn = true;
+      currentUser.name = provider === 'GitHub' ? 'علیرضا عباسی (GitHub)' : 'علیرضا عباسی (Google)';
+      closeAuthModal();
+      updateNavbarAuthState();
+      alert(`احراز هویت با موفقیت از طریق ${provider} انجام شد! به پلتفرم پیرو خوش آمدید.`);
+    }
+
+    function handleAuthSubmit(e, mode) {
+      e.preventDefault();
+      currentUser.isLoggedIn = true;
+      if (mode === 'signup') {
+        const nameInput = document.getElementById('signup-fullname');
+        if (nameInput && nameInput.value) {
+          currentUser.name = nameInput.value.trim();
+        }
+      }
+      closeAuthModal();
+      updateNavbarAuthState();
+      alert(`ورود با موفقیت انجام شد! خوش آمدید ${currentUser.name}.`);
+    }
+
+    function updateNavbarAuthState() {
+      const loginBtn = document.getElementById('landing-login-btn');
+      const dashboardLink = document.getElementById('landing-dashboard-link');
+      const mobileLoginBtn = document.getElementById('mobile-login-btn');
+      const mobileDashboardLink = document.getElementById('mobile-dashboard-link');
+      const userMonogram = document.getElementById('landing-user-monogram');
+
+      if (currentUser.isLoggedIn) {
+        // Authenticated User State
+        if (loginBtn) {
+          const shortName = currentUser.name ? currentUser.name.split(' ')[0] : 'علیرضا';
+          loginBtn.innerHTML = `
+            <div class="w-4.5 h-4.5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[9px] font-bold"><svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span>${shortName} (خروج)</span>
+          `;
+          loginBtn.title = 'خروج از حساب کاربری';
+          loginBtn.onclick = logoutUser;
+        }
+        if (dashboardLink) {
+          dashboardLink.classList.remove('hidden');
+          dashboardLink.classList.add('inline-flex');
+        }
+        if (userMonogram && currentUser.monogram) {
+          userMonogram.textContent = currentUser.monogram;
+        }
+        if (mobileLoginBtn) {
+          mobileLoginBtn.innerHTML = `
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span>حساب فعال: ${currentUser.name || 'کاربر'} (خروج)</span>
+          `;
+          mobileLoginBtn.onclick = logoutUser;
+        }
+        if (mobileDashboardLink) {
+          mobileDashboardLink.classList.remove('hidden');
+          mobileDashboardLink.classList.add('flex');
+        }
+      } else {
+        // Guest State (No Dashboard link visible)
+        if (loginBtn) {
+          loginBtn.innerHTML = `
+            <svg class="w-3.5 h-3.5 text-[#5E4131]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/>
+            </svg>
+            <span>ورود / ثبت‌نام</span>
+          `;
+          loginBtn.title = 'ورود به حساب یا ثبت‌نام کاربر جدید';
+          loginBtn.onclick = () => openAuthModal('login');
+        }
+        if (dashboardLink) {
+          dashboardLink.classList.add('hidden');
+          dashboardLink.classList.remove('inline-flex');
+        }
+        if (mobileLoginBtn) {
+          mobileLoginBtn.innerHTML = `
+            <svg class="w-4 h-4 text-[#5E4131]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/>
+            </svg>
+            <span>ورود به حساب کاربری یا ثبت‌نام جدید</span>
+          `;
+          mobileLoginBtn.onclick = () => { toggleMobileMenu(true); openAuthModal('login'); };
+        }
+        if (mobileDashboardLink) {
+          mobileDashboardLink.classList.add('hidden');
+          mobileDashboardLink.classList.remove('flex');
+        }
+      }
+    }
+
+    function logoutUser() {
+      currentUser.isLoggedIn = false;
+      currentUser.name = '';
+      currentUser.role = '';
+      currentUser.monogram = '';
+      updateNavbarAuthState();
+      alert('با موفقیت از حساب کاربری خارج شدید. اکنون در وضعیت مهمان قرار دارید.');
+    }
+
+
+
+  </script>
   
-  <!-- Persian Fonts: Vazirmatn (Benchmark Persian typography with standard Persian numerals) -->
+  <!-- Persian Fonts: Vazirmatn (Persian typography with standard Persian numerals) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -40,9 +224,17 @@
       text-align: right;
     }
 
-    /* Force standard Persian glyph numerals */
+    /* Force standard Persian glyph numerals with tabular alignment */
     .farsi-nums {
-      font-feature-settings: "ss01" on, "numr" on;
+      font-feature-settings: "ss01" on, "tnum" on;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Standard Bank & Financial Input Typography (Crisp, High-Legibility Persian Numerals) */
+    .bank-input-num {
+      font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, sans-serif !important;
+      font-feature-settings: "tnum" on;
+      font-variant-numeric: tabular-nums;
     }
 
     /* Responsive Liquid Glass Navbar Styling */
@@ -52,16 +244,85 @@
       -webkit-backdrop-filter: blur(28px) saturate(160%);
     }
 
-    /* Mobile: Hovering Floating Island */
+    .navbar-liquid-surface {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.65) 50%, rgba(255, 255, 255, 0.82) 100%);
+      backdrop-filter: blur(28px) saturate(160%);
+      -webkit-backdrop-filter: blur(28px) saturate(160%);
+    }
+
+    /* Mobile: Floating Island Navigation with Immutable Top Radii & Silky Smooth Animation */
     @media (max-width: 767px) {
       .navbar-mobile-island {
-        border-radius: 9999px;
+        /* Fixed explicit 28px radius on top corners: NEVER changes when menu opens or closes */
+        border-top-left-radius: 28px !important;
+        border-top-right-radius: 28px !important;
+        border-bottom-left-radius: 28px !important;
+        border-bottom-right-radius: 28px !important;
         border: 1px solid rgba(255, 255, 255, 0.9);
         box-shadow: 
-          0 16px 40px -10px rgba(44, 26, 17, 0.1),
-          0 2px 8px rgba(44, 26, 17, 0.03),
+          0 16px 40px -10px rgba(44, 26, 17, 0.12),
+          0 2px 8px rgba(44, 26, 17, 0.04),
           inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.95),
           inset 0 -1px 2px 0 rgba(223, 207, 192, 0.35);
+        transition: border-bottom-left-radius 260ms cubic-bezier(0.16, 1, 0.3, 1),
+                    border-bottom-right-radius 260ms cubic-bezier(0.16, 1, 0.3, 1),
+                    box-shadow 260ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .navbar-mobile-island.menu-open {
+        /* Top corners remain strictly 28px - completely immutable */
+        border-top-left-radius: 28px !important;
+        border-top-right-radius: 28px !important;
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+        border-bottom: none !important;
+        box-shadow: 0 4px 20px -4px rgba(44, 26, 17, 0.08) !important;
+      }
+      .island-drawer-open {
+        border-top-left-radius: 0 !important;
+        border-top-right-radius: 0 !important;
+        border-bottom-left-radius: 28px !important;
+        border-bottom-right-radius: 28px !important;
+        border-top: none !important;
+        border-left: 1px solid rgba(255, 255, 255, 0.9) !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.9) !important;
+        border-bottom: 1px solid rgba(223, 207, 192, 0.8) !important;
+        box-shadow: 
+          0 24px 50px -10px rgba(44, 26, 17, 0.15),
+          inset 0 -1px 2px 0 rgba(223, 207, 192, 0.35) !important;
+      }
+
+      /* Silky Smooth Hardware-Accelerated Dropdown Drawer Transitions */
+      #mobile-menu-drawer {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px) scale(0.985);
+        transform-origin: top center;
+        pointer-events: none;
+        transition: opacity 280ms cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 280ms cubic-bezier(0.16, 1, 0.3, 1),
+                    visibility 280ms cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: opacity, transform;
+      }
+      #mobile-menu-drawer.drawer-visible {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
+      }
+
+      /* Silky Smooth Ambient Backdrop Transitions */
+      #mobile-menu-backdrop {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 280ms cubic-bezier(0.16, 1, 0.3, 1),
+                    visibility 280ms cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: opacity;
+      }
+      #mobile-menu-backdrop.backdrop-visible {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
       }
     }
 
@@ -105,8 +366,9 @@
         inset 0 -1px 2px 0 rgba(223, 207, 192, 0.35);
     }
 
+    /* Refined Custom Scrollbar for Main Page */
     ::-webkit-scrollbar {
-      width: 8px;
+      width: 7px;
     }
     ::-webkit-scrollbar-track {
       background: rgb(242, 232, 218);
@@ -114,6 +376,38 @@
     ::-webkit-scrollbar-thumb {
       background: #DFCFC0;
       border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #C4B09E;
+    }
+
+    /* Hide scrollbar strictly inside the booking drawer/modal so it never sticks out */
+    #agenda-modal-dialog,
+    .no-scrollbar {
+      scrollbar-width: none !important; /* Firefox */
+      -ms-overflow-style: none !important; /* IE and Edge */
+    }
+    #agenda-modal-dialog::-webkit-scrollbar,
+    .no-scrollbar::-webkit-scrollbar {
+      display: none !important; /* Chrome, Safari, Opera */
+      width: 0 !important;
+      height: 0 !important;
+      background: transparent !important;
+    }
+
+    /* Registration Modal - Role selector dynamic visual feedback */
+    .role-card-option {
+      transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .role-card-option:has(input[name="signup-role"]:checked) {
+      border: 2px solid #2C1A11 !important;
+      background-color: #FBF8F4 !important;
+      box-shadow: 0 2px 8px -2px rgba(44, 26, 17, 0.12) !important;
+    }
+    .role-card-option:has(input[name="signup-role"]:not(:checked)) {
+      border: 1px solid #DFCFC0 !important;
+      background-color: #FFFFFF !important;
+      box-shadow: 0 1px 2px rgba(44, 26, 17, 0.04) !important;
     }
   </style>
 </head>
@@ -123,40 +417,72 @@
   <div class="absolute left-[-80px] top-[100px] w-[600px] h-[600px] bg-[#8EC5FF]/20 rounded-full blur-[140px] pointer-events-none -z-10"></div>
   <div class="absolute right-[-60px] top-[40px] w-[500px] h-[500px] bg-white/70 rounded-full blur-[120px] pointer-events-none -z-10"></div>
 
-  <!-- Responsive Navbar Container: Full-width on Desktop/iPad, Hovering Island on Mobile -->
-  <header class="sticky top-0 z-50 pt-3 px-4 md:pt-0 md:px-0 transition-all">
-    <nav class="navbar-liquid-surface navbar-mobile-island navbar-desktop-full mx-auto h-[60px] md:h-[68px] w-full max-w-md md:max-w-none transition-all flex items-center justify-between">
+  <!-- Responsive Navbar Container: Full-width on Desktop/iPad, Floating Island on Mobile -->
+  <header id="main-header" class="fixed top-0 inset-x-0 z-50 pt-3 px-4 md:pt-0 md:px-0 transition-transform duration-300 ease-in-out pointer-events-none">
+    
+    <!-- Floating Island Wrapper on Mobile (max-w-md centered), Full Width on Desktop -->
+    <div class="mx-auto w-full max-w-md md:max-w-none relative pointer-events-auto">
+      <nav class="navbar-liquid-surface navbar-mobile-island navbar-desktop-full mx-auto h-[60px] md:h-[68px] w-full transition-all flex items-center justify-between">
       <div class="w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-20 flex items-center justify-between">
         
-        <!-- Column 1 (Right): Brand Wordmark & Monogram -->
+        <!-- Column 1 (Right): Official Brand Logo Lockup -->
         <div class="flex items-center gap-3">
-          <a href="#" class="flex items-center gap-3 group">
-            <div class="w-9 h-9 rounded-full bg-[#2C1A11] flex items-center justify-center shrink-0 shadow-xs transition-transform group-hover:scale-105">
-              <span class="text-[#F2E8DA] text-lg font-bold pt-0.5 leading-none">پ</span>
-            </div>
-            <div class="flex items-baseline gap-2">
-              <span class="font-bold text-lg lg:text-[19px] text-[#2C1A11] tracking-tight">پیرو</span>
-              <span class="text-[12px] font-medium text-[#5E4131] hidden lg:inline">مربی‌گری تخصصی نرم‌افزار</span>
-            </div>
+          <a href="#" class="flex items-center gap-3 group" title="پیرو • Peyroo">
+            <img 
+              src="../../../assets/brand/peyroo_logo_cropped_transparent.svg" 
+              onerror="this.onerror=null; this.src='peyroo_logo_cropped_transparent.svg'" 
+              alt="پیرو • Peyroo" 
+              class="h-8 md:h-9 w-auto object-contain transition-transform group-hover:scale-105"
+            >
+            <span class="text-[12px] font-medium text-[#5E4131] hidden lg:inline border-r border-[#DFCFC0] pr-3 mr-1">
+              مربی‌گری تخصصی نرم‌افزار
+            </span>
           </a>
         </div>
 
-        <!-- Column 2 (Center - Desktop & iPad View): Wide Link Gaps (gap-12 lg:gap-14) -->
-        <div class="hidden md:flex items-center gap-10 lg:gap-14 text-[13.5px] font-medium text-[#2C1A11]/90">
+        <!-- Column 2 (Center - Desktop & iPad View): Wide Link Gaps -->
+        <div class="hidden md:flex items-center gap-7 lg:gap-10 text-[13.5px] font-medium text-[#2C1A11]/90">
           <a href="#mentors" class="hover:text-[#2C1A11] transition-colors py-1">جستجوی منتورها</a>
+          <a href="peyroo_become_mentor.html" class="hover:text-[#2C1A11] transition-colors py-1 inline-flex items-center gap-1.5 font-bold text-[#2C1A11]">
+            <span>منتور شوید</span>
+            <span class="text-[9.5px] font-bold text-amber-900 bg-amber-100/90 border border-amber-200 px-1.5 py-0.2 rounded-full">سهم ۹۰٪</span>
+          </a>
           <a href="#how-it-works" class="hover:text-[#2C1A11] transition-colors py-1">نحوه کارکرد</a>
           <a href="#principles" class="hover:text-[#2C1A11] transition-colors py-1">اصول و کارمزد</a>
         </div>
 
         <!-- Column 3 (Left): Desktop/iPad Actions & Mobile Menu Toggle -->
-        <div class="flex items-center gap-3 sm:gap-5">
-          <!-- Desktop & iPad Log In -->
-          <a href="#login" class="hidden md:inline text-[13.5px] font-medium text-[#5E4131] hover:text-[#2C1A11] transition-colors">
-            ورود
-          </a>
+        <div class="flex items-center gap-2.5 sm:gap-3.5">
+          <!-- Dynamic Auth Container -->
+          <div id="landing-auth-container" class="hidden md:flex items-center gap-2">
+            <!-- Login / Signup Trigger Button -->
+            <button 
+              type="button" 
+              onclick="openAuthModal('login')" 
+              id="landing-login-btn"
+              class="h-9 md:h-10 px-3.5 md:px-4.5 rounded-full bg-white/80 hover:bg-[#F2E8DA] border border-[#DFCFC0] text-[#2C1A11] font-bold text-xs md:text-[13px] inline-flex items-center gap-1.5 transition-all shadow-2xs hover:scale-102 active:scale-98 cursor-pointer shrink-0"
+              title="ورود به حساب یا ثبت‌نام کاربر جدید"
+            >
+              <svg class="w-3.5 h-3.5 text-[#5E4131]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/>
+              </svg>
+              <span>ورود / ثبت‌نام</span>
+            </button>
+
+            <!-- Dashboard Link (Authenticated Only - Strictly Hidden for Guest Users) -->
+            <a 
+              href="peyroo_dashboard.html" 
+              id="landing-dashboard-link"
+              class="hidden items-center gap-1.5 h-9 md:h-10 px-3 md:px-4 rounded-full bg-[#EFE3D5]/80 hover:bg-[#DFCFC0] border border-[#DFCFC0] text-[12.5px] font-bold text-[#2C1A11] transition-all cursor-pointer"
+              title="مشاهده میز کار و نشست‌ها (فقط کاربران لاگین‌شده)"
+            >
+              <div id="landing-user-monogram" class="w-5 h-5 rounded-full bg-[#2C1A11] text-[#F2E8DA] text-[9.5px] font-black flex items-center justify-center shrink-0 border border-[#DFCFC0]">ع‌ع</div>
+              <span>میز کار من</span>
+            </a>
+          </div>
 
           <!-- Primary Book CTA Button -->
-          <a href="#booking-card" class="h-9 md:h-10 px-4 md:px-6 rounded-full bg-[#8EC5FF] hover:bg-[#78B4F5] text-[#2C1A11] font-bold text-xs tracking-wide inline-flex items-center justify-center transition-all shadow-xs active:scale-95">
+          <a href="#booking-card" class="h-9 md:h-10 px-4 md:px-5.5 rounded-full bg-[#8EC5FF] hover:bg-[#78B4F5] text-[#2C1A11] font-bold text-xs tracking-wide inline-flex items-center justify-center transition-all shadow-xs active:scale-95">
             رزرو جلسه
           </a>
 
@@ -179,30 +505,79 @@
       </div>
     </nav>
 
-    <!-- Mobile Floating Island Dropdown Menu (Smooth phone view sheet) -->
-    <div id="mobile-menu-drawer" class="hidden md:hidden max-w-md mx-auto mt-2 px-2 transition-all">
-      <div class="navbar-liquid-surface rounded-2xl p-5 border border-white/90 shadow-xl space-y-4 text-right">
-        <a href="#mentors" onclick="toggleMobileMenu()" class="block text-sm font-bold text-[#2C1A11] hover:text-[#5E4131] py-1.5 border-b border-[#DFCFC0]/60">جستجوی منتورها</a>
-        <a href="#how-it-works" onclick="toggleMobileMenu()" class="block text-sm font-bold text-[#2C1A11] hover:text-[#5E4131] py-1.5 border-b border-[#DFCFC0]/60">نحوه کارکرد</a>
-        <a href="#principles" onclick="toggleMobileMenu()" class="block text-sm font-bold text-[#2C1A11] hover:text-[#5E4131] py-1.5 border-b border-[#DFCFC0]/60">اصول و کارمزد</a>
-        <div class="pt-2 flex items-center justify-between">
-          <a href="#login" onclick="toggleMobileMenu()" class="text-sm font-semibold text-[#5E4131] hover:text-[#2C1A11]">ورود به حساب کاربری</a>
-          <a href="#booking-card" onclick="toggleMobileMenu()" class="h-9 px-5 rounded-full bg-[#8EC5FF] text-[#2C1A11] font-bold text-xs inline-flex items-center justify-center shadow-xs">رزرو نوبت</a>
+      <!-- Mobile Dropdown Menu (Continuous Sheet Attached to the Floating Island, Hovering Above Content with Zero Page Shift) -->
+      <div 
+        id="mobile-menu-drawer" 
+        class="md:hidden absolute top-full inset-x-0 w-full z-50 navbar-liquid-surface island-drawer-open max-h-[calc(100vh-90px)] overflow-y-auto"
+      >
+      <div class="px-5 py-4 sm:px-6 space-y-3.5 text-right">
+        <div class="flex items-center justify-between pb-2 border-b border-[#DFCFC0]/60">
+          <img 
+            src="../../../assets/brand/peyroo_logo_cropped_transparent.svg" 
+            onerror="this.onerror=null; this.src='peyroo_logo_cropped_transparent.svg'" 
+            alt="پیرو • Peyroo" 
+            class="h-7 w-auto object-contain"
+          >
+          <span class="text-[11px] text-[#5E4131] font-medium">پلتفرم منتورشیپ مهندسی نرم‌افزار</span>
+        </div>
+        <a href="#mentors" onclick="toggleMobileMenu(true)" class="block text-sm font-bold text-[#2C1A11] hover:text-[#5E4131] py-1.5 border-b border-[#DFCFC0]/60">جستجوی منتورها</a>
+        <a href="peyroo_become_mentor.html" onclick="toggleMobileMenu(true)" class="flex items-center justify-between text-sm font-bold text-[#2C1A11] hover:text-[#5E4131] py-1.5 border-b border-[#DFCFC0]/60">
+          <span>منتور شوید (درخواست مربی‌گری)</span>
+          <span class="text-[9.5px] font-bold text-amber-900 bg-amber-100 px-2 py-0.5 rounded-full border border-amber-200">سهم ۹۰٪</span>
+        </a>
+        <a href="#how-it-works" onclick="toggleMobileMenu(true)" class="block text-sm font-bold text-[#2C1A11] hover:text-[#5E4131] py-1.5 border-b border-[#DFCFC0]/60">نحوه کارکرد</a>
+        <a href="#principles" onclick="toggleMobileMenu(true)" class="block text-sm font-bold text-[#2C1A11] hover:text-[#5E4131] py-1.5 border-b border-[#DFCFC0]/60">اصول و کارمزد</a>
+        <div class="pt-2.5 space-y-2.5">
+          <!-- Mobile Login / Register CTA (Primary Utility Action in Mobile Drawer - Deduplicated) -->
+          <button 
+            type="button" 
+            id="mobile-login-btn"
+            onclick="toggleMobileMenu(true); openAuthModal('login')" 
+            class="w-full h-11 rounded-full bg-white hover:bg-[#F2E8DA] border border-[#DFCFC0] text-xs font-bold text-[#2C1A11] flex items-center justify-center gap-2 shadow-2xs transition-all cursor-pointer"
+          >
+            <svg class="w-4 h-4 text-[#5E4131]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/>
+            </svg>
+            <span>ورود به حساب کاربری یا ثبت‌نام جدید</span>
+          </button>
+          
+          <!-- Mobile Dashboard Link (Strictly Hidden for Guest Users, Displayed Only When Authenticated) -->
+          <a 
+            href="peyroo_dashboard.html" 
+            id="mobile-dashboard-link" 
+            onclick="toggleMobileMenu(true)" 
+            class="hidden w-full h-11 rounded-full bg-[#EFE3D5] hover:bg-[#DFCFC0] text-xs font-bold text-[#2C1A11] items-center justify-center gap-2 border border-[#DFCFC0] transition-all shadow-2xs"
+          >
+            <div class="w-5 h-5 rounded-full bg-[#2C1A11] text-[#F2E8DA] text-[9.5px] font-black flex items-center justify-center shrink-0">ع‌ع</div>
+            <span>ورود به میز کار من</span>
+          </a>
         </div>
       </div>
     </div>
-  </header>
+  </div>
+</header>
+
+  <!-- Mobile Menu Backdrop (Screen Lock & Click-Outside to Dismiss) -->
+  <div 
+    id="mobile-menu-backdrop" 
+    class="md:hidden fixed inset-0 z-40 bg-[#2C1A11]/35 backdrop-blur-xs pointer-events-auto"
+    onclick="toggleMobileMenu(true)"
+    aria-hidden="true"
+  ></div>
+
+  <!-- Header Spacer for fixed navbar flow -->
+  <div class="h-[76px] md:h-[68px] w-full" aria-hidden="true"></div>
 
   <!-- Editorial Hero Layout (RTL: Right = Copy & Search, Left = Booking Card) -->
-  <main class="max-w-[1440px] mx-auto px-6 lg:px-20 py-10 lg:py-16">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+  <main class="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-20 py-8 md:py-10 lg:py-16">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-6 lg:gap-12 xl:gap-16 items-start">
       
-      <!-- Right Column in RTL: Editorial Introduction -->
-      <section class="lg:col-span-7 flex flex-col justify-center space-y-8 pt-4 lg:pt-6">
+      <!-- Right Column in RTL: Headline, Description, Search Box & Guarantees -->
+      <div class="col-span-1 md:col-span-7 lg:col-span-7 flex flex-col justify-center space-y-5 md:space-y-5 lg:space-y-6 pt-1 md:pt-2">
         
         <!-- Headline -->
         <div class="space-y-2">
-          <h1 class="text-4xl sm:text-5xl lg:text-[46px] font-extrabold leading-[1.55] sm:leading-[1.6] text-[#2C1A11] tracking-tight">
+          <h1 class="text-3xl sm:text-4xl md:text-[28px] lg:text-[42px] xl:text-[46px] font-extrabold leading-[1.42] md:leading-[1.42] lg:leading-[1.55] text-[#2C1A11] tracking-tight">
             جلسات ۱ به ۱ و هدفمند<br>
             منتورشیپ برای<br>
             مهندسان نرم‌افزار.
@@ -210,15 +585,15 @@
         </div>
 
         <!-- Description -->
-        <p class="text-base sm:text-[17px] text-[#5E4131] font-normal leading-[1.85] max-w-[570px]">
+        <p class="text-[14px] sm:text-base md:text-[13.5px] lg:text-[17px] text-[#5E4131] font-normal leading-[1.8] md:leading-[1.75] lg:leading-[1.85] max-w-[560px]">
           رزرو مستقیم زمان‌های اختصاصی با معماران ارشد و مهندسان باسابقه سیستم. هر جلسه دارای دستور کار مدون و از پیش تعیین‌شده است—بدون اتلاف وقت و بدون سردرگمی ارتباطات بی‌نتیجه.
         </p>
 
-        <!-- Topic Search Box (Liquid Glass Frame with Mirrored RTL Input & Button) -->
-        <div class="w-full max-w-[560px] space-y-3">
-          <form onsubmit="handleSearch(event)" class="w-full h-[64px] liquid-glass-search-frame rounded-[24px] p-2 pr-4 flex items-center justify-between focus-within:border-[#2C1A11] transition-all">
+        <!-- Topic Search Box (Liquid Glass Frame with Mirrored RTL Input & Button - Kept Under Title) -->
+        <div class="w-full max-w-full lg:max-w-[560px] space-y-3 pt-1">
+          <form onsubmit="handleSearch(event)" class="w-full h-[58px] lg:h-[64px] liquid-glass-search-frame rounded-[22px] lg:rounded-[24px] p-2 pr-4 flex items-center justify-between focus-within:border-[#2C1A11] transition-all">
             
-            <div class="flex items-center gap-3 flex-1 ml-2">
+            <div class="flex items-center gap-2.5 sm:gap-3 flex-1 ml-2">
               <svg class="w-5 h-5 text-[#5E4131] shrink-0" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M14.1667 8.75C14.1667 11.7415 11.7415 14.1667 8.75 14.1667C5.75846 14.1667 3.33333 11.7415 3.33333 8.75C3.33333 5.75846 5.75846 3.33333 8.75 3.33333C11.7415 3.33333 14.1667 5.75846 14.1667 8.75Z" stroke="#5E4131" stroke-width="1.33333"/>
                 <path d="M12.9167 12.9167L16.6667 16.6667" stroke="#5E4131" stroke-width="1.33333" stroke-linecap="round"/>
@@ -228,17 +603,17 @@
                 id="search-input" 
                 type="text" 
                 placeholder="جستجوی موضوعی (مثلاً: سیستم‌های توزیع‌شده، Go، همروندی)..." 
-                class="w-full bg-transparent border-none outline-none text-[13.5px] text-[#2C1A11] placeholder:text-[#5E4131]/75 font-normal"
+                class="w-full bg-transparent border-none outline-none text-[12.5px] sm:text-[13px] lg:text-[13.5px] text-[#2C1A11] placeholder:text-[#5E4131]/75 font-normal"
               />
             </div>
 
-            <button type="submit" class="h-[48px] px-6 rounded-[16px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-semibold text-[14px] transition-colors shrink-0 flex items-center justify-center active:scale-95 cursor-pointer shadow-xs">
+            <button type="submit" class="h-[44px] lg:h-[48px] px-5 lg:px-6 rounded-[14px] lg:rounded-[16px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-semibold text-[13px] lg:text-[14px] transition-colors shrink-0 flex items-center justify-center active:scale-95 cursor-pointer shadow-xs">
               <span>جستجو</span>
             </button>
           </form>
 
           <!-- Suggested Focus Areas -->
-          <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] font-medium text-[#5E4131] pt-1">
+          <div class="flex flex-wrap items-center gap-x-3.5 lg:gap-x-5 gap-y-2 text-[12px] lg:text-[13px] font-medium text-[#5E4131] pt-0.5">
             <button type="button" onclick="selectTopic('سیستم‌های توزیع‌شده')" class="underline underline-offset-4 decoration-[#DFCFC0] hover:decoration-[#2C1A11] hover:text-[#2C1A11] transition-all">
               سیستم‌های توزیع‌شده
             </button>
@@ -254,118 +629,157 @@
         </div>
 
         <!-- Invariant Guarantees (Persian Formatted Metrics) -->
-        <div class="w-full max-w-[560px] pt-6 border-t border-[#DFCFC0]">
-          <div class="flex items-center text-[13.5px] font-medium text-[#2C1A11]">
+        <div class="w-full max-w-full lg:max-w-[560px] pt-4 lg:pt-6 border-t border-[#DFCFC0]">
+          <div class="flex items-center text-[12px] md:text-[12px] lg:text-[13.5px] font-medium text-[#2C1A11]">
             <div class="flex-1 text-right">
               <span class="font-bold">۱۰٪ کارمزد ثابت</span>
-              <p class="text-xs text-[#5E4131] mt-0.5 font-normal">سهم شفاف پلتفرم</p>
+              <p class="text-[11px] lg:text-xs text-[#5E4131] mt-0.5 font-normal">سهم شفاف پلتفرم</p>
             </div>
-            <div class="h-[22px] w-px bg-[#DFCFC0] mx-4"></div>
+            <div class="h-[22px] w-px bg-[#DFCFC0] mx-2.5 sm:mx-3 md:mx-3 lg:mx-4"></div>
             <div class="flex-1 text-right">
               <span class="font-bold">قفل ۱۵ دقیقه‌ای</span>
-              <p class="text-xs text-[#5E4131] mt-0.5 font-normal">تضمین نگه‌داشت نوبت</p>
+              <p class="text-[11px] lg:text-xs text-[#5E4131] mt-0.5 font-normal">تضمین نگه‌داشت نوبت</p>
             </div>
-            <div class="h-[22px] w-px bg-[#DFCFC0] mx-4"></div>
+            <div class="h-[22px] w-px bg-[#DFCFC0] mx-2.5 sm:mx-3 md:mx-3 lg:mx-4"></div>
             <div class="flex-1 text-right">
               <span class="font-bold">ضمانت ۲۴ ساعته</span>
-              <p class="text-xs text-[#5E4131] mt-0.5 font-normal">بازگشت کامل وجه</p>
+              <p class="text-[11px] lg:text-xs text-[#5E4131] mt-0.5 font-normal">بازگشت کامل وجه</p>
             </div>
           </div>
         </div>
 
-      </section>
+      </div>
 
-      <!-- Left Column in RTL: Liquid Glass Booking Card Frame (Persian Currency & Jalali Date) -->
-      <aside class="lg:col-span-5 flex justify-center lg:justify-start" id="booking-card">
-        <div class="w-full max-w-[500px] liquid-glass-card-frame rounded-[28px] p-9 relative space-y-6">
+      <!-- Left Column in RTL: Liquid Glass Booking Card Frame (Sits Next to Title on Tablet md & Desktop lg) -->
+      <aside class="col-span-1 md:col-span-5 lg:col-span-5 flex justify-center md:justify-start" id="booking-card">
+        <div class="w-full max-w-[440px] lg:max-w-[500px] liquid-glass-card-frame rounded-[28px] p-5 sm:p-6 md:p-5 lg:p-8 xl:p-9 relative space-y-4 md:space-y-4 lg:space-y-6">
           
           <!-- Mentor Profile Header -->
           <div class="flex items-start justify-between">
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-3 sm:gap-4">
               <!-- Avatar -->
-              <div class="w-[52px] h-[52px] rounded-2xl bg-[#F2E8DA] flex items-center justify-center shrink-0 border border-[#DFCFC0]">
-                <span class="font-bold text-[16px] text-[#2C1A11]">س‌ر</span>
+              <div class="w-[46px] h-[46px] lg:w-[52px] lg:h-[52px] rounded-2xl bg-[#F2E8DA] flex items-center justify-center shrink-0 border border-[#DFCFC0]">
+                <span class="font-bold text-[15px] lg:text-[16px] text-[#2C1A11]">م‌س</span>
               </div>
 
               <!-- Mentor Meta -->
               <div>
                 <div class="flex items-center gap-2">
-                  <h2 class="text-[18px] font-bold text-[#2C1A11]">سارا راد</h2>
+                  <h2 id="selected-mentor-name" class="text-[17px] lg:text-[18px] font-bold text-[#2C1A11]">مصطفی سدیدی</h2>
                   <span class="w-[10px] h-[10px] rounded-full bg-[#8EC5FF] inline-block" title="منتور تاییدشده"></span>
                 </div>
-                <p class="text-[13px] text-[#5E4131] mt-0.5 font-normal">معمار ارشد سیستم • ۱۰ سال سابقه کار</p>
+                <p id="selected-mentor-role" class="text-[12px] lg:text-[13px] text-[#5E4131] mt-0.5 font-normal">معمار ارشد سیستم • ۱۰ سال سابقه کار</p>
               </div>
             </div>
 
             <!-- Rating Pill -->
-            <div class="text-[13px] font-bold text-[#2C1A11] bg-white px-3 py-1 rounded-md border border-[#DFCFC0] flex items-center gap-1 shadow-2xs">
-              <span class="text-amber-500 text-xs">★</span>
+            <div class="text-[12px] lg:text-[13px] font-bold text-[#2C1A11] bg-white px-2.5 lg:px-3 py-1 rounded-md border border-[#DFCFC0] flex items-center gap-1 shadow-2xs">
+              <svg class="w-3.5 h-3.5 text-amber-500 fill-amber-400 inline-block shrink-0" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+</svg>
               <span class="pt-0.5">۴.۹</span>
             </div>
           </div>
 
           <!-- Persian Currency Format: تومان (Toman) -->
           <div class="flex items-baseline gap-2">
-            <span class="text-[26px] font-black text-[#2C1A11]">۲۵۰٬۰۰۰ تومان</span>
-            <span class="text-[13.5px] text-[#5E4131]">/ جلسه ۴۵ دقیقه‌ای</span>
+            <span id="selected-mentor-fee" class="text-2xl lg:text-[26px] font-black text-[#2C1A11]">۲۵۰٬۰۰۰ تومان</span>
+            <span id="selected-package-unit" class="text-[12.5px] lg:text-[13.5px] text-[#5E4131]">/ جلسه ۴۵ دقیقه‌ای</span>
+          </div>
+
+          <!-- Hairline Divider -->
+          <div class="h-px bg-[#DFCFC0]/80 w-full"></div>
+
+          <!-- Mentorship Package Selection (Single vs 4-Week Sprint) -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <label class="text-[12.5px] lg:text-[13px] font-bold text-[#2C1A11]">نوع پکیج مربی‌گری</label>
+              
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <button 
+                type="button" 
+                id="package-btn-single" 
+                onclick="selectBookingPackage('single')" 
+                class="p-2.5 rounded-[16px] bg-[#F3F8FF] border-2 border-[#8EC5FF] text-right transition-all cursor-pointer shadow-2xs"
+              >
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-[#2C1A11]">تک‌جلسه تخصصی</span>
+                  <span class="w-2 h-2 rounded-full bg-[#8EC5FF]"></span>
+                </div>
+                <span class="text-[10px] text-[#5E4131] block mt-0.5">۴۵ دقیقه مشاوره هدفمند</span>
+              </button>
+              <button 
+                type="button" 
+                id="package-btn-sprint" 
+                onclick="selectBookingPackage('sprint')" 
+                class="p-2.5 rounded-[16px] bg-white border border-[#DFCFC0] hover:border-[#8EC5FF] text-right transition-all cursor-pointer shadow-2xs"
+              >
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-[#2C1A11]">اسپرینت ۴ هفته‌ای</span>
+                  <span class="text-[8.5px] font-bold text-amber-900 bg-amber-100 px-1.5 py-0.2 rounded-full">۱۵٪ تخفیف</span>
+                </div>
+                <span class="text-[10px] text-[#5E4131] block mt-0.5">۴ جلسه + پشتیبانی متنی</span>
+              </button>
+            </div>
           </div>
 
           <!-- Hairline Divider -->
           <div class="h-px bg-[#DFCFC0]/80 w-full"></div>
 
           <!-- Availability Slot Selection (Jalali Dates & IRST Tehran Timestamps) -->
-          <div class="space-y-3">
+          <div class="space-y-2.5 lg:space-y-3">
             <div class="flex items-center justify-between">
-              <label class="text-[13.5px] font-bold text-[#2C1A11]">انتخاب زمان جلسه</label>
-              <span class="text-[11.5px] text-[#5E4131]">به وقت رسمی ایران (تهران)</span>
+              <label class="text-[13px] lg:text-[13.5px] font-bold text-[#2C1A11]">انتخاب زمان جلسه</label>
+              <span class="text-[11px] lg:text-[11.5px] text-[#5E4131]">به وقت رسمی ایران (تهران)</span>
             </div>
 
-            <div class="grid grid-cols-2 gap-3.5">
+            <div class="grid grid-cols-2 gap-2.5 sm:gap-3.5">
               <!-- Slot 1 (Selected State: پنج‌شنبه ۲۲ آبان | ۱۸:۰۰) -->
               <button 
                 id="slot-1" 
                 onclick="selectSlot(1, 'پنج‌شنبه ۲۲ آبان ۱۴۰۵، ساعت ۱۸:۰۰')" 
-                class="h-[60px] px-3.5 rounded-[18px] bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-right hover:scale-[1.01]" 
+                class="h-[56px] lg:h-[60px] px-3 lg:px-3.5 rounded-[16px] lg:rounded-[18px] bg-[#F3F8FF] border-2 border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-right hover:scale-[1.01]" 
               >
                 <div class="flex flex-col">
-                  <span class="text-[12.5px] font-bold text-[#2C1A11]">پنج‌شنبه ۲۲ آبان</span>
-                  <span class="text-[11px] text-[#5E4131]">فردا</span>
+                  <span class="text-[11.5px] lg:text-[12.5px] font-bold text-[#2C1A11]">پنج‌شنبه ۲۲ آبان</span>
+                  <span class="text-[10.5px] lg:text-[11px] text-[#5E4131]">فردا</span>
                 </div>
-                <span class="text-[13px] font-extrabold text-[#2C1A11] bg-white px-2 py-1 rounded-md shadow-2xs">۱۸:۰۰</span>
+                <span class="text-[12px] lg:text-[13px] font-extrabold text-[#2C1A11] bg-white px-2 py-1 rounded-md shadow-2xs">۱۸:۰۰</span>
               </button>
 
               <!-- Slot 2 (جمعه ۲۳ آبان | ۱۹:۳۰) -->
               <button 
                 id="slot-2" 
                 onclick="selectSlot(2, 'جمعه ۲۳ آبان ۱۴۰۵، ساعت ۱۹:۳۰')" 
-                class="h-[60px] px-3.5 rounded-[18px] bg-white border border-[#DFCFC0] hover:border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-right hover:scale-[1.01]" 
+                class="h-[56px] lg:h-[60px] px-3 lg:px-3.5 rounded-[16px] lg:rounded-[18px] bg-white border border-[#DFCFC0] hover:border-[#8EC5FF] flex items-center justify-between transition-all cursor-pointer text-right hover:scale-[1.01]" 
               >
                 <div class="flex flex-col">
-                  <span class="text-[12.5px] font-semibold text-[#2C1A11]">جمعه ۲۳ آبان</span>
-                  <span class="text-[11px] text-[#5E4131]">پس‌فردا</span>
+                  <span class="text-[11.5px] lg:text-[12.5px] font-semibold text-[#2C1A11]">جمعه ۲۳ آبان</span>
+                  <span class="text-[10.5px] lg:text-[11px] text-[#5E4131]">پس‌فردا</span>
                 </div>
-                <span class="text-[13px] font-bold text-[#2C1A11] bg-white/70 px-2 py-1 rounded-md">۱۹:۳۰</span>
+                <span class="text-[12px] lg:text-[13px] font-bold text-[#2C1A11] bg-white/70 px-2 py-1 rounded-md">۱۹:۳۰</span>
               </button>
             </div>
           </div>
 
           <!-- Mandatory Agenda Box (RTL Structured Content) -->
-          <div class="space-y-2">
+          <div class="space-y-1.5 lg:space-y-2">
             <div class="flex items-center justify-between">
-              <label class="text-[13.5px] font-bold text-[#2C1A11]">دستور کار الزامی جلسه</label>
-              <span class="text-[11px] font-bold text-[#5E4131] bg-[#EFE3D5] px-2 py-0.5 rounded-md">الزامی</span>
+              <label class="text-[13px] lg:text-[13.5px] font-bold text-[#2C1A11]">دستور کار الزامی جلسه</label>
+              <span class="text-[10.5px] lg:text-[11px] font-bold text-[#5E4131] bg-[#EFE3D5] px-2 py-0.5 rounded-md">الزامی</span>
             </div>
 
-            <div class="bg-[#FBF8F4] border border-[#DFCFC0] rounded-[18px] p-4 space-y-1 text-right">
+            <div class="bg-[#FBF8F4] border border-[#DFCFC0] rounded-[16px] lg:rounded-[18px] p-3 lg:p-4 space-y-1 text-right">
               <p class="text-[11px] font-semibold text-[#5E4131]">موضوع جلسه:</p>
-              <p id="agenda-topic-text" class="text-[13.5px] font-normal text-[#2C1A11] leading-relaxed">
+              <p id="agenda-topic-text" class="text-[12.5px] lg:text-[13.5px] font-normal text-[#2C1A11] leading-relaxed">
                 بررسی مشکل Lag در بازتوازن پارتیشن‌های Kafka
               </p>
             </div>
           </div>
 
           <!-- Reservation Lock (RTL Lock Chip: ۱۵ دقیقه) -->
-          <div class="inline-flex items-center px-3.5 py-1.5 rounded-[14px] bg-[#F5E9CF] text-[#79551F] text-[11px] font-medium gap-2 shadow-2xs">
+          <div class="inline-flex items-center px-3 lg:px-3.5 py-1 lg:py-1.5 rounded-[12px] lg:rounded-[14px] bg-[#F5E9CF] text-[#79551F] text-[10.5px] lg:text-[11px] font-medium gap-2 shadow-2xs">
             <svg class="w-3.5 h-3.5 text-[#79551F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
             </svg>
@@ -375,10 +789,10 @@
           <!-- Total & Platform Fee Breakdown in Toman Currency (تومان) -->
           <div class="pt-2 border-t border-[#DFCFC0]/80 space-y-1">
             <div class="flex items-baseline justify-between">
-              <span class="text-[15px] font-bold text-[#2C1A11]">مبلغ قابل پرداخت:</span>
-              <span class="text-[26px] font-black text-[#2C1A11]">۲۷۵٬۰۰۰ تومان</span>
+              <span class="text-[14px] lg:text-[15px] font-bold text-[#2C1A11]">مبلغ قابل پرداخت:</span>
+              <span class="text-2xl lg:text-[26px] font-black text-[#2C1A11]">۲۷۵٬۰۰۰ تومان</span>
             </div>
-            <p class="text-[11.5px] text-[#5E4131]">
+            <p class="text-[11px] lg:text-[11.5px] text-[#5E4131]">
               شامل ۲۵۰٬۰۰۰ تومان حق‌الزحمه منتور + ۲۵٬۰۰۰ تومان کارمزد پلتفرم (۱۰٪)
             </p>
           </div>
@@ -387,9 +801,12 @@
           <button 
             type="button" 
             onclick="handleProceed()" 
-            class="w-full h-[48px] rounded-[16px] bg-[#8EC5FF] hover:bg-[#78B4F5] text-[#2C1A11] font-bold text-sm flex items-center justify-center transition-all shadow-xs active:scale-98 cursor-pointer"
+            class="w-full h-[46px] lg:h-[48px] rounded-[16px] bg-[#8EC5FF] hover:bg-[#78B4F5] text-[#2C1A11] font-bold text-xs sm:text-sm flex items-center justify-center transition-all shadow-xs active:scale-98 cursor-pointer gap-2"
           >
-            <span id="proceed-btn-text">تایید و ورود به مرحله پرداخت</span>
+            <span id="proceed-btn-text">ثبت نوبت و تدوین دستور کار جلسه</span>
+            <svg class="w-4 h-4 rotate-180" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
           </button>
 
           <!-- Feedback Notice -->
@@ -403,26 +820,1801 @@
     </div>
   </main>
 
+  <!-- ========================================== -->
+  <!-- SECTION 2: HOW IT WORKS (نحوه کارکرد ۳ مرحله‌ای) -->
+  <!-- ========================================== -->
+  <section id="how-it-works" class="max-w-[1440px] mx-auto px-6 lg:px-20 py-16 lg:py-24 border-t border-[#DFCFC0]/60">
+    <div class="text-center max-w-2xl mx-auto space-y-4 mb-14">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#8EC5FF]/25 border border-[#8EC5FF]/40 text-xs font-bold text-[#2C1A11]">
+        <span>مسیر هدایت‌شده</span>
+      </div>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-[#2C1A11] leading-[1.55] tracking-tight">
+        ۳ گام شفاف تا یک جلسه مهندسی اثربخش
+      </h2>
+      <p class="text-[15px] sm:text-base text-[#5E4131] leading-[1.85]">
+        بدون مکالمات طولانی معارفه و گپ‌های بی‌نتیجه. در پیرو، هر دقیقه برای حل چالش‌های واقعی کد و معماری طراحی شده است.
+      </p>
+    </div>
+
+    <!-- 3 Steps Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      
+      <!-- Step 1 Card (Liquid Glass Frame with Solid Inner Items) -->
+      <div class="liquid-glass-card-frame rounded-[28px] p-8 flex flex-col justify-between space-y-6 hover:translate-y-[-2px] transition-all">
+        <div class="space-y-4">
+          <div class="w-12 h-12 rounded-full bg-[#2C1A11] text-[#F2E8DA] flex items-center justify-center font-bold text-base shadow-xs border border-[#DFCFC0]/50">
+            ۰۱
+          </div>
+          <h3 class="text-xl font-bold text-[#2C1A11] leading-[1.5]">انتخاب منتور و قفل زمان</h3>
+          <p class="text-[14px] text-[#5E4131] leading-[1.85]">
+            بر اساس زمینه فنی مورد نیاز (مثل سیستم‌های توزیع‌شده، پرفورمنس Postgres یا بهینه‌سازی کوئری)، منتور دلخواه را انتخاب کرده و یک اسلات ۴۵ دقیقه‌ای را قفل کنید.
+          </p>
+        </div>
+        <div class="pt-4 border-t border-[#DFCFC0]/60 flex items-center justify-between text-xs font-semibold text-[#5E4131]">
+          <span class="inline-flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            قفل انحصاری ۱۵ دقیقه‌ای
+          </span>
+          <span class="text-[#2C1A11]/60">بدون تداخل رزرو</span>
+        </div>
+      </div>
+
+      <!-- Step 2 Card -->
+      <div class="liquid-glass-card-frame rounded-[28px] p-8 flex flex-col justify-between space-y-6 hover:translate-y-[-2px] transition-all">
+        <div class="space-y-4">
+          <div class="w-12 h-12 rounded-full bg-[#8EC5FF] text-[#2C1A11] flex items-center justify-center font-bold text-base shadow-xs border border-[#8EC5FF]/60">
+            ۰۲
+          </div>
+          <h3 class="text-xl font-bold text-[#2C1A11] leading-[1.5]">تدوین دستور کار مدون (Agenda)</h3>
+          <p class="text-[14px] text-[#5E4131] leading-[1.85]">
+            پیش از جلسه، مسئله، لینک ریپازیتوری، دیاگرام معماری یا سوالات اصلی را ارسال کنید. منتور پیش از شروع با کانتکست و سورس شما آشنا می‌شود.
+          </p>
+        </div>
+        <div class="pt-4 border-t border-[#DFCFC0]/60 flex items-center justify-between text-xs font-semibold text-[#5E4131]">
+          <span class="inline-flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-[#8EC5FF]"></span>
+            حداکثر بهره‌وری زمانی
+          </span>
+          <span class="text-[#2C1A11]/60">تمرکز روی مغز مسئله</span>
+        </div>
+      </div>
+
+      <!-- Step 3 Card -->
+      <div class="liquid-glass-card-frame rounded-[28px] p-8 flex flex-col justify-between space-y-6 hover:translate-y-[-2px] transition-all">
+        <div class="space-y-4">
+          <div class="w-12 h-12 rounded-full bg-white border border-[#DFCFC0] text-[#2C1A11] flex items-center justify-center font-bold text-base shadow-xs">
+            ۰۳
+          </div>
+          <h3 class="text-xl font-bold text-[#2C1A11] leading-[1.5]">جلسه ۱ به ۱ و یادداشت‌های معماری</h3>
+          <p class="text-[14px] text-[#5E4131] leading-[1.85]">
+            ۴۵ دقیقه مشاوره عمیق فنی روی پلتفرم آنلاین. پس از جلسه، سند تصمیمات معماری (ADR)، منابع تکمیلی و بازخورد منتور در پنل شما ذخیره می‌شود.
+          </p>
+        </div>
+        <div class="pt-4 border-t border-[#DFCFC0]/60 flex items-center justify-between text-xs font-semibold text-[#5E4131]">
+          <span class="inline-flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+            ضمانت بازگشت وجه ۲۴ ساعته
+          </span>
+          <span class="text-[#2C1A11]/60">تضمین کیفیت ۱۰۰٪</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- SECTION 3: MENTOR DIRECTORY (کاتالوگ منتورها) -->
+  <!-- ========================================== -->
+  <section id="mentors" class="max-w-[1440px] mx-auto px-6 lg:px-20 py-16 lg:py-24 border-t border-[#DFCFC0]/60">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+      <div class="space-y-3 max-w-xl">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#8EC5FF]/25 border border-[#8EC5FF]/40 text-xs font-bold text-[#2C1A11]">
+          <span>منتورهای ارشد</span>
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#2C1A11] leading-[1.55] tracking-tight">
+          یادگیری مستقیم از معماران باسابقه
+        </h2>
+        <p class="text-[15px] sm:text-base text-[#5E4131] leading-[1.85]">
+          منتورهای پیرو مهندسانی هستند که سیستم‌های پرترافیک و مقیاس‌پذیر کشور را طراحی، اجرا و نگهداری کرده‌اند.
+        </p>
+      </div>
+
+      <!-- Category Filter Pills (Fixed Rigid Dimensions) -->
+      <div class="flex flex-wrap items-center gap-2">
+        <button type="button" onclick="filterMentors('all')" id="filter-all" class="h-9 w-[100px] rounded-full bg-[#2C1A11] border border-[#2C1A11] text-white font-bold text-xs shadow-xs transition-all inline-flex items-center justify-center text-center shrink-0">همه زمینه‌ها</button>
+        <button type="button" onclick="filterMentors('distributed')" id="filter-distributed" class="h-9 w-[145px] rounded-full bg-white border border-[#DFCFC0] hover:border-[#2C1A11] text-[#2C1A11] font-medium text-xs transition-all inline-flex items-center justify-center text-center shrink-0">سیستم‌های توزیع‌شده</button>
+        <button type="button" onclick="filterMentors('database')" id="filter-database" class="h-9 w-[145px] rounded-full bg-white border border-[#DFCFC0] hover:border-[#2C1A11] text-[#2C1A11] font-medium text-xs transition-all inline-flex items-center justify-center text-center shrink-0">دیتابیس و اینترنالز</button>
+        <button type="button" onclick="filterMentors('cloud')" id="filter-cloud" class="h-9 w-[125px] rounded-full bg-white border border-[#DFCFC0] hover:border-[#2C1A11] text-[#2C1A11] font-medium text-xs transition-all inline-flex items-center justify-center text-center shrink-0">زیرساخت و ابری</button>
+      </div>
+    </div>
+
+    <!-- Mentors Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      
+      <!-- Mentor Card 1 -->
+      <div class="mentor-card distributed database liquid-glass-card-frame rounded-[28px] p-6 flex flex-col justify-between space-y-6 hover:shadow-lg transition-all" data-category="distributed database">
+        <div class="space-y-5">
+          <!-- Profile Header -->
+          <div class="flex items-start gap-4">
+            <div class="w-16 h-16 rounded-full bg-[#2C1A11] text-[#F2E8DA] flex items-center justify-center text-xl font-bold shrink-0 shadow-xs border border-[#DFCFC0]/60">
+              <span>به</span>
+            </div>
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <h3 class="text-lg font-bold text-[#2C1A11]">بهنود دهقان</h3>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">فعال</span>
+              </div>
+              <p class="text-xs font-semibold text-[#5E4131]">معمار ارشد سیستم و راهبر زیرساخت</p>
+              <div class="flex items-center gap-1.5 text-xs text-[#5E4131]/80 pt-0.5">
+                <span class="inline-flex items-center gap-1"><svg class="w-3.5 h-3.5 text-amber-500 fill-amber-400 inline-block shrink-0" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+</svg><span>۴.۹۵</span></span>
+                <span>(۴۸ جلسه تکمیل‌شده)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <p class="text-[13px] text-[#5E4131] leading-[1.8] line-clamp-3">
+            بیش از ۹ سال سابقه در طراحی موتورهای همروند، دیتابیس‌های مقیاس‌پذیر و توزیع‌شده با Go و PostgreSQL در سیستم‌های فین‌تک با TPS بالا.
+          </p>
+
+          <!-- Skill Tags (Solid Pills) -->
+          <div class="flex flex-wrap gap-1.5 pt-1">
+            <span class="px-2.5 py-1 rounded-[10px] bg-white border border-[#DFCFC0] text-[11px] font-medium text-[#2C1A11]">سیستم‌های توزیع‌شده</span>
+            <span class="px-2.5 py-1 rounded-[10px] bg-white border border-[#DFCFC0] text-[11px] font-medium text-[#2C1A11]">PostgreSQL</span>
+            <span class="px-2.5 py-1 rounded-[10px] bg-white border border-[#DFCFC0] text-[11px] font-medium text-[#2C1A11]">Kafka</span>
+            <span class="px-2.5 py-1 rounded-[10px] bg-white border border-[#DFCFC0] text-[11px] font-medium text-[#2C1A11]">Golang</span>
+          </div>
+        </div>
+
+        <!-- Footer / Action Area -->
+        <div class="pt-4 border-t border-[#DFCFC0]/60 space-y-3">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-[#5E4131]">اولین اسلات آزاد:</span>
+            <span class="font-bold text-[#2C1A11]">پنج‌شنبه ۲۲ آبان - ۱۸:۰۰</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-base font-extrabold text-[#2C1A11]">۲۵۰٬۰۰۰</span>
+              <span class="text-[11px] font-medium text-[#5E4131] mr-1">تومان / جلسه</span>
+            </div>
+            <button type="button" onclick="selectMentor('بهنود دهقان', 'معمار ارشد سیستم و راهبر زیرساخت', '۲۵۰٬۰۰۰ تومان', 'پنج‌شنبه ۲۲ آبان ۱۴۰۵، ساعت ۱۸:۰۰')" class="h-9 px-4 rounded-[14px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-bold text-xs inline-flex items-center justify-center transition-all shadow-xs active:scale-95 cursor-pointer">
+              رزرو نوبت
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mentor Card 2 -->
+      <div class="mentor-card database liquid-glass-card-frame rounded-[28px] p-6 flex flex-col justify-between space-y-6 hover:shadow-lg transition-all" data-category="database">
+        <div class="space-y-5">
+          <!-- Profile Header -->
+          <div class="flex items-start gap-4">
+            <div class="w-16 h-16 rounded-full bg-[#8EC5FF] text-[#2C1A11] flex items-center justify-center text-xl font-bold shrink-0 shadow-xs border border-[#8EC5FF]/60">
+              <span>مص</span>
+            </div>
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <h3 class="text-lg font-bold text-[#2C1A11]">مصطفی سدیدی</h3>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">فعال</span>
+              </div>
+              <p class="text-xs font-semibold text-[#5E4131]">معمار داده و مهندس عملکرد دیتابیس</p>
+              <div class="flex items-center gap-1.5 text-xs text-[#5E4131]/80 pt-0.5">
+                <span class="inline-flex items-center gap-1"><svg class="w-3.5 h-3.5 text-amber-500 fill-amber-400 inline-block shrink-0" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+</svg><span>۴.۹۸</span></span>
+                <span>(۶۲ جلسه تکمیل‌شده)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <p class="text-[13px] text-[#5E4131] leading-[1.8] line-clamp-3">
+            تخصص در تیونینگ ایندکس‌ها، بهینه‌سازی کوئری‌های پیچیده، معماری ذخیره‌سازی، کشینگ چندلایه و مدیریت تراکنش‌های بحرانی با لاک‌های ایزوله.
+          </p>
+
+          <!-- Skill Tags -->
+          <div class="flex flex-wrap gap-1.5 pt-1">
+            <span class="px-2.5 py-1 rounded-[10px] bg-white border border-[#DFCFC0] text-[11px] font-medium text-[#2C1A11]">Database Internals</span>
+            <span class="px-2.5 py-1 rounded-[10px] bg-white border border-[#DFCFC0] text-[11px] font-medium text-[#2C1A11]">Query Tuning</span>
+            <span class="px-2.5 py-1 rounded-[10px] bg-white border border-[#DFCFC0] text-[11px] font-medium text-[#2C1A11]">Redis</span>
+            <span class="px-2.5 py-1 rounded-[10px] bg-white border border-[#DFCFC0] text-[11px] font-medium text-[#2C1A11]">PostgreSQL</span>
+          </div>
+        </div>
+
+        <!-- Footer / Action Area -->
+        <div class="pt-4 border-t border-[#DFCFC0]/60 space-y-3">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-[#5E4131]">اولین اسلات آزاد:</span>
+            <span class="font-bold text-[#2C1A11]">جمعه ۲۳ آبان - ۱۹:۳۰</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-base font-extrabold text-[#2C1A11]">۲۸۰٬۰۰۰</span>
+              <span class="text-[11px] font-medium text-[#5E4131] mr-1">تومان / جلسه</span>
+            </div>
+            <button type="button" onclick="selectMentor('مصطفی سدیدی', 'معمار داده و عملکرد پایگاه داده', '۲۸۰٬۰۰۰ تومان', 'جمعه ۲۳ آبان ۱۴۰۵، ساعت ۱۹:۳۰')" class="h-9 px-4 rounded-[14px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-bold text-xs inline-flex items-center justify-center transition-all shadow-xs active:scale-95 cursor-pointer">
+              رزرو نوبت
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mentor Card 3 -->
+      <div class="mentor-card cloud distributed liquid-glass-card-frame rounded-[28px] p-6 flex flex-col justify-between space-y-6 hover:shadow-lg transition-all" data-category="cloud distributed">
+        <div class="space-y-5">
+          <!-- Profile Header -->
+          <div class="flex items-start gap-4">
+            <div class="w-16 h-16 rounded-full bg-white border border-[#DFCFC0] text-[#2C1A11] flex items-center justify-center text-xl font-bold shrink-0 shadow-xs">
+              <span>اب</span>
+            </div>
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <h3 class="text-lg font-bold text-[#2C1A11]">ابوالفضل سمرقندی</h3>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">فعال</span>
+              </div>
+              <p class="text-xs font-semibold text-[#5E4131]">راهبر قابلیت اطمینان زیرساخت (SRE)</p>
+              <div class="flex items-center gap-1.5 text-xs text-[#5E4131]/80 pt-0.5">
+                <span class="inline-flex items-center gap-1"><svg class="w-3.5 h-3.5 text-amber-500 fill-amber-400 inline-block shrink-0" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+</svg><span>۴.۹۲</span></span>
+                <span>(۳۵ جلسه تکمیل‌شده)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <p class="text-[13px] text-[#5E4131] leading-[1.8] line-clamp-3">
+            مشاوره در زمینه مهاجرت ابری، خودکارسازی زیرساخت با Kubernetes، عیب‌یابی خطاهای هسته لینوکس و پیاده‌سازی سیستم‌های Observability با OpenTelemetry.
+          </p>
+
+          <!-- Skill Tags -->
+          <div class="flex flex-wrap gap-1.5 pt-1">
+            <span class="px-2.5 py-1 rounded-[10px] bg-white border border-[#DFCFC0] text-[11px] font-medium text-[#2C1A11]">Kubernetes</span>
+            <span class="px-2.5 py-1 rounded-[10px] bg-white border border-[#DFCFC0] text-[11px] font-medium text-[#2C1A11]">Observability</span>
+            <span class="px-2.5 py-1 rounded-[10px] bg-white border border-[#DFCFC0] text-[11px] font-medium text-[#2C1A11]">Linux</span>
+            <span class="px-2.5 py-1 rounded-[10px] bg-white border border-[#DFCFC0] text-[11px] font-medium text-[#2C1A11]">DevOps</span>
+          </div>
+        </div>
+
+        <!-- Footer / Action Area -->
+        <div class="pt-4 border-t border-[#DFCFC0]/60 space-y-3">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-[#5E4131]">اولین اسلات آزاد:</span>
+            <span class="font-bold text-[#2C1A11]">شنبه ۲۴ آبان - ۲۰:۰۰</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-base font-extrabold text-[#2C1A11]">۲۶۰٬۰۰۰</span>
+              <span class="text-[11px] font-medium text-[#5E4131] mr-1">تومان / جلسه</span>
+            </div>
+            <button type="button" onclick="selectMentor('ابوالفضل سمرقندی', 'راهبر زیرساخت و SRE', '۲۶۰٬۰۰۰ تومان', 'شنبه ۲۴ آبان ۱۴۰۵، ساعت ۲۰:۰۰')" class="h-9 px-4 rounded-[14px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-bold text-xs inline-flex items-center justify-center transition-all shadow-xs active:scale-95 cursor-pointer">
+              رزرو نوبت
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- SECTION 4: BECOME A MENTOR (منتور شوید) -->
+  <!-- ========================================== -->
+  <section id="become-mentor" class="max-w-[1440px] mx-auto px-6 lg:px-20 py-16 lg:py-24 border-t border-[#DFCFC0]/60">
+    <div class="liquid-glass-card-frame rounded-[36px] p-8 md:p-14 lg:p-16 relative overflow-hidden space-y-10">
+      
+      <!-- Ambient Decorative Glows -->
+      <div class="absolute right-[-40px] top-[-40px] w-80 h-80 bg-amber-200/25 rounded-full blur-[100px] pointer-events-none"></div>
+      <div class="absolute left-[-40px] bottom-[-40px] w-72 h-72 bg-[#8EC5FF]/20 rounded-full blur-[90px] pointer-events-none"></div>
+
+      <!-- Section Header -->
+      <div class="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-[#DFCFC0]/60">
+        <div class="space-y-3 max-w-2xl">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#2C1A11] text-[#F2E8DA] text-xs font-bold shadow-xs">
+            <svg class="w-3.5 h-3.5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+            <span>مسیر رشد حرفه‌ای • پیوستن به هیئت منتورها</span>
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-[#2C1A11] leading-[1.5] tracking-tight">
+            دانش و تجربیات معماری خود را به اشتراک بگذارید؛ منتور پیرو شوید.
+          </h2>
+          <p class="text-sm sm:text-base text-[#5E4131] leading-relaxed">
+            پلتفرم پیرو با مدل شفاف ۹۰٪ درآمد خالص برای منتور، جلسات غربال‌شده با دستور کار فنی اجباری، و آزادی عمل کامل در تقویم، فضایی استاندارد برای لیدها و معماران باسابقه فراهم کرده است.
+          </p>
+        </div>
+        <div class="shrink-0">
+          <a 
+            href="peyroo_become_mentor.html" 
+            class="h-12 px-6 sm:px-8 rounded-full bg-[#2C1A11] hover:bg-[#432A1C] text-white font-bold text-sm inline-flex items-center justify-center gap-2.5 transition-all shadow-md hover:scale-102 active:scale-98 cursor-pointer text-center"
+          >
+            <span>+ ورود به پنل اختصاصی مربیان (سهم ۹۰٪)</span>
+            <svg class="w-4 h-4 text-[#8EC5FF]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- 3 Feature Columns (Mentor Benefits) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+        <!-- Feature 1: 90% Revenue Share -->
+        <div class="bg-white/80 p-6 sm:p-7 rounded-[26px] border border-[#DFCFC0] shadow-2xs space-y-3.5 hover:border-[#2C1A11]/30 transition-all flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-800">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="20" height="14" x="2" y="5" rx="2"/>
+                <line x1="2" x2="22" y1="10" y2="10"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold text-[#2C1A11]">سهم ۹۰٪ از درآمد هر جلسه</h3>
+            <p class="text-xs sm:text-[13px] text-[#5E4131] leading-relaxed">
+              برخلاف پلتفرم‌های سنتی با پورسانت‌های سنگین، پیرو ۹۰٪ از شهریه تنظیمی شما را مستقیماً به شماره شبا واریز می‌کند. تنها ۱۰٪ سهم پلتفرم صرف امنیت، سرورها و ضمانت استرداد می‌شود.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-[#DFCFC0]/50 flex items-center justify-between text-[11px] font-bold text-emerald-800">
+            <span>تسویه منظم هفتگی پایا</span>
+            <span class="bg-emerald-100 px-2 py-0.5 rounded-full">بدون کارمزد مازاد</span>
+          </div>
+        </div>
+
+        <!-- Feature 2: Structured Agenda Requirement -->
+        <div class="bg-white/80 p-6 sm:p-7 rounded-[26px] border border-[#DFCFC0] shadow-2xs space-y-3.5 hover:border-[#2C1A11]/30 transition-all flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-[#8EC5FF]/25 border border-[#8EC5FF]/50 flex items-center justify-center text-[#2C1A11]">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold text-[#2C1A11]">دستور کار مدون و از پیش تعیین‌شده</h3>
+            <p class="text-xs sm:text-[13px] text-[#5E4131] leading-relaxed">
+              هیچ جلسه‌ای بدون دستور کار تشکیل نمی‌شود. منتی موظف است حداقل ۲۴ ساعت قبل شرح چالش فنی (حداقل ۱۰ حرف)، سوالات کلیدی (حداقل ۱۵ حرف) و در صورت لزوم لینک ریپوی گیت‌هاب را ثبت کند.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-[#DFCFC0]/50 flex items-center justify-between text-[11px] font-bold text-[#2C1A11]">
+            <span>جلسات متمرکز و بدون حاشیه</span>
+            <span class="bg-[#F2E8DA] px-2 py-0.5 rounded-full border border-[#DFCFC0]">۱۰۰٪ هدفمند</span>
+          </div>
+        </div>
+
+        <!-- Feature 3: Complete Calendar & Workload Flexibility -->
+        <div class="bg-white/80 p-6 sm:p-7 rounded-[26px] border border-[#DFCFC0] shadow-2xs space-y-3.5 hover:border-[#2C1A11]/30 transition-all flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-800">
+              <svg class="w-6 h-6 text-amber-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="18" height="18" x="3" y="4" rx="2"/>
+                <path d="M16 2v4M8 2v4M3 10h18"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold text-[#2C1A11]">انعطاف زمانی و کنترل کامل تقویم</h3>
+            <p class="text-xs sm:text-[13px] text-[#5E4131] leading-relaxed">
+              شما تعیین می‌کنید در ماه چند ساعت مشاوره ارائه دهید. تعیین روزها، ساعت‌ها، مدت جلسات (۴۵ یا ۶۰ دقیقه) و همگام‌سازی لحظه‌ای با تقویم شخصی گوگل در اختیار کامل شماست.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-[#DFCFC0]/50 flex items-center justify-between text-[11px] font-bold text-[#5E4131]">
+            <span>سازگار با شغل تمام‌وقت شما</span>
+            <span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded-full border border-amber-200">اختیار ۱۰۰٪</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trust Badges & Secondary CTA Strip -->
+      <div class="bg-[#FBF8F4] p-5 sm:p-6 rounded-[24px] border border-[#DFCFC0] flex flex-col sm:flex-row items-center justify-between gap-4 relative z-10 text-xs text-[#5E4131]">
+        <div class="flex flex-wrap items-center gap-4 sm:gap-6 justify-center sm:justify-start">
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-xs shrink-0"><svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span class="font-bold text-[#2C1A11]">پوشش کامل قرارداد عدم افشای اطلاعات (NDA)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-6 rounded-full bg-blue-100 text-blue-800 flex items-center justify-center font-bold text-xs shrink-0"><svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span class="font-bold text-[#2C1A11]">بیش از ۴۰ معمار و لید فعال در جامعه پیرو</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-6 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-xs shrink-0"><svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span class="font-bold text-[#2C1A11]">امکان تعریف قالب‌های اختصاصی ارزیابی کد</span>
+          </div>
+        </div>
+        <a 
+          href="peyroo_become_mentor.html" 
+          class="text-xs font-bold text-[#2C1A11] underline hover:text-[#5E4131] cursor-pointer shrink-0"
+        >
+          ورود به پنل و فرم اختصاصی ارزیابی مربیان ←
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- SECTION 5: PRINCIPLES & TRANSPARENCY (اصول و کارمزد) -->
+  <!-- ========================================== -->
+  <section id="principles" class="max-w-[1440px] mx-auto px-6 lg:px-20 py-16 lg:py-24 border-t border-[#DFCFC0]/60">
+    <div class="liquid-glass-card-frame rounded-[32px] p-8 md:p-14 relative overflow-hidden">
+      
+      <!-- Inner subtle decorative glow -->
+      <div class="absolute left-[-50px] top-[-50px] w-72 h-72 bg-[#8EC5FF]/20 rounded-full blur-[80px] pointer-events-none"></div>
+
+      <div class="relative z-10 max-w-3xl space-y-6">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#2C1A11] text-[#F2E8DA] text-xs font-bold shadow-xs">
+          <span>اصول بنیادی و تعهدات پیرو</span>
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#2C1A11] leading-[1.55] tracking-tight">
+          شفافیت کامل مالی و حفظ حریم خصوصی کدها
+        </h2>
+        <p class="text-[15px] sm:text-base text-[#5E4131] leading-[1.85]">
+          ما معتقدیم منتورشیپ مهندسی تنها زمانی ثمر می‌دهد که اعتماد کامل برقرار باشد. خط‌مشی‌های شفاف پلتفرم برای تضمین همین اعتماد شکل گرفته‌اند:
+        </p>
+
+        <!-- Principles Grid (Solid cards inside liquid glass container) -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 pt-4">
+          <div class="bg-white rounded-[20px] p-5 border border-[#DFCFC0] shadow-xs space-y-2">
+            <div class="text-base font-bold text-[#2C1A11] flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+              کارمزد شفاف ۱۰٪
+            </div>
+            <p class="text-xs text-[#5E4131] leading-[1.8]">
+              تنها ۱۰٪ از مبلغ جلسه بابت مدیریت سرور، درگاه و هماهنگی دریافت می‌شود و ۹۰٪ مستقیماً به منتور تخصیص می‌یابد.
+            </p>
+          </div>
+
+          <div class="bg-white rounded-[20px] p-5 border border-[#DFCFC0] shadow-xs space-y-2">
+            <div class="text-base font-bold text-[#2C1A11] flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#8EC5FF]"></span>
+              تضمین بازگشت وجه
+            </div>
+            <p class="text-xs text-[#5E4131] leading-[1.8]">
+              امکان لغو تا ۲۴ ساعت قبل با عودت ۱۰۰٪ وجه؛ در صورت عدم حضور منتور، تمام مبلغ بلافاصله به حساب شما بازمی‌گردد.
+            </p>
+          </div>
+
+          <div class="bg-white rounded-[20px] p-5 border border-[#DFCFC0] shadow-xs space-y-2">
+            <div class="text-base font-bold text-[#2C1A11] flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
+              حریم خصوصی و NDA
+            </div>
+            <p class="text-xs text-[#5E4131] leading-[1.8]">
+              تمامی کدهای بررسی‌شده و دیاگرام‌های ارسال‌شده در دستور کار محرمانه تلقی شده و به هیچ عنوان بازنشر نمی‌شوند.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- FOOTER: (پاورقی استاندارد پیرو) -->
+  <!-- ========================================== -->
+  <!-- ======================================================= -->
+  <!-- PRODUCTION FOOTER                                       -->
+  <!-- ======================================================= -->
+  <footer class="border-t border-[#DFCFC0]/80 bg-[#F2E8DA]/60 pt-16 pb-12 transition-all">
+    <div class="max-w-[1440px] mx-auto px-6 lg:px-20 space-y-12">
+      
+      <!-- Top Grid: Brand & Categorized Navigation Columns -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-10 text-right">
+        
+        <!-- Brand & Description Column (Spans 2 columns on large screens) -->
+        <div class="lg:col-span-2 space-y-4">
+          <div class="flex items-center gap-3">
+            <img 
+              src="../../../assets/brand/peyroo_logo_cropped_transparent.svg" 
+              onerror="this.onerror=null; this.src='peyroo_logo_cropped_transparent.svg'" 
+              alt="پلتفرم پیرو • Peyroo" 
+              class="h-8 md:h-9 w-auto object-contain"
+            />
+            <span class="text-xs font-bold text-[#5E4131] px-2.5 py-0.5 rounded-full bg-white/70 border border-[#DFCFC0]">
+              شبکه تخصصی مربی‌گری مهندسی نرم‌افزار
+            </span>
+          </div>
+          <p class="text-xs sm:text-[13px] text-[#5E4131] leading-relaxed max-w-md">
+            پیرو نخستین پلتفرم ساختاریافته ایرانی برای اتصال مهندسان نرم‌افزار و تیم‌های فنی به معماران و راهبران ارشد است؛ با دستور کار مدون، جلسات ویدیویی باکیفیت، و تضمین محرمانگی فنی (NDA).
+          </p>
+          <div class="flex flex-wrap items-center gap-2 pt-1 text-xs text-[#5E4131]">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 border border-[#DFCFC0] text-[11px] font-medium text-[#2C1A11]">
+              <svg class="w-3.5 h-3.5 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <span>تضمین استرداد ۱۰۰٪ وجه تا ۲۴ ساعت</span>
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 border border-[#DFCFC0] text-[11px] font-medium text-[#2C1A11]">
+              <svg class="w-3.5 h-3.5 text-sky-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <span>پشتیبانی فنی ۲۴/۷</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Column 1: پلتفرم و رزرو -->
+        <div class="space-y-3.5">
+          <h4 class="text-xs sm:text-sm font-bold text-[#2C1A11] border-r-2 border-[#2C1A11] pr-2.5">کاوش و رزرو</h4>
+          <ul class="space-y-2 text-xs font-semibold text-[#5E4131]">
+            <li><a href="#mentors" class="hover:text-[#2C1A11] transition-colors block py-0.5">جستجوی منتورهای ارشد</a></li>
+            <li><a href="#booking-card" class="hover:text-[#2C1A11] transition-colors block py-0.5">رزرو نشست ۴۵ دقیقه‌ای</a></li>
+            <li><a href="#how-it-works" class="hover:text-[#2C1A11] transition-colors block py-0.5">مراحل و نحوه کارکرد</a></li>
+            <li><a href="#principles" class="hover:text-[#2C1A11] transition-colors block py-0.5">اصول شفافیت و کارمزد</a></li>
+            <li><a href="peyroo_dashboard.html" class="hover:text-[#2C1A11] transition-colors inline-flex items-center gap-1 py-0.5 text-[#2C1A11] font-bold">میز کار کاربری <span class="text-[10px] text-sky-600">↗</span></a></li>
+          </ul>
+        </div>
+
+        <!-- Column 2: مربی‌گری و همکاری -->
+        <div class="space-y-3.5">
+          <h4 class="text-xs sm:text-sm font-bold text-[#2C1A11] border-r-2 border-[#2C1A11] pr-2.5">مربی‌گری و همکاران</h4>
+          <ul class="space-y-2 text-xs font-semibold text-[#5E4131]">
+            <li><a href="peyroo_become_mentor.html" class="hover:text-[#2C1A11] transition-colors inline-flex items-center gap-1.5 py-0.5 font-bold text-[#2C1A11]"><span>درخواست منتور شدن</span><span class="text-[9px] font-bold text-amber-900 bg-amber-100 px-1.5 py-0.2 rounded-full border border-amber-200">سهم ۹۰٪</span></a></li>
+            <li><a href="peyroo_become_mentor.html#calculator" class="hover:text-[#2C1A11] transition-colors block py-0.5">محاسبه‌گر آنلاین درآمد منتور</a></li>
+            <li><a href="peyroo_become_mentor.html#evaluation" class="hover:text-[#2C1A11] transition-colors block py-0.5">معیارهای سنجش صلاحیت فنی</a></li>
+            <li><a href="#mentors" class="hover:text-[#2C1A11] transition-colors block py-0.5">سرفصل‌های تخصصی مشاوره</a></li>
+            <li><a href="javascript:void(0)" onclick="alert('برنامه منتورشیپ سازمانی پیرو برای تیم‌های نرم‌افزاری فعال است. جهت دریافت کاتالوگ با enterprise@peyroo.ir تماس بگیرید.')" class="hover:text-[#2C1A11] transition-colors block py-0.5">طرح سازمانی و شرکتی</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: قوانین، امنیت و راهنما -->
+        <div class="space-y-3.5">
+          <h4 class="text-xs sm:text-sm font-bold text-[#2C1A11] border-r-2 border-[#2C1A11] pr-2.5">قوانین و پشتیبانی</h4>
+          <ul class="space-y-2 text-xs font-semibold text-[#5E4131]">
+            <li><a href="javascript:void(0)" onclick="alert('کلیه جلسات پلتفرم پیرو تحت پوشش قرارداد رسمی عدم افشای اطلاعات فنی (NDA) دوطرفه برگزار می‌شوند.')" class="hover:text-[#2C1A11] transition-colors block py-0.5">محرمانگی و قرارداد NDA</a></li>
+            <li><a href="javascript:void(0)" onclick="alert('سیاست استرداد پیرو: در صورت عدم برگزاری جلسه توسط منتور یا بروز مشکل کیفی، ۱۰۰٪ مبلغ پرداختی مسترد می‌شود.')" class="hover:text-[#2C1A11] transition-colors block py-0.5">شرایط و قوانین استرداد</a></li>
+            <li><a href="#principles" class="hover:text-[#2C1A11] transition-colors block py-0.5">پرسش‌های متداول (FAQ)</a></li>
+            <li><a href="javascript:void(0)" onclick="alert('پشتیبانی پیرو: support@peyroo.ir | شماره پشتیبانی اضطراری: ۰۲۱-۸۸۸۸۴۳۲۱')" class="hover:text-[#2C1A11] transition-colors block py-0.5">تماس با پشتیبانی مهندسی</a></li>
+            <li><a href="javascript:void(0)" onclick="alert('پلتفرم پیرو متعهد به حریم خصوصی کاربران است و ویدیوهای جلسات هرگز بدون رضایت مکتوب ضبط یا ذخیره نمی‌شوند.')" class="hover:text-[#2C1A11] transition-colors block py-0.5">سیاست حریم خصوصی</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Bottom Bar: Dividers, Copyright & System Badges -->
+      <div class="pt-8 border-t border-[#DFCFC0]/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#5E4131]/80">
+        <div class="flex items-center gap-2">
+          <span>© سال ۱۴۰۵ پلتفرم منتورشیپ مهندسی نرم‌افزار پیرو (Peyroo). تمامی حقوق محفوظ است.</span>
+        </div>
+        <div class="flex items-center gap-3 text-[11px] font-mono">
+          <span class="bg-white/80 border border-[#DFCFC0] px-3 py-1 rounded-full text-[#5E4131]">نسخه تولیدی: v1.4.0</span>
+          <span class="bg-emerald-50 border border-emerald-200 text-emerald-800 px-3 py-1 rounded-full flex items-center gap-1.5 font-bold">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+            سامانه فعال و پایدار
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ======================================================= -->
+  <!-- STEP 4: BOOKING AGENDA & LOCK MODAL (/bookings/new)     -->
+  <!-- ======================================================= -->
+  <div id="agenda-modal-backdrop" class="fixed inset-0 z-50 bg-[#2C1A11]/60 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 transition-all duration-200 hidden" onclick="handleBackdropClick(event)">
+    
+    <!-- Modal Wrapper for Fixed Floating Close Button -->
+    <div class="relative w-full max-w-2xl" onclick="event.stopPropagation()">
+      
+      <!-- Fixed Floating Close Button (Clean standalone button, NO top bar, NO view blockage) -->
+      <button 
+        type="button" 
+        onclick="closeAgendaModal()" 
+        class="absolute top-5 left-5 sm:top-6 sm:left-6 z-30 w-9 h-9 rounded-full bg-white/95 hover:bg-[#2C1A11] hover:text-[#F2E8DA] border border-[#DFCFC0] text-[#2C1A11] flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-md"
+        title="بستن پنجره (Esc)"
+      >
+        <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 4l8 8M12 4l-8 8" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <!-- Scrollable Dialog Card -->
+      <div id="agenda-modal-dialog" class="liquid-glass-card-frame w-full rounded-[32px] p-6 sm:p-9 shadow-2xl relative max-h-[92vh] overflow-y-auto space-y-6 text-right no-scrollbar">
+        
+        <!-- Step Indicator Pill Only (Clean, no background, no sticky bar) -->
+        <div class="flex items-center justify-between pl-12">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#8EC5FF]/25 border border-[#8EC5FF]/50 text-xs font-bold text-[#2C1A11]">
+            <span>گام ۲ از ۳: تدوین دستور کار مدون</span>
+          </div>
+        </div>
+
+      <!-- Modal Header -->
+      <div class="space-y-2">
+        <h3 class="text-2xl sm:text-[26px] font-extrabold text-[#2C1A11] leading-[1.4] tracking-tight">
+          دستور کار و جزئیات چالش فنی جلسه
+        </h3>
+        <p class="text-xs sm:text-[13.5px] text-[#5E4131] leading-[1.8]">
+          برای حداکثر بهره‌وری زمانی در جلسه، شرح مسئله و فایل‌های مرتبط را وارد کنید. منتور پیش از شروع با سورس‌کد و معماری شما آشنا می‌شود.
+        </p>
+      </div>
+
+      <!-- Live 15:00 Reservation Hold Timer Bar (Solid Surface) -->
+      <div class="bg-[#FFF9EE] border border-[#F5E9CF] rounded-[18px] p-3.5 px-4 flex items-center justify-between shadow-2xs">
+        <div class="flex items-center gap-2.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
+          <span class="text-xs font-bold text-[#79551F]">این نوبت به مدت ۱۵ دقیقه برای شما قفل است</span>
+        </div>
+        <div class="flex items-center gap-1.5 text-xs font-semibold text-[#79551F]">
+          <span>زمان باقیمانده:</span>
+          <span id="modal-timer" class="font-extrabold text-[#2C1A11] bg-white px-2.5 py-0.5 rounded-lg border border-[#F5E9CF] text-xs">۱۵:۰۰</span>
+        </div>
+      </div>
+
+      <!-- Session & Mentor Summary Card (Solid Surface) -->
+      <div class="bg-white rounded-[20px] p-4 border border-[#DFCFC0] shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-full bg-[#2C1A11] text-[#F2E8DA] flex items-center justify-center font-bold text-sm shrink-0">
+            <span id="modal-mentor-monogram">م‌س</span>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span id="modal-mentor-name" class="font-bold text-sm text-[#2C1A11]">مصطفی سدیدی</span>
+              <span class="text-[11px] text-[#5E4131]">• ۴۵ دقیقه مشاوره ۱ به ۱</span>
+            </div>
+            <p id="modal-mentor-role" class="text-xs text-[#5E4131]">معمار ارشد سیستم و عملکرد پایگاه داده</p>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between sm:justify-end gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#DFCFC0]/60">
+          <div class="bg-[#F3F8FF] border border-[#8EC5FF] px-3 py-1.5 rounded-[12px] text-xs font-bold text-[#2C1A11]">
+            <span id="modal-slot-time">پنج‌شنبه ۲۲ آبان ۱۴۰۵ - ساعت ۱۸:۰۰</span>
+          </div>
+          <div class="text-left">
+            <span id="modal-total-fee" class="text-base font-extrabold text-[#2C1A11]">۲۷۵٬۰۰۰ تومان</span>
+            <span class="block text-[10px] text-[#5E4131]">مبلغ کل (با احتساب کارمزد)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Agenda Submission Form -->
+      <form id="agenda-form" onsubmit="submitAgendaAndProceed(event)" class="space-y-4">
+        
+        <!-- Session Goal Templates -->
+        <div class="space-y-2 bg-[#F9F5EE] border border-[#DFCFC0]/80 rounded-[20px] p-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-[#2C1A11] flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-amber-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <polyline points="10 9 9 9 8 9"/>
+              </svg>
+              <span>انتخاب قالب هدفمند جلسه (پیش‌تنظیم خودکار دستورکار):</span>
+            </span>
+            
+          </div>
+          <p class="text-[11px] text-[#5E4131] leading-relaxed">
+            با کلیک روی یکی از الگوهای زیر، عنوان و چارچوب پرسش‌های کلیدی به صورت ساختاریافته در فیلدهای زیر درج می‌شود:
+          </p>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+            <button 
+              type="button" 
+              onclick="applyGoalTemplate('system-design')" 
+              class="goal-template-chip p-2.5 rounded-[14px] bg-white hover:bg-[#F2E8DA] border border-[#DFCFC0] hover:border-[#2C1A11] text-right transition-all group cursor-pointer"
+            >
+              <div class="flex items-center gap-1.5 text-[11px] font-bold text-[#2C1A11] group-hover:text-black">
+                <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                <span>سیستم دیزاین</span>
+              </div>
+              <span class="text-[9.5px] text-[#5E4131] block mt-1 line-clamp-1">شبیه‌سازی معماری مقیاس‌بالا</span>
+            </button>
+            <button 
+              type="button" 
+              onclick="applyGoalTemplate('code-review')" 
+              class="goal-template-chip p-2.5 rounded-[14px] bg-white hover:bg-[#F2E8DA] border border-[#DFCFC0] hover:border-[#2C1A11] text-right transition-all group cursor-pointer"
+            >
+              <div class="flex items-center gap-1.5 text-[11px] font-bold text-[#2C1A11] group-hover:text-black">
+                <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                <span>بازبینی کد</span>
+              </div>
+              <span class="text-[9.5px] text-[#5E4131] block mt-1 line-clamp-1">کلین کد و ریفکتورینگ</span>
+            </button>
+            <button 
+              type="button" 
+              onclick="applyGoalTemplate('incident')" 
+              class="goal-template-chip p-2.5 rounded-[14px] bg-white hover:bg-[#F2E8DA] border border-[#DFCFC0] hover:border-[#2C1A11] text-right transition-all group cursor-pointer"
+            >
+              <div class="flex items-center gap-1.5 text-[11px] font-bold text-[#2C1A11] group-hover:text-black">
+                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                <span>رفع بحران پروداکشن</span>
+              </div>
+              <span class="text-[9.5px] text-[#5E4131] block mt-1 line-clamp-1">پرفورمنس و گلوگاه‌ها</span>
+            </button>
+            <button 
+              type="button" 
+              onclick="applyGoalTemplate('career')" 
+              class="goal-template-chip p-2.5 rounded-[14px] bg-white hover:bg-[#F2E8DA] border border-[#DFCFC0] hover:border-[#2C1A11] text-right transition-all group cursor-pointer"
+            >
+              <div class="flex items-center gap-1.5 text-[11px] font-bold text-[#2C1A11] group-hover:text-black">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span>نقشه راه ارتقا</span>
+              </div>
+              <span class="text-[9.5px] text-[#5E4131] block mt-1 line-clamp-1">مسیر مهندس ارشد و لید</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Field 1: Topic Title -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-[#2C1A11]">
+            موضوع یا عنوان اصلی چالش فنی <span class="text-red-500">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="agenda-modal-title" 
+            required 
+            placeholder="مثال: طراحی ایندکس‌های بهینه و پارتیشن‌بندی در PostgreSQL برای جدول تراکنش‌ها" 
+            class="w-full h-11 px-3.5 rounded-[16px] bg-white border border-[#DFCFC0] focus:border-[#2C1A11] outline-none text-xs text-[#2C1A11] placeholder:text-[#5E4131]/60 font-medium transition-all shadow-2xs"
+          />
+        </div>
+
+        <!-- Field 2: Problem Context & What was tried -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-[#2C1A11]">
+            شرح جزئیات مسئله و کانتکست سیستم <span class="text-red-500">*</span>
+          </label>
+          <textarea 
+            id="agenda-modal-desc" 
+            required 
+            rows="3" 
+            placeholder="توضیح دهید سیستم در چه مقیاسی کار می‌کند، چه راهکارهایی را تاکنون امتحان کرده‌اید و انتظار دارید در پایان جلسه به چه تصمیمی برسید..." 
+            class="w-full p-3.5 rounded-[16px] bg-white border border-[#DFCFC0] focus:border-[#2C1A11] outline-none text-xs text-[#2C1A11] placeholder:text-[#5E4131]/60 font-medium transition-all resize-none shadow-2xs leading-[1.8]"
+          ></textarea>
+        </div>
+
+        <!-- Field 3: GitHub Repo or PR Link -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-[#2C1A11] flex items-center justify-between">
+            <span>لینک مخزن گیت‌هاب / مستندات فنی</span>
+            <span class="text-[11px] font-normal text-[#5E4131]">اختیاری</span>
+          </label>
+          <div class="relative">
+            <input 
+              type="url" 
+              id="agenda-modal-github" 
+              placeholder="https://github.com/organization/project/pull/42" 
+              class="w-full h-11 px-3.5 pl-10 rounded-[16px] bg-white border border-[#DFCFC0] focus:border-[#2C1A11] outline-none text-xs text-[#2C1A11] placeholder:text-[#5E4131]/60 font-medium transition-all shadow-2xs text-left"
+              dir="ltr"
+            />
+            <div class="absolute left-3 top-1/2 -translate-y-1/2 text-[#5E4131] pointer-events-none">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Field 4: Diagram / File Attachment -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-[#2C1A11] flex items-center justify-between">
+            <span>پیوست دیاگرام معماری، تصویر یا لاگ خطا</span>
+            <span class="text-[11px] font-normal text-[#5E4131]">اختیاری</span>
+          </label>
+          <div class="border border-dashed border-[#DFCFC0] hover:border-[#2C1A11] bg-white/70 rounded-[18px] p-4 text-center cursor-pointer transition-colors group">
+            <input type="file" id="agenda-modal-file" class="hidden" onchange="handleFileSelected(this)" />
+            <label for="agenda-modal-file" class="cursor-pointer block space-y-1">
+              <svg class="w-6 h-6 mx-auto text-[#5E4131] group-hover:text-[#2C1A11] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <div id="file-upload-label" class="text-xs font-semibold text-[#2C1A11]">
+                کلیک برای انتخاب فایل دیاگرام (PNG, SVG, PDF) یا رها کردن اینجا
+              </div>
+              <p class="text-[10px] text-[#5E4131]">حداکثر حجم فایل ۱۰ مگابایت</p>
+            </label>
+          </div>
+        </div>
+
+        <!-- Action Row -->
+        <div class="pt-4 flex flex-col sm:flex-row items-center gap-3">
+          <button 
+            type="submit" 
+            class="w-full sm:flex-1 h-[52px] rounded-[16px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md active:scale-98 cursor-pointer"
+          >
+            <span id="submit-btn-text">تایید دستور کار و انتقال به درگاه پرداخت</span>
+            <svg class="w-4 h-4 rotate-180" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </button>
+          <button 
+            type="button" 
+            onclick="closeAgendaModal()" 
+            class="w-full sm:w-auto h-[52px] px-6 rounded-[16px] bg-white border border-[#DFCFC0] hover:border-[#2C1A11] text-[#5E4131] hover:text-[#2C1A11] font-semibold text-xs transition-colors cursor-pointer"
+          >
+            انصراف و لغو قفل
+          </button>
+        </div>
+
+        <!-- Trust footer -->
+        <p class="text-center text-[10.5px] text-[#5E4131] pt-1">
+          <svg class="w-3.5 h-3.5 text-[#5E4131] inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+</svg> پرداخت امن شاپرک • ضمانت بازگشت ۱۰۰٪ وجه تا ۲۴ ساعت قبل • تعهدنامه محرمانگی کدهای پروژه (NDA)
+        </p>
+
+      </form>
+
+    </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- STEP 5: PANEL 5 — MOCK BANKING GATEWAY SIMULATOR (درگاه پرداخت آزمایشی شاپرک) -->
+  <!-- ============================================================ -->
+  <div 
+    id="gateway-modal-backdrop" 
+    class="fixed inset-0 z-50 bg-[#2C1A11]/75 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-5 md:p-6 overflow-y-auto"
+    onclick="handleGatewayBackdropClick(event)"
+  >
+    <!-- Modal Wrapper for Floating Fixed Close Button -->
+    <div class="relative w-full max-w-xl my-auto">
+      
+      <!-- Standalone Floating Close Button (Consistent with Step 4 - No blocking bar) -->
+      <button 
+        type="button" 
+        onclick="closeGatewayModal()" 
+        class="absolute top-5 left-5 sm:top-6 sm:left-6 z-30 w-9 h-9 rounded-full bg-white/95 hover:bg-[#2C1A11] hover:text-[#F2E8DA] border border-[#DFCFC0] text-[#2C1A11] flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-md"
+        title="انصراف و بستن درگاه (Esc)"
+      >
+        <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 4l8 8M12 4l-8 8" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <!-- Scrollable Gateway Frame -->
+      <div 
+        id="gateway-modal-dialog" 
+        class="liquid-glass-card-frame w-full rounded-[32px] p-6 sm:p-8 shadow-2xl relative max-h-[92vh] overflow-y-auto space-y-5 text-right no-scrollbar"
+        onclick="event.stopPropagation()"
+      >
+        
+        <!-- Academic Defense & Sandbox Banner -->
+        <div class="bg-[#2C1A11] text-[#F2E8DA] rounded-[20px] p-3.5 flex items-center justify-between shadow-xs pl-12 sm:pl-14">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center shrink-0">
+              <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4.5 3h15M6 3v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3M6 14h12"/>
+</svg>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-white tracking-wide">درگاه شبیه‌ساز پرداخت شاپرک (Sandbox)</span>
+                
+              </div>
+              <p class="text-[10px] text-[#DFCFC0]/80 mt-0.5 font-normal">پروژه مهندسی نرم‌افزار پیرو • بدون تراکنش مالی واقعی</p>
+            </div>
+          </div>
+
+          <!-- 15-Minute Countdown Hold -->
+          <div class="flex items-center gap-1.5 bg-white/10 px-2.5 py-1 rounded-xl border border-white/15">
+            <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+            <span id="gateway-timer" class="font-mono text-xs font-bold text-amber-300 farsi-nums pt-0.5">۱۵:۰۰</span>
+          </div>
+        </div>
+
+        <!-- Merchant & Ledger Breakdown (10% Transparent Commission Demonstration) -->
+        <div class="bg-[#FBF8F4] border border-[#DFCFC0] rounded-[22px] p-4 space-y-3">
+          <div class="flex items-center justify-between border-b border-[#DFCFC0]/70 pb-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-[#2C1A11] flex items-center justify-center shrink-0 shadow-xs">
+                <span class="text-[#F2E8DA] text-base font-bold pt-0.5">پ</span>
+              </div>
+              <div>
+                <h3 class="text-xs sm:text-sm font-bold text-[#2C1A11]">پذیرنده: پلتفرم منتورشیپ پیرو (Peyroo)</h3>
+                <p class="text-[10.5px] text-[#5E4131] mt-0.5">شماره ترمینال: ۹۲۸۳۷۴۱۰ • فاکتور: #PYR-1405-8821</p>
+              </div>
+            </div>
+            <div class="text-left">
+              <span class="text-[10.5px] text-[#5E4131] block">مبلغ کل قابل پرداخت</span>
+              <span id="gateway-total-fee" class="text-lg sm:text-xl font-black text-[#2C1A11] farsi-nums">۲۷۵٬۰۰۰ تومان</span>
+            </div>
+          </div>
+
+          <!-- Transparent Fee Ledger -->
+          <div class="grid grid-cols-2 gap-2 text-xs text-[#5E4131] pt-0.5">
+            <div class="bg-white/80 p-2.5 rounded-xl border border-[#DFCFC0]/60 flex items-center justify-between">
+              <span>سهم منتور (۹۰٪):</span>
+              <span id="gateway-mentor-fee" class="font-bold text-[#2C1A11] farsi-nums">۲۵۰٬۰۰۰ تومان</span>
+            </div>
+            <div class="bg-white/80 p-2.5 rounded-xl border border-[#DFCFC0]/60 flex items-center justify-between">
+              <span>کارمزد پلتفرم (۱۰٪):</span>
+              <span class="font-bold text-[#2C1A11] farsi-nums">۲۵٬۰۰۰ تومان</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Shetab Card Payment Form -->
+        <form id="gateway-payment-form" onsubmit="handleGatewaySubmit(event)" class="space-y-4">
+          
+          <!-- Card Input Header: Label, Live Bank Badge, and Test Auto-Fill Button -->
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <label class="text-xs sm:text-[13px] font-bold text-[#2C1A11]">
+                شماره کارت ۱۶ رقمی عضو شتاب <span class="text-red-500">*</span>
+              </label>
+              <!-- Live Bank Issuer Badge (Positioned safely in the header - Never overflows into digits!) -->
+              <span id="card-bank-badge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#F2E8DA] text-[#2C1A11] border border-[#DFCFC0] shadow-2xs transition-all">
+                <svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="20" height="14" x="2" y="5" rx="2"/>
+  <line x1="2" x2="22" y1="10" y2="10"/>
+</svg> کارت شتاب
+              </span>
+            </div>
+            <button 
+              type="button" 
+              onclick="fillTestCard()" 
+              class="text-[11px] font-bold text-[#2C1A11] bg-[#8EC5FF]/30 hover:bg-[#8EC5FF]/50 border border-[#8EC5FF]/60 px-3 py-1 rounded-full transition-all flex items-center gap-1 active:scale-95 cursor-pointer shadow-2xs"
+            >
+              <span class="inline-flex items-center gap-1"><svg class="w-3.5 h-3.5 text-blue-700 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+</svg> درج خودکار کارت تستی</span>
+            </button>
+          </div>
+
+          <!-- Card Number Input (Full width, Large, High-Legibility Vazirmatn Numbers) -->
+          <div class="space-y-1.5">
+            <input 
+              type="text" 
+              id="card-number-input" 
+              required 
+              maxlength="25" 
+              placeholder="۶۰۳۷ - ۹۹۱۸ - ۴۳۲۱ - ۵۶۷۸" 
+              oninput="formatCardNumber(this)" 
+              class="w-full h-14 px-4 rounded-[20px] bg-white border border-[#DFCFC0] focus:border-[#2C1A11] outline-none text-[19px] sm:text-[21px] font-bold text-[#2C1A11] placeholder:text-[#5E4131]/35 transition-all shadow-2xs tracking-[0.08em] sm:tracking-[0.1em] text-center bank-input-num"
+              dir="ltr"
+            />
+          </div>
+
+          <!-- CVV2 & Expiry Date Row -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <!-- CVV2 -->
+            <div class="space-y-1.5">
+              <label class="block text-xs font-bold text-[#2C1A11]">
+                کد CVV2 <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="password" 
+                id="card-cvv2" 
+                required 
+                maxlength="4" 
+                placeholder="•••" 
+                class="w-full h-[52px] px-3.5 rounded-[16px] bg-white border border-[#DFCFC0] focus:border-[#2C1A11] outline-none text-center bank-input-num text-base sm:text-lg font-bold text-[#2C1A11] tracking-widest transition-all shadow-2xs"
+                dir="ltr"
+              />
+            </div>
+
+            <!-- Expiry Month -->
+            <div class="space-y-1.5">
+              <label class="block text-xs font-bold text-[#2C1A11]">
+                ماه انقضا <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="card-exp-month" 
+                required 
+                maxlength="2" 
+                placeholder="۰۸" 
+                class="w-full h-[52px] px-3.5 rounded-[16px] bg-white border border-[#DFCFC0] focus:border-[#2C1A11] outline-none text-center bank-input-num text-base sm:text-lg font-bold text-[#2C1A11] transition-all shadow-2xs"
+                dir="ltr"
+              />
+            </div>
+
+            <!-- Expiry Year -->
+            <div class="space-y-1.5 col-span-2 sm:col-span-1">
+              <label class="block text-xs font-bold text-[#2C1A11]">
+                سال انقضا (شمسی) <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="card-exp-year" 
+                required 
+                maxlength="2" 
+                placeholder="۰۵" 
+                class="w-full h-[52px] px-3.5 rounded-[16px] bg-white border border-[#DFCFC0] focus:border-[#2C1A11] outline-none text-center bank-input-num text-base sm:text-lg font-bold text-[#2C1A11] transition-all shadow-2xs"
+                dir="ltr"
+              />
+            </div>
+          </div>
+
+          <!-- Dynamic SMS OTP (رمز اینترنتی پویا) -->
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold text-[#2C1A11] flex items-center justify-between">
+              <span>رمز دوم پویا / یک‌بار مصرف</span>
+              <span class="text-[11px] font-normal text-[#5E4131]">ارسال پیامک بانکی</span>
+            </label>
+            <div class="flex items-center gap-2">
+              <input 
+                type="password" 
+                id="card-otp" 
+                required 
+                maxlength="6" 
+                placeholder="کد ۶ رقمی پیامک‌شده" 
+                class="flex-1 h-[52px] px-3.5 rounded-[16px] bg-white border border-[#DFCFC0] focus:border-[#2C1A11] outline-none text-base sm:text-lg font-bold text-[#2C1A11] tracking-widest placeholder:tracking-normal transition-all shadow-2xs text-center bank-input-num"
+                dir="ltr"
+              />
+              <button 
+                type="button" 
+                id="btn-request-otp" 
+                onclick="simulateRequestOtp()" 
+                class="h-[52px] px-4 sm:px-5 rounded-[16px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-bold text-xs transition-all shrink-0 active:scale-95 cursor-pointer shadow-xs"
+              >
+                درخواست رمز پویا
+              </button>
+            </div>
+          </div>
+
+          <!-- Simulated Floating SMS Notification -->
+          <div id="simulated-sms-banner" class="hidden bg-[#2C1A11] text-[#F2E8DA] rounded-[16px] p-3 text-xs border border-amber-400/40 flex items-center justify-between shadow-lg">
+            <div class="flex items-center gap-2">
+              <span class="inline-flex items-center gap-1"><svg class="w-3.5 h-3.5 text-amber-300 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="20" height="16" x="2" y="4" rx="2"/>
+  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+</svg> پیامک شبیه‌ساز بانک:</span>
+              <span class="font-bold text-amber-300 tracking-wider bank-input-num text-base" id="simulated-otp-code">۷۴۸۲۹۱</span>
+            </div>
+            <span class="text-[10.5px] text-[#DFCFC0] bg-white/10 px-2 py-0.5 rounded-md">در فیلد درج شد</span>
+          </div>
+
+          <!-- Captcha / Security Code -->
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold text-[#2C1A11]">
+              کد امنیتی تصویر <span class="text-red-500">*</span>
+            </label>
+            <div class="flex items-center gap-3">
+              <input 
+                type="text" 
+                id="card-captcha" 
+                required 
+                maxlength="4" 
+                placeholder="کد ۴ رقمی" 
+                class="w-32 h-[52px] px-3 rounded-[16px] bg-white border border-[#DFCFC0] focus:border-[#2C1A11] outline-none text-center bank-input-num text-base sm:text-lg font-bold text-[#2C1A11] transition-all shadow-2xs"
+                dir="ltr"
+              />
+              <!-- Visual Captcha Badge -->
+              <div class="h-[52px] px-5 rounded-[16px] bg-[#EFE3D5] border border-[#DFCFC0] flex items-center justify-center select-none tracking-widest bank-input-num text-lg font-black text-[#2C1A11] line-through decoration-amber-600">
+                <span id="captcha-display">۴۸۲۹</span>
+              </div>
+              <button 
+                type="button" 
+                onclick="refreshCaptcha()" 
+                class="w-12 h-[52px] rounded-[16px] bg-white border border-[#DFCFC0] hover:border-[#2C1A11] flex items-center justify-center text-[#5E4131] transition-colors cursor-pointer text-base"
+                title="تغییر کد امنیتی"
+              >
+                <svg class="w-4 h-4 text-[#5E4131]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+  <path d="M21 3v5h-5"/>
+  <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+  <path d="M8 16H3v5"/>
+</svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Error Alert Container (for Error simulation pathway) -->
+          <div id="gateway-error-box" class="hidden bg-rose-50 border border-rose-200 rounded-[18px] p-3.5 text-xs text-rose-800 space-y-1">
+            <div class="font-bold flex items-center gap-1.5">
+              <span class="inline-flex items-center gap-1">
+      <svg class="w-4 h-4 text-rose-700 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+      <span>خطای تراکنش شبیه‌سازی‌شده (کد ۵۱):</span>
+    </span>
+              <span id="gateway-error-msg">موجودی حساب کافی نیست یا رمز دوم اشتباه است.</span>
+            </div>
+            <p class="text-[11px] text-rose-700 leading-relaxed">
+              قفل ۱۵ دقیقه‌ای نوبت شما برای این جلسه همچنان معتبر است. می‌توانید با وارد کردن شماره کارت دیگر، مجدداً تلاش کنید.
+            </p>
+          </div>
+
+          <!-- Dual Academic Evaluation Action Buttons -->
+          <div class="pt-2 space-y-2.5">
+            
+            <!-- Primary Pathway A: Simulated Success -->
+            <button 
+              type="submit" 
+              id="gateway-success-btn" 
+              class="w-full h-[52px] rounded-[16px] bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md active:scale-98 cursor-pointer"
+            >
+              <span id="gateway-btn-text">پرداخت ۲۷۵٬۰۰۰ تومان (شبیه‌سازی موفق)</span>
+              <svg class="w-4 h-4 rotate-180" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </button>
+
+            <div class="grid grid-cols-2 gap-2.5">
+              <!-- Pathway B: Simulated Failure for Defense Evaluation -->
+              <button 
+                type="button" 
+                onclick="simulateGatewayFailure()" 
+                class="h-11 px-3 rounded-[16px] bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-800 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+              >
+                <span><svg class="w-4 h-4 text-rose-500 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> تست خطای درگاه</span>
+              </button>
+
+              <!-- Cancel & Return to Peyroo -->
+              <button 
+                type="button" 
+                onclick="closeGatewayModal()" 
+                class="h-11 px-3 rounded-[16px] bg-white border border-[#DFCFC0] hover:border-[#2C1A11] text-[#5E4131] hover:text-[#2C1A11] font-semibold text-xs transition-colors cursor-pointer"
+              >
+                انصراف و بازگشت
+              </button>
+            </div>
+
+          </div>
+
+        </form>
+
+        <!-- Gateway Success Screen (Transition to Step 6) -->
+        <div id="gateway-success-view" class="hidden space-y-6 text-center py-3">
+          
+          <!-- Animated Success Badge -->
+          <div class="w-16 h-16 rounded-full bg-emerald-100 border-2 border-emerald-400 flex items-center justify-center mx-auto text-emerald-600 shadow-md">
+            <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+          </div>
+
+          <div class="space-y-1.5">
+            <h3 class="text-xl sm:text-2xl font-black text-[#2C1A11]">تراکنش بانکی با موفقیت تایید شد</h3>
+            <p class="text-xs sm:text-[13px] text-emerald-800 font-semibold">رسید دیجیتال صادر شد و نوبت جلسه شما قطعی گردید.</p>
+          </div>
+
+          <!-- Receipt Ledger Box -->
+          <div class="bg-[#FBF8F4] border border-[#DFCFC0] rounded-[22px] p-4 sm:p-5 text-right space-y-3 shadow-xs">
+            <div class="flex items-center justify-between border-b border-[#DFCFC0]/60 pb-2.5">
+              <span class="text-xs text-[#5E4131]">شماره پیگیری شاپرک (TRX):</span>
+              <span class="font-mono text-xs font-bold text-[#2C1A11] tracking-wider">TRX-۱۴۰۵-۸۸۳۹۲</span>
+            </div>
+            <div class="flex items-center justify-between border-b border-[#DFCFC0]/60 pb-2.5">
+              <span class="text-xs text-[#5E4131]">شماره مرجع بانکی (RRN):</span>
+              <span class="font-mono text-xs font-bold text-[#2C1A11] tracking-wider">۹۹۲۱۴۷۳۲۰۸۱</span>
+            </div>
+            <div class="flex items-center justify-between border-b border-[#DFCFC0]/60 pb-2.5">
+              <span class="text-xs text-[#5E4131]">زمان تراکنش:</span>
+              <span id="gateway-receipt-slot" class="text-xs font-bold text-[#2C1A11]">پنج‌شنبه ۲۲ آبان ۱۴۰۵ - ۱۸:۰۰</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-[#5E4131]">مبلغ کل تسویه شده:</span>
+              <span id="gateway-receipt-total" class="text-sm font-black text-emerald-800 farsi-nums">۲۷۵٬۰۰۰ تومان</span>
+            </div>
+          </div>
+
+          <!-- Action Row (Preparing for Step 6) -->
+          <div class="space-y-2.5 pt-2">
+            <button 
+              type="button" 
+              onclick="goToStep6Confirmation()" 
+              class="w-full h-[50px] rounded-[16px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md active:scale-98 cursor-pointer"
+            >
+              <span>مشاهده تاییدیه و دریافت لینک اختصاصی جلسه</span>
+              <svg class="w-4 h-4 rotate-180" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </button>
+            
+            <button 
+              type="button" 
+              onclick="closeGatewayModal()" 
+              class="w-full h-11 rounded-[16px] bg-white border border-[#DFCFC0] hover:border-[#2C1A11] text-[#5E4131] hover:text-[#2C1A11] font-semibold text-xs transition-colors cursor-pointer"
+            >
+              بازگشت به صفحه اصلی پیرو
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- STEP 6: PANEL 6 — BOOKING CONFIRMATION & PROTECTED MEETING URL (/bookings/:id/confirmation) -->
+  <!-- ============================================================ -->
+  <div 
+    id="confirmation-modal-backdrop" 
+    class="fixed inset-0 z-50 bg-[#2C1A11]/75 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-5 md:p-6 overflow-y-auto"
+    onclick="handleConfirmationBackdropClick(event)"
+  >
+    <!-- Modal Wrapper for Floating Fixed Close Button -->
+    <div class="relative w-full max-w-2xl my-auto">
+      
+      <!-- Standalone Floating Close Button (Consistent across all panels - No blocking bar) -->
+      <button 
+        type="button" 
+        onclick="closeConfirmationModal()" 
+        class="absolute top-5 left-5 sm:top-6 sm:left-6 z-30 w-9 h-9 rounded-full bg-white/95 hover:bg-[#2C1A11] hover:text-[#F2E8DA] border border-[#DFCFC0] text-[#2C1A11] flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-md"
+        title="بستن تاییدیه (Esc)"
+      >
+        <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 4l8 8M12 4l-8 8" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <!-- Scrollable Dialog Card -->
+      <div 
+        id="confirmation-modal-dialog" 
+        class="liquid-glass-card-frame w-full rounded-[32px] p-6 sm:p-9 shadow-2xl relative max-h-[92vh] overflow-y-auto space-y-6 text-right no-scrollbar"
+        onclick="event.stopPropagation()"
+      >
+        
+        <!-- Step Indicator Pill & Confirmed Status -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pl-12 sm:pl-14">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-xs font-bold text-emerald-800">
+            <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+            <span>گام ۳ از ۳: رزرو قطعی و تایید نهایی</span>
+          </div>
+          <span class="text-xs font-mono font-bold text-[#5E4131] bg-[#F2E8DA] px-3 py-1 rounded-full border border-[#DFCFC0]">
+            کد رهگیری: #PYR-BK-10492
+          </span>
+        </div>
+
+        <!-- Celebratory Headline -->
+        <div class="space-y-2">
+          <h2 class="text-2xl sm:text-[28px] font-extrabold text-[#2C1A11] leading-[1.35] tracking-tight">
+            <span class="inline-flex items-center gap-2">
+      <svg class="w-6 h-6 text-emerald-600 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+        <polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+      <span>جلسه شما با موفقیت رزرو شد!</span>
+    </span>
+          </h2>
+          <p class="text-xs sm:text-[13.5px] text-[#5E4131] leading-[1.8]">
+            اتاق گفتگوی اختصاصی و رمزنگاری‌شده صادر گردید. دستور کار جلسه، ریپازیتوری و فایل‌های پیوست برای منتور ارسال شد.
+          </p>
+        </div>
+
+        <!-- HIGHLIGHT: Protected Video Room Box (The core value of Step 6) -->
+        <div class="bg-gradient-to-br from-[#F3F8FF] via-white to-[#F3F8FF] border-2 border-[#8EC5FF] rounded-[24px] p-5 sm:p-6 space-y-4 shadow-sm relative overflow-hidden">
+          
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-11 h-11 rounded-2xl bg-[#2C1A11] text-[#F2E8DA] flex items-center justify-center shrink-0 shadow-xs">
+                <svg class="w-5 h-5 text-[#8EC5FF]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                </svg>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-sm sm:text-base font-extrabold text-[#2C1A11]">اتاق گفتگوی اختصاصی و امن جلسه</h3>
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    آماده برقراری
+                  </span>
+                </div>
+                <p class="text-[11.5px] text-[#5E4131] mt-0.5">پلتفرم Google Meet سازمانی پیرو • رمزنگاری سرتاسری ۲۵۶ بیتی</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Room URL Box with 1-Click Copy -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 bg-white p-2.5 rounded-[18px] border border-[#DFCFC0]">
+            <div class="flex-1 px-3 py-2 text-left font-mono text-xs sm:text-sm font-bold text-[#2C1A11] truncate select-all tracking-wide" dir="ltr">
+              <span id="meeting-url-text">https://meet.google.com/pyr-sara-9842</span>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <button 
+                type="button" 
+                onclick="copyMeetingUrl()" 
+                id="btn-copy-url"
+                class="flex-1 sm:flex-none sm:w-[115px] h-10 px-3 rounded-[14px] bg-[#F2E8DA] hover:bg-[#DFCFC0] text-[#2C1A11] font-bold text-xs inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer shadow-2xs shrink-0 text-center"
+              >
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
+                </svg>
+                <span id="copy-btn-label">کپی لینک</span>
+              </button>
+              
+              <a 
+                id="btn-join-meet" 
+                href="https://meet.google.com/pyr-sara-9842" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="flex-1 sm:flex-none h-10 px-5 rounded-[14px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer"
+              >
+                <span>ورود به اتاق جلسه</span>
+                <svg class="w-3.5 h-3.5 rotate-180" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Add to Calendar & Privacy Note -->
+          <div class="flex flex-wrap items-center justify-between gap-2 text-xs pt-1">
+            <div class="flex items-center gap-3">
+              <button 
+                type="button" 
+                onclick="exportToGoogleCalendar()" 
+                class="inline-flex items-center gap-1.5 font-bold text-[#2C1A11] hover:text-[#5E4131] transition-colors cursor-pointer"
+              >
+                <span class="inline-flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5 text-[#2C1A11] inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="18" x="3" y="4" rx="2"/>
+                    <path d="M16 2v4M8 2v4M3 10h18"/>
+                  </svg> 
+                  افزودن به تقویم گوگل
+                </span>
+              </button>
+              <span>•</span>
+              <button 
+                type="button" 
+                onclick="downloadCalendarInvite()" 
+                class="inline-flex items-center gap-1.5 font-bold text-blue-700 hover:text-blue-900 transition-colors cursor-pointer"
+                title="دانلود فایل استاندارد .ics برای اپل کلندر، اوت‌لوک و موبایل"
+              >
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                </svg>
+                <span>دانلود فایل iCal (.ics)</span>
+              </button>
+            </div>
+              <span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-[#2C1A11] inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="18" height="18" x="3" y="4" rx="2"/>
+  <path d="M16 2v4M8 2v4M3 10h18"/>
+</svg> افزودن نوبت به تقویم گوگل (Google Calendar)</span>
+            </button>
+            <span class="text-[11px] text-[#5E4131] inline-flex items-center gap-1"><svg class="w-3.5 h-3.5 text-[#5E4131] inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+</svg> این لینک فقط برای شما و منتور قابل مشاهده است</span>
+          </div>
+
+        </div>
+
+        <!-- Session Details Summary Card (Solid Surface) -->
+        <div class="bg-white rounded-[22px] p-5 border border-[#DFCFC0] shadow-xs space-y-4">
+          <h4 class="text-xs font-bold text-[#2C1A11] pb-2 border-b border-[#DFCFC0]/60">
+            خلاصه مشخصات جلسه و دستور کار تاییدشده
+          </h4>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            <!-- Mentor Info -->
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-[#2C1A11] text-[#F2E8DA] flex items-center justify-center font-bold text-sm shrink-0 border border-[#DFCFC0]/60">
+                <span id="confirm-mentor-monogram">م‌س</span>
+              </div>
+              <div>
+                <span class="text-[11px] text-[#5E4131] block">منتور انتخابی</span>
+                <span id="confirm-mentor-name" class="font-bold text-[#2C1A11] text-sm">مصطفی سدیدی</span>
+              </div>
+            </div>
+
+            <!-- Scheduled Slot -->
+            <div class="bg-[#FBF8F4] p-3 rounded-[16px] border border-[#DFCFC0]/70 flex flex-col justify-center">
+              <span class="text-[11px] text-[#5E4131] block">زمان برگزاری</span>
+              <span id="confirm-slot-time" class="font-bold text-[#2C1A11]">پنج‌شنبه ۲۲ آبان ۱۴۰۵ - ۱۸:۰۰ الی ۱۸:۴۵</span>
+            </div>
+          </div>
+
+          <!-- Submitted Agenda -->
+          <div class="bg-[#FBF8F4] p-3.5 rounded-[16px] border border-[#DFCFC0]/70 space-y-1">
+            <span class="text-[11px] font-bold text-[#5E4131] block">دستور کار ثبت‌شده:</span>
+            <p id="confirm-agenda-title" class="text-xs text-[#2C1A11] font-semibold leading-relaxed">
+              بررسی مشکل Lag در بازتوازن پارتیشن‌های Kafka و ایندکس‌گذاری بهینه
+            </p>
+          </div>
+
+          <!-- Financial Snapshot -->
+          <div class="flex items-center justify-between text-xs pt-1">
+            <span class="text-[#5E4131]">مبلغ کل پرداخت‌شده (با احتساب ۱۰٪ کارمزد):</span>
+            <span id="confirm-total-paid" class="font-black text-emerald-800 text-sm farsi-nums">۲۷۵٬۰۰۰ تومان</span>
+          </div>
+        </div>
+
+        <!-- Guarantee & Protection Banner (Academic Quality) -->
+        <div class="bg-[#FBF8F4] border border-[#DFCFC0] rounded-[20px] p-4 text-xs text-[#5E4131] space-y-2">
+          <div class="flex items-center gap-2 font-bold text-[#2C1A11]">
+            <svg class="w-4 h-4 text-emerald-600 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+  <path d="m9 12 2 2 4-4"/>
+</svg>
+            <span>ضمانت‌ها و حقوق کاربری شما در پیرو:</span>
+          </div>
+          <ul class="space-y-1.5 text-[11px] pr-5 list-disc text-[#5E4131] leading-relaxed">
+            <li>امکان تغییر زمان یا لغو کامل نوبت تا ۲۴ ساعت قبل از شروع جلسه با بازگشت ۱۰۰٪ وجه به کیف پول.</li>
+            <li>تعهدنامه رسمی محرمانگی سورس‌کد و مستندات معماری (NDA) برای این جلسه معتبر و لازم‌الاجراست.</li>
+            <li>در پایان جلسه، یادداشت‌های معماری و تصمیمات اتخاذشده (ADR) در میز کار شما آرشیو خواهد شد.</li>
+          </ul>
+        </div>
+
+        <!-- Action Row (Preparing for Step 7: Dashboard) -->
+        <div class="pt-2 flex flex-col sm:flex-row items-center gap-3">
+          <button 
+            type="button" 
+            onclick="goToStep7Dashboard()" 
+            class="w-full sm:flex-1 h-[52px] rounded-[16px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md active:scale-98 cursor-pointer"
+          >
+            <span>ورود به میز کار و جلسات من</span>
+            <svg class="w-4 h-4 rotate-180" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </button>
+          
+          <button 
+            type="button" 
+            onclick="downloadReceiptSimulation()" 
+            class="w-full sm:w-auto h-[52px] px-5 rounded-[16px] bg-white border border-[#DFCFC0] hover:border-[#2C1A11] text-[#2C1A11] font-semibold text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
+          >
+            <svg class="w-4 h-4 text-[#5E4131]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            <span>دانلود رسید دیجیتال (PDF)</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: BECOME A MENTOR APPLICATION FORM -->
+  <!-- ========================================== -->
+  <div 
+    id="auth-modal-backdrop" 
+    class="fixed inset-0 z-50 bg-[#2C1A11]/75 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-5 md:p-6 overflow-y-auto"
+    onclick="handleAuthBackdropClick(event)"
+  >
+    <div 
+      id="auth-dialog" 
+      class="liquid-glass-card-frame w-full max-w-md rounded-[32px] p-6 sm:p-8 shadow-2xl relative max-h-[92vh] overflow-y-auto space-y-5 text-right no-scrollbar"
+      onclick="event.stopPropagation()"
+    >
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-[#DFCFC0]/60 pb-3.5">
+        <div class="flex items-center gap-2.5">
+          <img 
+            src="../../../assets/brand/peyroo_logo_cropped_transparent.svg" 
+            onerror="this.onerror=null; this.src='peyroo_logo_cropped_transparent.svg'" 
+            alt="پیرو" 
+            class="h-7 w-auto object-contain"
+          />
+          <h3 id="auth-modal-title" class="text-base font-bold text-[#2C1A11]">ورود به حساب کاربری</h3>
+        </div>
+        <button 
+          type="button" 
+          onclick="closeAuthModal()" 
+          class="w-8 h-8 rounded-full bg-white hover:bg-stone-100 border border-[#DFCFC0] flex items-center justify-center text-xs font-bold text-[#2C1A11] cursor-pointer transition-colors shadow-2xs"
+          title="بستن"
+        >
+          <svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Tab Switcher (Login vs Sign Up) -->
+      <div class="grid grid-cols-2 gap-1 bg-[#EFE3D5] p-1 rounded-[16px] border border-[#DFCFC0]">
+        <button 
+          type="button" 
+          id="auth-tab-login" 
+          onclick="switchAuthTab('login')" 
+          class="h-9 rounded-[12px] bg-[#2C1A11] text-white font-bold text-xs transition-all shadow-xs cursor-pointer text-center"
+        >
+          ورود به حساب
+        </button>
+        <button 
+          type="button" 
+          id="auth-tab-signup" 
+          onclick="switchAuthTab('signup')" 
+          class="h-9 rounded-[12px] text-[#5E4131] hover:text-[#2C1A11] font-semibold text-xs transition-all cursor-pointer text-center"
+        >
+          ثبت‌نام کاربر جدید
+        </button>
+      </div>
+
+      <!-- Social / Engineering SSO Buttons -->
+      <div class="space-y-2">
+        <button 
+          type="button" 
+          onclick="simulateSocialLogin('GitHub')" 
+          class="w-full h-11 px-4 rounded-[14px] bg-white hover:bg-[#F2E8DA] border border-[#DFCFC0] text-xs font-bold text-[#2C1A11] transition-all flex items-center justify-center gap-2.5 cursor-pointer shadow-2xs hover:scale-[1.01] active:scale-[0.99]"
+        >
+          <svg class="w-4 h-4 text-[#2C1A11]" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+          </svg>
+          <span>ورود سریع با حساب GitHub</span>
+        </button>
+
+        <button 
+          type="button" 
+          onclick="simulateSocialLogin('Google')" 
+          class="w-full h-11 px-4 rounded-[14px] bg-white hover:bg-[#F2E8DA] border border-[#DFCFC0] text-xs font-bold text-[#2C1A11] transition-all flex items-center justify-center gap-2.5 cursor-pointer shadow-2xs hover:scale-[1.01] active:scale-[0.99]"
+        >
+          <svg class="w-4 h-4" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <span>ورود با حساب Google</span>
+        </button>
+      </div>
+
+      <div class="flex items-center gap-3 my-1">
+        <div class="h-px bg-[#DFCFC0] flex-1"></div>
+        <span class="text-[11px] text-[#5E4131] font-semibold">یا با شماره موبایل و رمز عبور</span>
+        <div class="h-px bg-[#DFCFC0] flex-1"></div>
+      </div>
+
+      <!-- Login Form View -->
+      <form id="auth-form-login" onsubmit="handleAuthSubmit(event, 'login')" class="space-y-3.5 text-xs">
+        <div class="space-y-1.5">
+          <label class="block font-bold text-[#2C1A11]">شماره موبایل یا ایمیل:</label>
+          <input 
+            type="text" 
+            id="login-identifier" 
+            required 
+            value="09123456789"
+            placeholder="مثال: 09123456789 یا info@example.com" 
+            class="w-full h-12 px-4 py-3 rounded-[16px] bg-white border border-[#DFCFC0] focus:border-[#2C1A11] outline-none text-xs sm:text-sm text-[#2C1A11] font-bold text-left dir-ltr shadow-2xs placeholder:text-stone-400"
+          />
+        </div>
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <label class="block font-bold text-[#2C1A11]">رمز عبور یا کد یکبارمصرف:</label>
+            <a href="javascript:void(0)" onclick="alert('کد تایید پیامکی (OTP) برای شماره شما ارسال شد: ۱۲۳۴۵')" class="text-[10.5px] text-[#5E4131] hover:underline">ارسال کد OTP پیامکی</a>
+          </div>
+          <input 
+            type="password" 
+            id="login-password" 
+            required 
+            value="password123"
+            placeholder="••••••••" 
+            class="w-full h-12 px-4 py-3 rounded-[16px] bg-white border border-[#DFCFC0] focus:border-[#2C1A11] outline-none text-xs sm:text-sm text-[#2C1A11] text-left dir-ltr shadow-2xs placeholder:text-stone-400"
+          />
+        </div>
+        <button 
+          type="submit" 
+          class="w-full h-12 rounded-[16px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-bold text-xs sm:text-sm transition-all shadow-xs hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-center gap-2 mt-3"
+        >
+          <span>ورود به حساب کاربری پیرو</span>
+          <svg class="w-4 h-4 text-[#8EC5FF] rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </form>
+
+      <!-- Sign Up Form View (Initially Hidden) -->
+      <form id="auth-form-signup" onsubmit="handleAuthSubmit(event, 'signup')" class="hidden space-y-3.5 text-xs">
+        <!-- Role Intent Selector (Spacious & Ergonomic) -->
+        <div class="space-y-1.5">
+          <label class="block font-bold text-[#2C1A11]">نقش کاربری شما در پیرو:</label>
+          <div class="grid grid-cols-2 gap-2.5">
+            <label 
+              id="signup-role-mentee-card"
+              onclick="handleSignupRoleToggle('mentee')"
+              class="role-card-option p-3.5 sm:p-4 rounded-[16px] min-h-[58px] bg-[#FBF8F4] border-2 border-[#2C1A11] flex items-center gap-2.5 cursor-pointer shadow-xs transition-all"
+            >
+              <input 
+                type="radio" 
+                name="signup-role" 
+                value="mentee" 
+                checked 
+                onchange="handleSignupRoleToggle('mentee')"
+                class="w-4 h-4 accent-[#2C1A11] cursor-pointer shrink-0" 
+              />
+              <div class="text-right">
+                <span class="block font-bold text-[#2C1A11] text-xs">منتی (دریافت مشاوره)</span>
+                <span class="block text-[10px] text-[#5E4131] mt-0.5">رزرو نشست‌های تخصصی</span>
+              </div>
+            </label>
+            <label 
+              id="signup-role-mentor-card"
+              onclick="handleSignupRoleToggle('mentor')"
+              class="role-card-option p-3.5 sm:p-4 rounded-[16px] min-h-[58px] bg-white border border-[#DFCFC0] hover:border-[#2C1A11]/60 flex items-center gap-2.5 cursor-pointer shadow-2xs transition-all"
+            >
+              <input 
+                type="radio" 
+                name="signup-role" 
+                value="mentor" 
+                onchange="handleSignupRoleToggle('mentor')"
+                class="w-4 h-4 accent-[#2C1A11] cursor-pointer shrink-0" 
+              />
+              <div class="text-right">
+                <span class="block font-bold text-[#2C1A11] text-xs">منتور (ارائه مشاوره)</span>
+                <span class="block text-[10px] text-[#5E4131] mt-0.5">تسهیم دانش و درآمد ۹۰٪</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="block font-bold text-[#2C1A11]">نام و نام خانوادگی:</label>
+          <input 
+            type="text" 
+            id="signup-fullname" 
+            required 
+            placeholder="مثال: علیرضا عباسی" 
+            class="w-full h-12 px-4 py-3 rounded-[16px] bg-white border border-[#DFCFC0] focus:border-[#2C1A11] outline-none text-xs sm:text-sm text-[#2C1A11] font-semibold transition-all shadow-2xs placeholder:text-stone-400"
+          />
+        </div>
+        <div class="space-y-1.5">
+          <label class="block font-bold text-[#2C1A11]">شماره موبایل:</label>
+          <input 
+            type="tel" 
+            id="signup-phone" 
+            required 
+            placeholder="09123456789" 
+            class="w-full h-12 px-4 py-3 rounded-[16px] bg-white border border-[#DFCFC0] focus:border-[#2C1A11] outline-none text-xs sm:text-sm text-[#2C1A11] text-left dir-ltr shadow-2xs placeholder:text-stone-400"
+          />
+        </div>
+        <div class="space-y-1.5">
+          <label class="block font-bold text-[#2C1A11]">رمز عبور انتخابی:</label>
+          <input 
+            type="password" 
+            id="signup-password" 
+            required 
+            placeholder="حداقل ۶ کاراکتر" 
+            class="w-full h-12 px-4 py-3 rounded-[16px] bg-white border border-[#DFCFC0] focus:border-[#2C1A11] outline-none text-xs sm:text-sm text-[#2C1A11] text-left dir-ltr shadow-2xs placeholder:text-stone-400"
+          />
+        </div>
+        <button 
+          type="submit" 
+          class="w-full h-12 rounded-[16px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-bold text-xs sm:text-sm transition-all shadow-xs hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-center gap-2 mt-3"
+        >
+          <span>تکمیل ثبت‌نام و ورود</span>
+          <svg class="w-4 h-4 text-[#8EC5FF] rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+  <!-- ============================================================ -->
+  <!-- STEP 7: DEDICATED PERSONAL SESSION DASHBOARD (DUAL-MODE) -->
+  <!-- Note: Migrated from modal overlay to a dedicated standalone page: peyroo_dashboard.html -->
+  <!-- ============================================================ -->
+
   <!-- Interactive JavaScript Logic (Persian State Management & Mobile Menu) -->
   <script>
+    let currentBookingPackage = 'single'; // 'single' or 'sprint'
+
+    function selectBookingPackage(pkg) {
+      currentBookingPackage = pkg;
+      const btnSingle = document.getElementById('package-btn-single');
+      const btnSprint = document.getElementById('package-btn-sprint');
+      const feeText = document.getElementById('selected-mentor-fee');
+      const unitText = document.getElementById('selected-package-unit');
+      const modalTotalFee = document.getElementById('modal-total-fee');
+      const gatewayFee = document.getElementById('gateway-mentor-fee');
+
+      if (pkg === 'single') {
+        btnSingle.className = 'p-2.5 rounded-[16px] bg-[#F3F8FF] border-2 border-[#8EC5FF] text-right transition-all cursor-pointer shadow-2xs';
+        btnSprint.className = 'p-2.5 rounded-[16px] bg-white border border-[#DFCFC0] hover:border-[#8EC5FF] text-right transition-all cursor-pointer shadow-2xs';
+        if (feeText) feeText.textContent = '۲۵۰٬۰۰۰ تومان';
+        if (unitText) unitText.textContent = '/ جلسه ۴۵ دقیقه‌ای';
+        if (modalTotalFee) modalTotalFee.textContent = '۲۵۰٬۰۰۰ تومان';
+        if (gatewayFee) gatewayFee.textContent = '۲۵۰٬۰۰۰ تومان';
+      } else {
+        btnSprint.className = 'p-2.5 rounded-[16px] bg-[#F3F8FF] border-2 border-[#8EC5FF] text-right transition-all cursor-pointer shadow-2xs';
+        btnSingle.className = 'p-2.5 rounded-[16px] bg-white border border-[#DFCFC0] hover:border-[#8EC5FF] text-right transition-all cursor-pointer shadow-2xs';
+        if (feeText) feeText.textContent = '۸۵۰٬۰۰۰ تومان';
+        if (unitText) unitText.textContent = '/ پکیج ۴ هفته‌ای (۴ جلسه)';
+        if (modalTotalFee) modalTotalFee.textContent = '۸۵۰٬۰۰۰ تومان';
+        if (gatewayFee) gatewayFee.textContent = '۸۵۰٬۰۰۰ تومان';
+      }
+    }
+
+    function applyGoalTemplate(key) {
+      const titleInput = document.getElementById('agenda-modal-title');
+      const descInput = document.getElementById('agenda-modal-desc');
+
+      const templates = {
+        'system-design': {
+          title: 'شبیه‌سازی مصاحبه و طراحی معماری سرویس توزیع‌شده با ترافیک بالا',
+          desc: '• موضوع: طراحی سیستم توزیع‌شده با پاسخ‌گویی به ۱۰۰K درخواست در ثانیه\n- صورت مسئله: انتخاب الگوی پارتیشن‌بندی، کشینگ لایه اپلیکیشن با Redis و مکانیزم Failover.\n- چالش اصلی: مدیریت همزمانی بالا و تضمین عدم افت کارایی در زمان بلک‌فرایدی.\n- انتظار از جلسه: بررسی دیاگرام سیستم و تصمیم‌گیری نهایی درباره دیتابیس مناسب.'
+        },
+        'code-review': {
+          title: 'بازبینی عمیق کد، کلین کد و الگوهای طراحی در ماژول پرداخت و تسویه',
+          desc: '• موضوع: بازبینی ریپازیتوری ماژول Core Payment\n- صورت مسئله: مواجهه با بدهی فنی (Technical Debt) و پیچیدگی الگوهای Concurrency در Go.\n- چالش اصلی: ریفکتورینگ کدهای قدیمی بدون شکستن قراردادهای میکروسرویس.\n- انتظار از جلسه: دریافت بازخورد معماری روی پول ریکوئست و بهینه‌سازی ساختار دامنه‌ها.'
+        },
+        'incident': {
+          title: 'حل بحران کارایی، کندی کوئری‌ها و بهینه‌سازی دیتابیس در محیط پروداکشن',
+          desc: '• موضوع: رفع عارضه نشت کانکشن و Spike در مصرف رم دیتابیس PostgreSQL\n- علائم بحران: افزایش Response Time به بالای ۲.۵ ثانیه در ساعات اوج مصرف.\n- اقدامات انجام شده: آنالیز لاگ‌های APM و بررسی Execution Plan کوئری‌های پرمصرف.\n- انتظار از جلسه: تدوین پلن فوری ایندکس‌گذاری و تنظیمات بهینه Connection Pool.'
+        },
+        'career': {
+          title: 'تدوین نقشه راه ارتقا از مهندس نرم‌افزار ارشد به معمار سیستم (Principal)',
+          desc: '• موضوع: راهبری فنی، سیستم دیزاین و مدیریت اثرگذاری در سازمان\n- وضعیت فعلی: ۳ سال سابقه کار در سطح Senior Backend Engineer.\n- ابهامات: انتخاب میان مسیر مدیریت فنی (Engineering Manager) و مسیر تخصصی معمار (IC Track).\n- انتظار از جلسه: ارزیابی گپ‌های مهارتی، مهارت‌های نرم و پروژه‌های اثرگذار جهت ارتقا.'
+        }
+      };
+
+      if (templates[key]) {
+        if (titleInput) titleInput.value = templates[key].title;
+        if (descInput) descInput.value = templates[key].desc;
+      }
+    }
+
+    function downloadCalendarInvite() {
+      const mentorName = document.getElementById('selected-mentor-name')?.textContent || 'مصطفی سدیدی';
+      const slotText = selectedSlotText || 'پنج‌شنبه ۲۲ آبان ۱۴۰۵ - ۱۸:۰۰';
+      const ics = 
+`BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Peyroo Mentorship Platform//IR
+CALSCALE:GREGORIAN
+METHOD:REQUEST
+BEGIN:VEVENT
+UID:pyr-session-${Date.now()}@peyroo.ir
+DTSTAMP:20261114T180000Z
+DTSTART:20261115T143000Z
+DTEND:20261115T151500Z
+SUMMARY:جلسه مربی‌گری تخصصی پیرو با ${mentorName}
+DESCRIPTION:نوبت رزرو شده در پلتفرم مربی‌گری پیرو (Peyroo)\nزمان: ${slotText}\nلینک اتاق گفتگوی امن: https://meet.google.com/pyr-sara-9842
+LOCATION:https://meet.google.com/pyr-sara-9842
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR`;
+
+      const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `peyroo-session-${Date.now()}.ics`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      alert('فایل استاندارد تقویم (.ics) دانلود شد و در تمام اپلیکیشن‌های تقویم قابل بارگذاری است.');
+    }
+
     let selectedSlot = 1;
     let selectedSlotText = 'پنج‌شنبه ۲۲ آبان ۱۴۰۵، ساعت ۱۸:۰۰';
     let isMobileMenuOpen = false;
+    let modalTimerInterval = null;
+    let secondsRemaining = 900; // 15:00 minutes
 
-    function toggleMobileMenu() {
+    function toPersianDigits(n) {
+      const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      return n.toString().replace(/\d/g, x => farsiDigits[x]);
+    }
+
+    function toggleMobileMenu(forceClose = false) {
       const drawer = document.getElementById('mobile-menu-drawer');
+      const backdrop = document.getElementById('mobile-menu-backdrop');
       const iconBars = document.getElementById('menu-icon-bars');
       const iconClose = document.getElementById('menu-icon-close');
-      isMobileMenuOpen = !isMobileMenuOpen;
+      const navElement = document.querySelector('#main-header nav');
+      const headerEl = document.getElementById('main-header');
+
+      if (forceClose) {
+        isMobileMenuOpen = false;
+      } else {
+        isMobileMenuOpen = !isMobileMenuOpen;
+      }
 
       if (isMobileMenuOpen) {
-        drawer.classList.remove('hidden');
-        iconBars.classList.add('hidden');
-        iconClose.classList.remove('hidden');
+        if (headerEl) {
+          headerEl.classList.remove('-translate-y-full');
+        }
+        if (drawer) {
+          drawer.classList.add('drawer-visible');
+        }
+        if (backdrop) {
+          backdrop.classList.add('backdrop-visible');
+        }
+        if (iconBars) iconBars.classList.add('hidden');
+        if (iconClose) iconClose.classList.remove('hidden');
+        if (navElement) {
+          navElement.classList.add('menu-open');
+        }
+        // Lock body scroll completely so the page cannot be scrolled while open
+        document.body.classList.add('overflow-hidden');
       } else {
-        drawer.classList.add('hidden');
-        iconBars.classList.remove('hidden');
-        iconClose.classList.add('hidden');
+        if (drawer) {
+          drawer.classList.remove('drawer-visible');
+        }
+        if (backdrop) {
+          backdrop.classList.remove('backdrop-visible');
+        }
+        if (iconBars) iconBars.classList.remove('hidden');
+        if (iconClose) iconClose.classList.add('hidden');
+        if (navElement) {
+          navElement.classList.remove('menu-open');
+        }
+        // Unlock body scroll
+        document.body.classList.remove('overflow-hidden');
       }
     }
 
@@ -453,21 +2645,732 @@
       e.preventDefault();
       const searchInput = document.getElementById('search-input');
       if (searchInput && searchInput.value.trim()) {
+        const query = searchInput.value.trim();
         const agendaTopic = document.getElementById('agenda-topic-text');
-        agendaTopic.textContent = searchInput.value.trim();
+        agendaTopic.textContent = query;
+
+        // Auto filter catalog if matches keywords
+        if (query.includes('توزیع') || query.includes('Go')) {
+          filterMentors('distributed');
+        } else if (query.includes('داده') || query.includes('Postgres') || query.includes('SQL')) {
+          filterMentors('database');
+        } else if (query.includes('کلاود') || query.includes('ابر') || query.includes('Kubernetes')) {
+          filterMentors('cloud');
+        }
+      }
+    }
+
+    function filterMentors(category) {
+      const cards = document.querySelectorAll('.mentor-card');
+      const btnAll = document.getElementById('filter-all');
+      const btnDistributed = document.getElementById('filter-distributed');
+      const btnDatabase = document.getElementById('filter-database');
+      const btnCloud = document.getElementById('filter-cloud');
+
+      const buttons = [
+        { el: btnAll, cat: 'all' },
+        { el: btnDistributed, cat: 'distributed' },
+        { el: btnDatabase, cat: 'database' },
+        { el: btnCloud, cat: 'cloud' }
+      ];
+
+      buttons.forEach(b => {
+        if (!b.el) return;
+        const widthClass = b.cat === 'all' ? 'w-[100px]' : (b.cat === 'distributed' ? 'w-[145px]' : (b.cat === 'database' ? 'w-[145px]' : 'w-[125px]'));
+        if (b.cat === category) {
+          b.el.className = `h-9 ${widthClass} rounded-full bg-[#2C1A11] border border-[#2C1A11] text-white font-bold text-xs shadow-xs transition-all inline-flex items-center justify-center text-center shrink-0`;
+        } else {
+          b.el.className = `h-9 ${widthClass} rounded-full bg-white border border-[#DFCFC0] hover:border-[#2C1A11] text-[#2C1A11] font-medium text-xs transition-all inline-flex items-center justify-center text-center shrink-0`;
+        }
+      });
+
+      cards.forEach(card => {
+        if (category === 'all') {
+          card.classList.remove('hidden');
+        } else {
+          const cats = card.getAttribute('data-category') || '';
+          if (cats.includes(category)) {
+            card.classList.remove('hidden');
+          } else {
+            card.classList.add('hidden');
+          }
+        }
+      });
+    }
+
+    function selectMentor(name, role, fee, slotText) {
+      const mentorNameEl = document.getElementById('selected-mentor-name');
+      const mentorRoleEl = document.getElementById('selected-mentor-role');
+      const mentorFeeEl = document.getElementById('selected-mentor-fee');
+      const agendaTopic = document.getElementById('agenda-topic-text');
+
+      if (mentorNameEl) mentorNameEl.textContent = name;
+      if (mentorRoleEl) mentorRoleEl.textContent = role;
+      if (mentorFeeEl) mentorFeeEl.textContent = fee;
+      if (agendaTopic) agendaTopic.textContent = `دستور کار پیشنهادی برای جلسه با ${name}`;
+
+      // Smooth scroll to booking card
+      const bookingCard = document.getElementById('booking-card');
+      if (bookingCard) {
+        bookingCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        bookingCard.classList.add('ring-4', 'ring-[#8EC5FF]');
+        setTimeout(() => {
+          bookingCard.classList.remove('ring-4', 'ring-[#8EC5FF]');
+        }, 1800);
       }
     }
 
     function handleProceed() {
-      const btn = document.getElementById('proceed-btn-text');
-      const feedback = document.getElementById('booking-feedback');
-      btn.textContent = `در حال ثبت اسلات (${selectedSlotText})...`;
-      feedback.classList.remove('hidden');
+      openAgendaModal();
+    }
+
+    function openAgendaModal() {
+      const modal = document.getElementById('agenda-modal-backdrop');
+      const modalMentorName = document.getElementById('modal-mentor-name');
+      const modalMentorRole = document.getElementById('modal-mentor-role');
+      const modalSlotTime = document.getElementById('modal-slot-time');
+      const modalAgendaTitle = document.getElementById('agenda-modal-title');
+      const heroAgendaTopic = document.getElementById('agenda-topic-text');
+      const selectedMentorName = document.getElementById('selected-mentor-name');
+      const selectedMentorRole = document.getElementById('selected-mentor-role');
+      const modalMentorMonogram = document.getElementById('modal-mentor-monogram');
+
+      if (selectedMentorName && modalMentorName) {
+        const name = selectedMentorName.textContent.trim();
+        modalMentorName.textContent = name;
+        if (modalMentorMonogram) {
+          const parts = name.split(' ');
+          modalMentorMonogram.textContent = parts.length > 1 ? parts[0][0] + '‌' + parts[1][0] : name.slice(0, 2);
+        }
+      }
+      if (selectedMentorRole && modalMentorRole) {
+        modalMentorRole.textContent = selectedMentorRole.textContent;
+      }
+      if (modalSlotTime) {
+        modalSlotTime.textContent = selectedSlotText;
+      }
+      if (heroAgendaTopic && modalAgendaTitle) {
+        const text = heroAgendaTopic.textContent.trim();
+        if (text && !text.includes('بررسی و مشاوره')) {
+          modalAgendaTitle.value = text;
+        } else {
+          modalAgendaTitle.value = text.replace('بررسی و مشاوره معماری: ', '');
+        }
+      }
+
+      modal.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+      startReservationTimer();
+    }
+
+    function closeAgendaModal() {
+      const modal = document.getElementById('agenda-modal-backdrop');
+      if (modal) modal.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+      stopReservationTimer();
+    }
+
+    function handleBackdropClick(e) {
+      if (e.target.id === 'agenda-modal-backdrop') {
+        closeAgendaModal();
+      }
+    }
+
+    function startReservationTimer() {
+      stopReservationTimer();
+      secondsRemaining = 900;
+      updateTimerDisplay();
+      modalTimerInterval = setInterval(() => {
+        secondsRemaining--;
+        if (secondsRemaining <= 0) {
+          stopReservationTimer();
+          alert('مهلت قفل اختصاصی ۱۵ دقیقه‌ای این نوبت به پایان رسید. لطفاً اسلات را مجدداً انتخاب کنید.');
+          closeAgendaModal();
+          return;
+        }
+        updateTimerDisplay();
+      }, 1000);
+    }
+
+    function stopReservationTimer() {
+      if (modalTimerInterval) {
+        clearInterval(modalTimerInterval);
+        modalTimerInterval = null;
+      }
+    }
+
+    function updateTimerDisplay() {
+      const timerEl = document.getElementById('modal-timer');
+      if (!timerEl) return;
+      const mins = Math.floor(secondsRemaining / 60);
+      const secs = secondsRemaining % 60;
+      const formatted = `${toPersianDigits(mins.toString().padStart(2, '0'))}:${toPersianDigits(secs.toString().padStart(2, '0'))}`;
+      timerEl.textContent = formatted;
+    }
+
+    function handleFileSelected(input) {
+      const label = document.getElementById('file-upload-label');
+      if (input.files && input.files[0]) {
+        label.textContent = `فایل پیوست شد: ${input.files[0].name} (${(input.files[0].size / 1024).toFixed(0)} کیلوبایت)`;
+        label.className = "text-xs font-bold text-emerald-800";
+      }
+    }
+
+    function submitAgendaAndProceed(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById('submit-btn-text');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = "در حال ایجاد نشست تراکنش و انتقال به درگاه شاپرک...";
+      
       setTimeout(() => {
-        btn.textContent = "تایید و ورود به مرحله پرداخت";
-      }, 3500);
+        submitBtn.textContent = originalText;
+        closeAgendaModal();
+        openGatewayModal();
+      }, 700);
+    }
+
+    // --- STEP 5: MOCK BANKING GATEWAY SIMULATOR LOGIC ---
+    let gatewayTimerInterval = null;
+    let gatewaySecondsRemaining = 900;
+    const BANK_BIN_MAP = {
+      '603799': 'بانک ملی',
+      '610433': 'بانک ملت',
+      '621986': 'بانک سامان',
+      '502229': 'بانک پاسارگاد',
+      '622106': 'بانک پارسیان',
+      '627412': 'بانک اقتصاد نوین',
+      '504706': 'بانک شهر',
+      '585983': 'بانک تجارت',
+      '639599': 'بلوبانک',
+      '627381': 'بانک انصار',
+      '603770': 'بانک کشاورزی',
+      '628023': 'بانک مسکن'
+    };
+
+    function openGatewayModal() {
+      const modal = document.getElementById('gateway-modal-backdrop');
+      const selectedMentorFee = document.getElementById('selected-mentor-fee');
+      const gatewayMentorFee = document.getElementById('gateway-mentor-fee');
+      const gatewayTotalFee = document.getElementById('gateway-total-fee');
+      const gatewayBtnText = document.getElementById('gateway-btn-text');
+      const gatewayReceiptSlot = document.getElementById('gateway-receipt-slot');
+      const gatewayReceiptTotal = document.getElementById('gateway-receipt-total');
+
+      let mentorFeeNum = 250000;
+      if (selectedMentorFee) {
+        const raw = selectedMentorFee.textContent.replace(/[^\d]/g, '');
+        if (raw) mentorFeeNum = parseInt(raw, 10);
+      }
+      const platformCommission = Math.round(mentorFeeNum * 0.1);
+      const totalFee = mentorFeeNum + platformCommission;
+
+      if (gatewayMentorFee) gatewayMentorFee.textContent = `${mentorFeeNum.toLocaleString('fa-IR')} تومان`;
+      if (gatewayTotalFee) gatewayTotalFee.textContent = `${totalFee.toLocaleString('fa-IR')} تومان`;
+      if (gatewayBtnText) gatewayBtnText.textContent = `پرداخت ${totalFee.toLocaleString('fa-IR')} تومان (شبیه‌سازی موفق)`;
+      if (gatewayReceiptSlot) gatewayReceiptSlot.textContent = selectedSlotText;
+      if (gatewayReceiptTotal) gatewayReceiptTotal.textContent = `${totalFee.toLocaleString('fa-IR')} تومان`;
+
+      resetGateway();
+      modal.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+      startGatewayTimer();
+    }
+
+    function closeGatewayModal() {
+      const modal = document.getElementById('gateway-modal-backdrop');
+      if (modal) modal.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+      stopGatewayTimer();
+    }
+
+    function handleGatewayBackdropClick(e) {
+      if (e.target.id === 'gateway-modal-backdrop') {
+        closeGatewayModal();
+      }
+    }
+
+    function startGatewayTimer() {
+      stopGatewayTimer();
+      gatewaySecondsRemaining = secondsRemaining > 0 ? secondsRemaining : 900;
+      updateGatewayTimerDisplay();
+      gatewayTimerInterval = setInterval(() => {
+        gatewaySecondsRemaining--;
+        if (gatewaySecondsRemaining <= 0) {
+          stopGatewayTimer();
+          alert('مهلت زمانی اتصال به درگاه منقضی شد. لطفاً نوبت را مجدداً انتخاب کنید.');
+          closeGatewayModal();
+          return;
+        }
+        updateGatewayTimerDisplay();
+      }, 1000);
+    }
+
+    function stopGatewayTimer() {
+      if (gatewayTimerInterval) {
+        clearInterval(gatewayTimerInterval);
+        gatewayTimerInterval = null;
+      }
+    }
+
+    function updateGatewayTimerDisplay() {
+      const timerEl = document.getElementById('gateway-timer');
+      if (!timerEl) return;
+      const mins = Math.floor(gatewaySecondsRemaining / 60);
+      const secs = gatewaySecondsRemaining % 60;
+      timerEl.textContent = `${toPersianDigits(mins.toString().padStart(2, '0'))}:${toPersianDigits(secs.toString().padStart(2, '0'))}`;
+    }
+
+    function normalizeDigits(str) {
+      if (!str) return '';
+      return str
+        .toString()
+        .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
+        .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+    }
+
+    function formatCardNumber(input) {
+      let raw = normalizeDigits(input.value).replace(/\D/g, '');
+      if (raw.length > 16) raw = raw.slice(0, 16);
+      
+      const badge = document.getElementById('card-bank-badge');
+      if (badge) {
+        if (raw.length >= 6) {
+          const bin = raw.slice(0, 6);
+          const bankName = BANK_BIN_MAP[bin] || 'کارت شتاب';
+          badge.innerHTML = `<span class="inline-flex items-center gap-1.5"><svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="20" height="14" x="2" y="5" rx="2"/>
+  <line x1="2" x2="22" y1="10" y2="10"/>
+</svg> ${bankName}</span>`;
+          badge.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#8EC5FF]/35 text-[#2C1A11] border border-[#8EC5FF]/70 shadow-2xs transition-all";
+        } else {
+          badge.innerHTML = `<span><svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="20" height="14" x="2" y="5" rx="2"/>
+  <line x1="2" x2="22" y1="10" y2="10"/>
+</svg> کارت شتاب</span>`;
+          badge.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#F2E8DA] text-[#2C1A11] border border-[#DFCFC0] shadow-2xs transition-all";
+        }
+      }
+
+      const parts = [];
+      for (let i = 0; i < raw.length; i += 4) {
+        parts.push(toPersianDigits(raw.slice(i, i + 4)));
+      }
+      input.value = parts.join(' - ');
+    }
+
+    function fillTestCard() {
+      const cardInput = document.getElementById('card-number-input');
+      const cvv2Input = document.getElementById('card-cvv2');
+      const monthInput = document.getElementById('card-exp-month');
+      const yearInput = document.getElementById('card-exp-year');
+      const captchaInput = document.getElementById('card-captcha');
+      const captchaDisplay = document.getElementById('captcha-display');
+
+      if (cardInput) {
+        cardInput.value = '6037991843215678';
+        formatCardNumber(cardInput);
+      }
+      if (cvv2Input) cvv2Input.value = '۷۲۱';
+      if (monthInput) monthInput.value = '۰۸';
+      if (yearInput) yearInput.value = '۰۵';
+      if (captchaInput && captchaDisplay) captchaInput.value = captchaDisplay.textContent;
+    }
+
+    function simulateRequestOtp() {
+      const btn = document.getElementById('btn-request-otp');
+      const banner = document.getElementById('simulated-sms-banner');
+      const otpInput = document.getElementById('card-otp');
+      const otpCodeEl = document.getElementById('simulated-otp-code');
+      
+      const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
+      const persianCode = toPersianDigits(randomCode);
+
+      btn.disabled = true;
+      btn.textContent = 'ارسال شد (۱:۵۹)';
+      btn.className = 'h-[52px] px-4 sm:px-5 rounded-[16px] bg-[#5E4131] text-[#DFCFC0] font-bold text-xs transition-all shrink-0 cursor-not-allowed';
+
+      if (otpCodeEl) otpCodeEl.textContent = persianCode;
+      if (banner) banner.classList.remove('hidden');
+
+      setTimeout(() => {
+        if (otpInput) {
+          otpInput.value = persianCode;
+          otpInput.classList.add('ring-2', 'ring-emerald-500');
+          setTimeout(() => otpInput.classList.remove('ring-2', 'ring-emerald-500'), 1500);
+        }
+      }, 500);
+    }
+
+    function refreshCaptcha() {
+      const captchaDisplay = document.getElementById('captcha-display');
+      const captchaInput = document.getElementById('card-captcha');
+      const random4 = Math.floor(1000 + Math.random() * 9000).toString();
+      if (captchaDisplay) captchaDisplay.textContent = toPersianDigits(random4);
+      if (captchaInput) captchaInput.value = '';
+    }
+
+    function handleGatewaySubmit(e) {
+      e.preventDefault();
+      const form = document.getElementById('gateway-payment-form');
+      const successBtn = document.getElementById('gateway-success-btn');
+      const originalHtml = successBtn.innerHTML;
+      const errorBox = document.getElementById('gateway-error-box');
+
+      if (errorBox) errorBox.classList.add('hidden');
+      successBtn.disabled = true;
+      successBtn.innerHTML = `
+        <svg class="w-4 h-4 animate-spin text-white inline-block ml-2" viewBox="0 0 24 24" fill="none">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+        </svg>
+        <span>در حال اتصال به سوئیچ شاپرک و تایید تراکنش...</span>
+      `;
+
+      setTimeout(() => {
+        form.classList.add('hidden');
+        const successView = document.getElementById('gateway-success-view');
+        if (successView) successView.classList.remove('hidden');
+        successBtn.innerHTML = originalHtml;
+        successBtn.disabled = false;
+      }, 1000);
+    }
+
+    function simulateGatewayFailure() {
+      const errorBox = document.getElementById('gateway-error-box');
+      if (errorBox) {
+        errorBox.classList.remove('hidden');
+        errorBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    function resetGateway() {
+      const form = document.getElementById('gateway-payment-form');
+      const successView = document.getElementById('gateway-success-view');
+      const errorBox = document.getElementById('gateway-error-box');
+      const banner = document.getElementById('simulated-sms-banner');
+      const btnOtp = document.getElementById('btn-request-otp');
+
+      if (form) form.classList.remove('hidden');
+      if (successView) successView.classList.add('hidden');
+      if (errorBox) errorBox.classList.add('hidden');
+      if (banner) banner.classList.add('hidden');
+      if (btnOtp) {
+        btnOtp.disabled = false;
+        btnOtp.textContent = 'درخواست رمز پویا';
+        btnOtp.className = 'h-[52px] px-4 sm:px-5 rounded-[16px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-bold text-xs transition-all shrink-0 active:scale-95 cursor-pointer shadow-xs';
+      }
+      refreshCaptcha();
+    }
+
+    // Keyboard accessibility: ESC key closes open modals
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const supportModal = document.getElementById('support-modal-dialog');
+        if (supportModal && !supportModal.classList.contains('hidden')) {
+          toggleSupportModal(false);
+          return;
+        }
+        const dashboardModal = document.getElementById('dashboard-modal-backdrop');
+        const confirmationModal = document.getElementById('confirmation-modal-backdrop');
+        const gatewayModal = document.getElementById('gateway-modal-backdrop');
+        const agendaModal = document.getElementById('agenda-modal-backdrop');
+        if (dashboardModal && !dashboardModal.classList.contains('hidden')) {
+          closeDashboardModal();
+        } else if (confirmationModal && !confirmationModal.classList.contains('hidden')) {
+          closeConfirmationModal();
+        } else if (gatewayModal && !gatewayModal.classList.contains('hidden')) {
+          closeGatewayModal();
+        } else if (agendaModal && !agendaModal.classList.contains('hidden')) {
+          closeAgendaModal();
+        }
+      }
+    });
+
+    // --- STEP 6: BOOKING CONFIRMATION & PROTECTED MEETING URL LOGIC ---
+    function goToStep6Confirmation() {
+      closeGatewayModal();
+      openConfirmationModal();
+    }
+
+    function openConfirmationModal() {
+      const modal = document.getElementById('confirmation-modal-backdrop');
+      const selectedMentorName = document.getElementById('selected-mentor-name');
+      const confirmMentorName = document.getElementById('confirm-mentor-name');
+      const confirmMentorMonogram = document.getElementById('confirm-mentor-monogram');
+      const confirmSlotTime = document.getElementById('confirm-slot-time');
+      const confirmTotalPaid = document.getElementById('confirm-total-paid');
+      const confirmAgendaTitle = document.getElementById('confirm-agenda-title');
+      const gatewayTotalFee = document.getElementById('gateway-total-fee');
+      const agendaModalTitle = document.getElementById('agenda-modal-title');
+      const heroAgendaTopic = document.getElementById('agenda-topic-text');
+
+      if (selectedMentorName && confirmMentorName) {
+        const name = selectedMentorName.textContent.trim();
+        confirmMentorName.textContent = name;
+        if (confirmMentorMonogram) {
+          const parts = name.split(' ');
+          confirmMentorMonogram.textContent = parts.length > 1 ? parts[0][0] + '‌' + parts[1][0] : name.slice(0, 2);
+        }
+      }
+
+      if (confirmSlotTime) {
+        confirmSlotTime.textContent = `${selectedSlotText} (۴۵ دقیقه)`;
+      }
+
+      if (gatewayTotalFee && confirmTotalPaid) {
+        confirmTotalPaid.textContent = gatewayTotalFee.textContent;
+      }
+
+      if (confirmAgendaTitle) {
+        if (agendaModalTitle && agendaModalTitle.value.trim()) {
+          confirmAgendaTitle.textContent = agendaModalTitle.value.trim();
+        } else if (heroAgendaTopic && heroAgendaTopic.textContent.trim()) {
+          confirmAgendaTitle.textContent = heroAgendaTopic.textContent.trim();
+        }
+      }
+
+      const copyLabel = document.getElementById('copy-btn-label');
+      if (copyLabel) copyLabel.textContent = 'کپی لینک';
+
+      modal.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+    }
+
+    function closeConfirmationModal() {
+      const modal = document.getElementById('confirmation-modal-backdrop');
+      if (modal) modal.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    function handleConfirmationBackdropClick(e) {
+      if (e.target.id === 'confirmation-modal-backdrop') {
+        closeConfirmationModal();
+      }
+    }
+
+    function copyMeetingUrl() {
+      const urlText = document.getElementById('meeting-url-text');
+      const copyLabel = document.getElementById('copy-btn-label');
+      if (urlText) {
+        const textToCopy = urlText.textContent.trim();
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          if (copyLabel) {
+            copyLabel.textContent = 'کپی شد! <svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+            copyLabel.className = 'text-emerald-800 font-bold';
+            setTimeout(() => {
+              copyLabel.textContent = 'کپی لینک';
+              copyLabel.className = '';
+            }, 2000);
+          }
+        }).catch(() => {
+          if (copyLabel) copyLabel.textContent = 'کپی شد! <svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+        });
+      }
+    }
+
+    function exportToGoogleCalendar() {
+      const selectedMentor = document.getElementById('confirm-mentor-name')?.textContent || 'مصطفی سدیدی';
+      const agenda = document.getElementById('confirm-agenda-title')?.textContent || 'جلسه مربی‌گری تخصصی';
+      const title = encodeURIComponent(`جلسه منتورشیپ پیرو: ${selectedMentor}`);
+      const details = encodeURIComponent(`دستور کار: ${agenda}\nلینک ورود: https://meet.google.com/pyr-sara-9842\nپلتفرم پیرو (Peyroo)`);
+      const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&location=https://meet.google.com/pyr-sara-9842`;
+      window.open(gcalUrl, '_blank');
+    }
+
+    function downloadReceiptSimulation() {
+      alert('رسید الکترونیکی پرداخت و سند رسمی دستور کار جلسه (PYR-BK-10492.pdf) با موفقیت تولید شد و آماده دانلود است.');
+    }
+
+    // --- STEP 7: DEDICATED PERSONAL SESSION DASHBOARD NAVIGATION ---
+    function goToStep7Dashboard() {
+      closeConfirmationModal();
+      window.location.href = 'peyroo_dashboard.html?mode=mentee';
+    }
+
+    function openDashboardModal(mode = 'mentee') {
+      window.location.href = `peyroo_dashboard.html?mode=${mode}`;
+    }
+
+    // Auto-Hiding Navbar on Scroll Down / Reveal on Scroll Up
+    let lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
+    const header = document.getElementById('main-header');
+    const scrollThreshold = 10;
+
+    window.addEventListener('scroll', () => {
+      // Guard: Never hide navbar while mobile menu is open!
+      if (isMobileMenuOpen) return;
+
+      const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+      if (!header) return;
+
+      // Always show at top of page
+      if (currentScrollY <= 25) {
+        header.classList.remove('-translate-y-full');
+        lastScrollY = currentScrollY;
+        return;
+      }
+
+      // Check scroll direction with threshold
+      if (currentScrollY > lastScrollY + scrollThreshold) {
+        // Scrolling DOWN -> smoothly hide navbar
+        header.classList.add('-translate-y-full');
+      } else if (currentScrollY < lastScrollY - scrollThreshold) {
+        // Scrolling UP -> smoothly show navbar
+        header.classList.remove('-translate-y-full');
+      }
+
+      lastScrollY = currentScrollY;
+    }, { passive: true });
+
+    // Tiny Sticky Support CTA Controls
+    function toggleSupportModal(force) {
+      const dialog = document.getElementById('support-modal-dialog');
+      if (!dialog) return;
+      if (typeof force === 'boolean') {
+        if (force) dialog.classList.remove('hidden');
+        else dialog.classList.add('hidden');
+      } else {
+        dialog.classList.toggle('hidden');
+      }
+      if (!dialog.classList.contains('hidden')) {
+        const input = document.getElementById('support-message-input');
+        if (input) setTimeout(() => input.focus(), 100);
+      }
+    }
+
+    function sendQuickSupportMessage() {
+      const input = document.getElementById('support-message-input');
+      const feedback = document.getElementById('support-status-feedback');
+      if (!input || !input.value.trim()) return;
+
+      input.value = '';
+      if (feedback) {
+        feedback.textContent = '<svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> پیام شما دریافت شد؛ کارشناس شیفت در کمتر از ۲ دقیقه پاسخ می‌دهد.';
+        feedback.classList.remove('hidden');
+        setTimeout(() => {
+          feedback.classList.add('hidden');
+        }, 5000);
+      }
     }
   </script>
+
+  <!-- ============================================================ -->
+  <!-- TINY STICKY CTA BUTTON FOR SUPPORT (BOTTOM LEFT) -->
+  <!-- ============================================================ -->
+  <div class="fixed bottom-5 left-5 z-50 select-none">
+    <!-- Support Trigger Button -->
+    <button 
+      type="button" 
+      id="support-sticky-btn" 
+      onclick="toggleSupportModal()" 
+      class="group relative h-10 sm:h-11 px-3 sm:px-4 rounded-full bg-[#2C1A11] hover:bg-[#432A1C] text-[#F2E8DA] shadow-lg shadow-[#2C1A11]/30 hover:shadow-xl hover:shadow-[#2C1A11]/45 transition-all duration-300 flex items-center gap-2 cursor-pointer border border-[#DFCFC0]/30 hover:scale-105 active:scale-95"
+      aria-label="پشتیبانی آنلاین پیرو"
+    >
+      <!-- Green Pulse Status Indicator -->
+      <span class="relative flex h-2 w-2">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+      </span>
+
+      <!-- Support Headset Icon -->
+      <svg class="w-4 h-4 text-[#F2E8DA] group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+      </svg>
+
+      <!-- Label -->
+      <span class="text-xs font-bold text-[#F2E8DA] group-hover:text-white">
+        پشتیبانی<span class="hidden sm:inline font-normal text-[#DFCFC0]"> آنلاین</span>
+      </span>
+    </button>
+
+    <!-- Support Floating Quick Dialog -->
+    <div 
+      id="support-modal-dialog" 
+      class="hidden absolute bottom-14 left-0 w-[310px] sm:w-[350px] rounded-[24px] p-5 liquid-glass-card shadow-2xl border border-[#DFCFC0] text-right space-y-4"
+    >
+      <!-- Dialog Header -->
+      <div class="flex items-center justify-between border-b border-[#DFCFC0]/70 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-[#2C1A11] text-[#F2E8DA] flex items-center justify-center text-xs shrink-0 border border-[#DFCFC0]/60">
+            <svg class="w-4 h-4 text-[#F2E8DA]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/>
+            </svg>
+          </div>
+          <div>
+            <h4 class="text-xs sm:text-sm font-black text-[#2C1A11]">پشتیبانی همراه پیرو</h4>
+            <div class="flex items-center gap-1.5 text-[10px] text-emerald-700 font-semibold">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              <span>پاسخ‌گویی فوری (زیر ۲ دقیقه)</span>
+            </div>
+          </div>
+        </div>
+        <button 
+          type="button" 
+          onclick="toggleSupportModal(false)" 
+          class="w-7 h-7 rounded-full bg-[#EFE3D5]/60 hover:bg-[#DFCFC0] text-[#5E4131] flex items-center justify-center text-xs font-bold transition-colors cursor-pointer"
+        >
+          <svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="space-y-2 text-xs">
+        <a 
+          href="tel:02188990011" 
+          class="flex items-center justify-between p-2.5 rounded-xl bg-white/80 hover:bg-white border border-[#DFCFC0]/70 text-[#2C1A11] transition-all group"
+        >
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-full bg-[#EFE3D5]/80 border border-[#DFCFC0] flex items-center justify-center text-[#2C1A11] shrink-0">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+            </div>
+            <div class="text-right">
+              <span class="font-bold block text-xs">تماس اضطراری اتاق جلسه</span>
+              <span class="text-[10px] text-[#5E4131]">حل فوری اختلال صدا یا لینک ویدئو</span>
+            </div>
+          </div>
+          <span class="text-[11px] font-mono font-bold text-[#5E4131] group-hover:text-[#2C1A11] direction-ltr">۰۲۱-۸۸۹۹۰۰۱۱</span>
+        </a>
+
+        <div class="p-2.5 rounded-xl bg-[#F4EBE1]/60 border border-[#DFCFC0]/60 space-y-1">
+          <div class="flex items-center gap-1.5 text-[11px] font-bold text-[#2C1A11]">
+            <svg class="w-4 h-4 text-emerald-600 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+  <path d="m9 12 2 2 4-4"/>
+</svg>
+            <span>ضمانت ۱۰۰٪ استرداد وجه</span>
+          </div>
+          <p class="text-[10px] text-[#5E4131] leading-relaxed">
+            در صورت هرگونه نارضایتی فنی یا تاخیر، کل مبلغ جلسه در کمتر از ۳ ساعت به کیف پول عودت داده می‌شود.
+          </p>
+        </div>
+      </div>
+
+      <!-- Live Chat Input Simulation -->
+      <div class="space-y-1.5 pt-1 border-t border-[#DFCFC0]/50">
+        <label class="block text-[11px] font-bold text-[#2C1A11]">ارسال پیام به اپراتور شیفت:</label>
+        <div class="relative">
+          <input 
+            type="text" 
+            id="support-message-input" 
+            placeholder="پیام یا پرسش خود را تایپ کنید..." 
+            class="w-full h-9 px-3 rounded-xl bg-white border border-[#DFCFC0] focus:border-[#2C1A11] text-xs text-[#2C1A11] placeholder:text-[#5E4131]/50 outline-hidden transition-all pl-16"
+            onkeydown="if(event.key === 'Enter') sendQuickSupportMessage()"
+          />
+          <button 
+            type="button" 
+            onclick="sendQuickSupportMessage()" 
+            class="absolute left-1.5 top-1.5 h-6 px-2.5 rounded-lg bg-[#2C1A11] hover:bg-[#432A1C] text-white text-[10px] font-bold transition-all cursor-pointer"
+          >
+            ارسال
+          </button>
+        </div>
+        <p id="support-status-feedback" class="text-[10px] text-emerald-800 font-semibold hidden"></p>
+      </div>
+
+    </div>
+  </div>
 
 </body>
 </html>

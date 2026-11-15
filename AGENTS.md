@@ -69,6 +69,7 @@ Development progresses sequentially through defined lifecycle stages. No stage m
 - **No Secrets or Credentials:** Never commit API keys, passwords, `.env` files, credentials, or session tokens.
 - **No Large Binaries:** Keep the repository lightweight; store large binary assets outside or compress them appropriately within `assets/`.
 - **Atomic Commits:** Keep commits scoped to a single logical change with an accurate description.
+- **Commit Cadence & User Confirmation:** Never commit intermediate tweaks or single prompt changes automatically. Keep changes staged or in the working tree for user inspection. Only execute git commits when the user explicitly requests a commit or confirms that a task/milestone is completely finished.
 
 ---
 

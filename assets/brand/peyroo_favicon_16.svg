@@ -1,0 +1,24 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Peyroo Favicon 16x16 (Micro-Scale Calibrated) -->
+  <rect width="16" height="16" rx="4" fill="#F2E8DA"/>
+  
+  <g transform="translate(0.3, 0.3) scale(0.030)">
+    <!-- 4-Pointed Star (Expanded core for micro legibility) -->
+    <path d="M 238 70 C 238 122 216 144 180 144 C 216 144 238 166 238 218 C 238 166 260 144 296 144 C 260 144 238 122 238 70 Z" fill="#8EC5FF" />
+    
+    <!-- Mentee Head -->
+    <circle cx="186" cy="236" r="46" fill="#2C1A11" />
+    
+    <!-- Mentee Body -->
+    <path d="M 112 408 C 112 346 140 292 190 292 C 220 292 244 310 254 336 C 224 356 182 378 112 408 Z" fill="#2C1A11" />
+    
+    <!-- Flowing Stream -->
+    <path d="M 104 452 L 208 452 C 180 418 184 394 222 368 C 260 342 312 322 346 266 C 326 286 278 310 238 330 C 182 358 136 388 104 452 Z" fill="#8EC5FF" />
+    
+    <!-- Mentor Head -->
+    <circle cx="330" cy="180" r="54" fill="#2C1A11" />
+    
+    <!-- Mentor Body -->
+    <path d="M 276 254 C 298 244 326 248 356 274 C 394 304 406 354 390 406 C 374 446 334 442 308 428 C 354 398 378 354 360 310 C 344 274 296 268 276 254 Z" fill="#2C1A11" />
+  </g>
+</svg>
