@@ -211,6 +211,11 @@
       --color-amber-text: #79551F;
     }
 
+    html, body {
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+
     body {
       font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       color: var(--color-espresso);
@@ -219,7 +224,6 @@
       background: linear-gradient(143.55deg, rgb(251, 245, 236) 8.33%, rgb(242, 232, 218) 50%, rgb(231, 231, 225) 91.67%);
       background-attachment: fixed;
       position: relative;
-      overflow-x: hidden;
       direction: rtl;
       text-align: right;
     }
@@ -413,9 +417,11 @@
 </head>
 <body class="antialiased selection:bg-[#8EC5FF] selection:text-[#2C1A11] farsi-nums">
 
-  <!-- Subtle Ambient Glows -->
-  <div class="absolute left-[-80px] top-[100px] w-[600px] h-[600px] bg-[#8EC5FF]/20 rounded-full blur-[140px] pointer-events-none -z-10"></div>
-  <div class="absolute right-[-60px] top-[40px] w-[500px] h-[500px] bg-white/70 rounded-full blur-[120px] pointer-events-none -z-10"></div>
+  <!-- Subtle Ambient Glows (Strictly Viewport-Clipped to Prevent Horizontal Canvas Expansion) -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+    <div class="absolute left-[-80px] top-[100px] w-[600px] h-[600px] bg-[#8EC5FF]/20 rounded-full blur-[140px]"></div>
+    <div class="absolute right-[-60px] top-[40px] w-[500px] h-[500px] bg-white/70 rounded-full blur-[120px]"></div>
+  </div>
 
   <!-- Responsive Navbar Container: Full-width on Desktop/iPad, Floating Island on Mobile -->
   <header id="main-header" class="fixed top-0 inset-x-0 z-50 pt-3 px-4 md:pt-0 md:px-0 transition-transform duration-300 ease-in-out pointer-events-none">

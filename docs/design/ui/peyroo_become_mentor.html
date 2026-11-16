@@ -32,6 +32,11 @@
       --color-amber-text: #79551F;
     }
 
+    html, body {
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+
     body {
       font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       color: var(--color-espresso);
@@ -39,7 +44,6 @@
       background: linear-gradient(143.55deg, rgb(251, 245, 236) 8.33%, rgb(242, 232, 218) 50%, rgb(231, 231, 225) 91.67%);
       background-attachment: fixed;
       position: relative;
-      overflow-x: hidden;
       direction: rtl;
       text-align: right;
     }
@@ -55,9 +59,10 @@
       -webkit-backdrop-filter: blur(28px) saturate(160%);
     }
 
-    /* Mobile Floating Island Navigation with Immutable 28px Radii & Depth */
+    /* Mobile: Floating Island Navigation with Immutable Top Radii & Silky Smooth Animation */
     @media (max-width: 767px) {
       .navbar-mobile-island {
+        /* Fixed explicit 28px radius on top corners: NEVER changes when menu opens or closes */
         border-top-left-radius: 28px !important;
         border-top-right-radius: 28px !important;
         border-bottom-left-radius: 28px !important;
@@ -68,8 +73,74 @@
           0 2px 8px rgba(44, 26, 17, 0.04),
           inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.95),
           inset 0 -1px 2px 0 rgba(223, 207, 192, 0.35);
-        transition: box-shadow 260ms cubic-bezier(0.16, 1, 0.3, 1);
+        transition: border-bottom-left-radius 260ms cubic-bezier(0.16, 1, 0.3, 1),
+                    border-bottom-right-radius 260ms cubic-bezier(0.16, 1, 0.3, 1),
+                    box-shadow 260ms cubic-bezier(0.16, 1, 0.3, 1);
       }
+      .navbar-mobile-island.menu-open {
+        /* Top corners remain strictly 28px - completely immutable */
+        border-top-left-radius: 28px !important;
+        border-top-right-radius: 28px !important;
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+        border-bottom: none !important;
+        box-shadow: 0 4px 20px -4px rgba(44, 26, 17, 0.08) !important;
+      }
+      .island-drawer-open {
+        border-top-left-radius: 0 !important;
+        border-top-right-radius: 0 !important;
+        border-bottom-left-radius: 28px !important;
+        border-bottom-right-radius: 28px !important;
+        border-top: none !important;
+        border-left: 1px solid rgba(255, 255, 255, 0.9) !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.9) !important;
+        border-bottom: 1px solid rgba(223, 207, 192, 0.8) !important;
+        box-shadow: 
+          0 24px 50px -10px rgba(44, 26, 17, 0.15),
+          inset 0 -1px 2px 0 rgba(223, 207, 192, 0.35) !important;
+      }
+
+      /* Silky Smooth Hardware-Accelerated Dropdown Drawer Transitions */
+      #mobile-menu-drawer {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px) scale(0.985);
+        transform-origin: top center;
+        pointer-events: none;
+        transition: opacity 280ms cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 280ms cubic-bezier(0.16, 1, 0.3, 1),
+                    visibility 280ms cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: opacity, transform;
+      }
+      #mobile-menu-drawer.drawer-visible {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
+      }
+
+      /* Silky Smooth Ambient Backdrop Transitions */
+      #mobile-menu-backdrop {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 280ms cubic-bezier(0.16, 1, 0.3, 1),
+                    visibility 280ms cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: opacity;
+      }
+      #mobile-menu-backdrop.backdrop-visible {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
 
     /* Desktop & iPad View (md: 768px and up): Full-Width Bar */
@@ -132,9 +203,11 @@
 </head>
 <body class="antialiased selection:bg-[#8EC5FF] selection:text-[#2C1A11] farsi-nums">
 
-  <!-- Ambient Glows -->
-  <div class="absolute left-[-100px] top-[80px] w-[600px] h-[600px] bg-[#8EC5FF]/20 rounded-full blur-[140px] pointer-events-none -z-10"></div>
-  <div class="absolute right-[-80px] top-[160px] w-[500px] h-[500px] bg-amber-200/20 rounded-full blur-[130px] pointer-events-none -z-10"></div>
+  <!-- Ambient Glows (Strictly Viewport-Clipped to Prevent Horizontal Canvas Expansion) -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+    <div class="absolute left-[-100px] top-[80px] w-[600px] h-[600px] bg-[#8EC5FF]/20 rounded-full blur-[140px]"></div>
+    <div class="absolute right-[-80px] top-[160px] w-[500px] h-[500px] bg-amber-200/20 rounded-full blur-[130px]"></div>
+  </div>
 
   <!-- Dedicated Mentor Portal Top Bar -->
     <!-- ============================================================ -->
@@ -227,9 +300,9 @@
           <span class="text-[11px] text-[#5E4131] font-medium">پلتفرم منتورشیپ مهندسی نرم‌افزار</span>
         </div>
         <a href="peyroo_figma_landing.html#mentors" onclick="toggleMobileMenu(true)" class="block text-sm font-bold text-[#2C1A11] hover:text-[#5E4131] py-1.5 border-b border-[#DFCFC0]/60">جستجوی منتورها</a>
-        <a href="peyroo_become_mentor.html" onclick="toggleMobileMenu(true)" class="flex items-center justify-between text-sm font-bold text-[#2C1A11] hover:text-[#5E4131] py-1.5 border-b border-[#DFCFC0]/60">
+        <a href="peyroo_become_mentor.html" onclick="toggleMobileMenu(true); return false;" class="flex items-center justify-between text-sm font-black text-[#2C1A11] bg-[#2C1A11]/5 px-3 py-2 rounded-xl border border-[#DFCFC0]/70">
           <span>منتور شوید (درخواست مربی‌گری)</span>
-          <span class="text-[9.5px] font-bold text-amber-900 bg-amber-100 px-2 py-0.5 rounded-full border border-amber-200">سهم ۹۰٪</span>
+          <span class="text-[9.5px] font-bold text-amber-900 bg-amber-100 px-2 py-0.5 rounded-full border border-amber-200">صفحه فعلی • سهم ۹۰٪</span>
         </a>
         <a href="peyroo_figma_landing.html#how-it-works" onclick="toggleMobileMenu(true)" class="block text-sm font-bold text-[#2C1A11] hover:text-[#5E4131] py-1.5 border-b border-[#DFCFC0]/60">نحوه کارکرد</a>
         <a href="peyroo_figma_landing.html#principles" onclick="toggleMobileMenu(true)" class="block text-sm font-bold text-[#2C1A11] hover:text-[#5E4131] py-1.5 border-b border-[#DFCFC0]/60">اصول و کارمزد</a>
@@ -287,59 +360,59 @@
       </p>
 
       <!-- Panel Navigation Switcher (4 Primary Views) -->
-      <div class="pt-4 flex flex-wrap items-center justify-center gap-2 max-w-3xl mx-auto">
+      <div class="pt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 max-w-4xl mx-auto w-full">
         <button 
           type="button" 
           onclick="switchPortalView('wizard')" 
           id="portal-tab-wizard" 
-          class="portal-nav-tab-active h-10 px-4 sm:px-5 rounded-2xl text-xs sm:text-[13px] font-bold transition-all cursor-pointer flex items-center gap-2"
+          class="portal-nav-tab-active h-11 px-3 sm:px-4 rounded-2xl text-xs sm:text-[12.5px] font-bold transition-all cursor-pointer flex items-center justify-center gap-2 w-full text-center shadow-2xs"
         >
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
             <circle cx="9" cy="7" r="4"/>
             <polyline points="16 11 18 13 22 9"/>
           </svg>
-          <span>۱. فرم ارزیابی و ثبت‌نام مربی (۵ مرحله)</span>
+          <span class="truncate">۱. فرم ثبت‌نام و ارزیابی (۵ مرحله)</span>
         </button>
 
         <button 
           type="button" 
           onclick="switchPortalView('calculator')" 
           id="portal-tab-calculator" 
-          class="portal-nav-tab-inactive h-10 px-4 sm:px-5 rounded-2xl text-xs sm:text-[13px] font-bold transition-all cursor-pointer flex items-center gap-2"
+          class="portal-nav-tab-inactive h-11 px-3 sm:px-4 rounded-2xl text-xs sm:text-[12.5px] font-bold transition-all cursor-pointer flex items-center justify-center gap-2 w-full text-center shadow-2xs"
         >
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect width="18" height="18" x="3" y="3" rx="2"/>
             <line x1="8" y1="12" x2="16" y2="12"/>
             <line x1="12" y1="8" x2="12" y2="16"/>
           </svg>
-          <span>۲. محاسبه‌گر زنده درآمد مربی (سهم ۹۰٪)</span>
+          <span class="truncate">۲. محاسبه‌گر زنده درآمد (سهم ۹۰٪)</span>
         </button>
 
         <button 
           type="button" 
           onclick="switchPortalView('criteria')" 
           id="portal-tab-criteria" 
-          class="portal-nav-tab-inactive h-10 px-4 sm:px-5 rounded-2xl text-xs sm:text-[13px] font-bold transition-all cursor-pointer flex items-center gap-2"
+          class="portal-nav-tab-inactive h-11 px-3 sm:px-4 rounded-2xl text-xs sm:text-[12.5px] font-bold transition-all cursor-pointer flex items-center justify-center gap-2 w-full text-center shadow-2xs"
         >
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
             <polyline points="14 2 14 8 20 8"/>
           </svg>
-          <span>۳. معیارهای ارزیابی کیفی هیئت علمی</span>
+          <span class="truncate">۳. معیارهای ارزیابی کیفی هیئت علمی</span>
         </button>
 
         <button 
           type="button" 
           onclick="switchPortalView('tracker')" 
           id="portal-tab-tracker" 
-          class="portal-nav-tab-inactive h-10 px-4 sm:px-5 rounded-2xl text-xs sm:text-[13px] font-bold transition-all cursor-pointer flex items-center gap-2"
+          class="portal-nav-tab-inactive h-11 px-3 sm:px-4 rounded-2xl text-xs sm:text-[12.5px] font-bold transition-all cursor-pointer flex items-center justify-center gap-2 w-full text-center shadow-2xs"
         >
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10"/>
             <polyline points="12 6 12 12 16 14"/>
           </svg>
-          <span>۴. تابلوی رهگیری آنلاین پرونده</span>
+          <span class="truncate">۴. تابلوی رهگیری آنلاین پرونده</span>
         </button>
       </div>
     </section>
@@ -364,20 +437,20 @@
           </div>
 
           <!-- Step Indicators -->
-          <div class="grid grid-cols-5 gap-2 pt-1 text-center text-[10px] sm:text-xs font-bold">
-            <button type="button" onclick="goToStep(1)" id="step-btn-1" class="step-pill-active py-2 px-1 rounded-xl border transition-all cursor-pointer">
+          <div class="flex sm:grid sm:grid-cols-5 gap-2 pt-1 text-center text-[10.5px] sm:text-xs font-bold overflow-x-auto no-scrollbar pb-1">
+            <button type="button" onclick="goToStep(1)" id="step-btn-1" class="step-pill-active py-2 px-3 sm:px-1 rounded-xl border transition-all cursor-pointer shrink-0 whitespace-nowrap sm:whitespace-normal font-bold">
               ۱. انگیزه و سبک
             </button>
-            <button type="button" onclick="goToStep(2)" id="step-btn-2" class="step-pill-inactive py-2 px-1 rounded-xl border transition-all cursor-pointer">
+            <button type="button" onclick="goToStep(2)" id="step-btn-2" class="step-pill-inactive py-2 px-3 sm:px-1 rounded-xl border transition-all cursor-pointer shrink-0 whitespace-nowrap sm:whitespace-normal font-bold">
               ۲. سوابق ارشدیت
             </button>
-            <button type="button" onclick="goToStep(3)" id="step-btn-3" class="step-pill-inactive py-2 px-1 rounded-xl border transition-all cursor-pointer">
+            <button type="button" onclick="goToStep(3)" id="step-btn-3" class="step-pill-inactive py-2 px-3 sm:px-1 rounded-xl border transition-all cursor-pointer shrink-0 whitespace-nowrap sm:whitespace-normal font-bold">
               ۳. تخصص‌های فنی
             </button>
-            <button type="button" onclick="goToStep(4)" id="step-btn-4" class="step-pill-inactive py-2 px-1 rounded-xl border transition-all cursor-pointer">
+            <button type="button" onclick="goToStep(4)" id="step-btn-4" class="step-pill-inactive py-2 px-3 sm:px-1 rounded-xl border transition-all cursor-pointer shrink-0 whitespace-nowrap sm:whitespace-normal font-bold">
               ۴. تعرفه و محاسبه‌گر
             </button>
-            <button type="button" onclick="goToStep(5)" id="step-btn-5" class="step-pill-inactive py-2 px-1 rounded-xl border transition-all cursor-pointer">
+            <button type="button" onclick="goToStep(5)" id="step-btn-5" class="step-pill-inactive py-2 px-3 sm:px-1 rounded-xl border transition-all cursor-pointer shrink-0 whitespace-nowrap sm:whitespace-normal font-bold">
               ۵. رهگیری ارزیابی
             </button>
           </div>
@@ -410,7 +483,7 @@
               </div>
 
               <!-- Cascading Province & City Dropdowns (No backend required) -->
-              <div class="grid grid-cols-2 gap-2.5">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <div class="space-y-1.5">
                   <label class="block text-xs font-bold text-[#2C1A11]">استان محل سکونت <span class="text-red-500">*</span></label>
                   <select 
@@ -762,14 +835,15 @@
                   </div>
                   <div class="relative">
                     <input 
-                      type="text" 
+                      type="number" 
                       id="mentor-fee-input" 
-                      inputmode="numeric" 
-                      pattern="[0-9]*" 
-                      value="۴۰۰٬۰۰۰" 
+                      min="50000" 
+                      max="10000000" 
+                      step="10000" 
+                      value="400000" 
                       oninput="handleFeeInput(this)" 
-                      class="w-full h-12 px-4 rounded-[16px] bg-white border-2 border-[#DFCFC0] focus:border-[#2C1A11] outline-none text-base font-black text-[#2C1A11] font-mono transition-all pl-16 farsi-nums"
-                      placeholder="۴۰۰٬۰۰۰"
+                      class="w-full h-12 px-4 rounded-[16px] bg-white border-2 border-[#DFCFC0] focus:border-[#2C1A11] outline-none text-base font-black text-[#2C1A11] font-mono transition-all pl-16 text-left dir-ltr"
+                      placeholder="400000"
                     />
                     <span class="absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold text-[#5E4131]">تومان</span>
                   </div>
@@ -1142,7 +1216,12 @@
 
         <div class="bg-amber-50 border border-amber-300 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-amber-200 text-amber-900 flex items-center justify-center font-bold text-xs shrink-0">⏳</div>
+            <div class="w-10 h-10 rounded-xl bg-amber-200 text-amber-900 flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5 text-amber-900 animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
             <div>
               <h3 class="text-xs sm:text-sm font-black text-[#2C1A11]">پرونده PEY-MTR-89421: در حال ارزیابی کیفی سوابق</h3>
               <p class="text-[11px] text-[#5E4131]">توسط شورای معماری و ارزیابی مربیان پیرو • زمان تخمینی باقیمانده: کمتر از ۲۴ ساعت</p>
@@ -1473,19 +1552,14 @@
     }
 
     function handleFeeInput(input) {
-      const rawNum = parseRawNumber(input.value);
-      if (rawNum > 0) {
-        input.value = formatWithPersianCommas(rawNum);
-      } else {
-        input.value = '';
-      }
-      recalculateMentorPayout(rawNum);
+      const val = parseFloat(input.value);
+      recalculateMentorPayout(!isNaN(val) ? val : 0);
     }
 
     function setFeePreset(amount) {
       const feeInput = document.getElementById('mentor-fee-input');
       if (feeInput) {
-        feeInput.value = formatWithPersianCommas(amount);
+        feeInput.value = amount;
       }
       recalculateMentorPayout(amount);
     }
@@ -1504,9 +1578,11 @@
         }
         if (tab) {
           if (v === view) {
-            tab.className = 'portal-nav-tab-active h-10 px-4 sm:px-5 rounded-2xl text-xs sm:text-[13px] font-bold transition-all cursor-pointer flex items-center gap-2';
+            tab.classList.add('portal-nav-tab-active');
+            tab.classList.remove('portal-nav-tab-inactive');
           } else {
-            tab.className = 'portal-nav-tab-inactive h-10 px-4 sm:px-5 rounded-2xl text-xs sm:text-[13px] font-bold transition-all cursor-pointer flex items-center gap-2';
+            tab.classList.remove('portal-nav-tab-active');
+            tab.classList.add('portal-nav-tab-inactive');
           }
         }
       });
@@ -1530,12 +1606,13 @@
           }
         }
         if (btn) {
+          btn.classList.remove('step-pill-active', 'step-pill-completed', 'step-pill-inactive');
           if (i === step) {
-            btn.className = 'step-pill-active py-2 px-1 rounded-xl border transition-all cursor-pointer font-bold';
+            btn.classList.add('step-pill-active');
           } else if (i < step) {
-            btn.className = 'step-pill-completed py-2 px-1 rounded-xl border transition-all cursor-pointer font-bold';
+            btn.classList.add('step-pill-completed');
           } else {
-            btn.className = 'step-pill-inactive py-2 px-1 rounded-xl border transition-all cursor-pointer font-bold';
+            btn.classList.add('step-pill-inactive');
           }
         }
       }
@@ -1567,8 +1644,8 @@
       const slider = document.getElementById('weekly-sessions-slider');
       const sliderLabel = document.getElementById('slider-sessions-label');
       
-      let fee = customFee !== null ? customFee : (feeInput ? parseRawNumber(feeInput.value) : 400000);
-      if (fee <= 0) fee = 400000;
+      let fee = customFee !== null ? parseFloat(customFee) : (feeInput ? parseFloat(feeInput.value) : 400000);
+      if (isNaN(fee) || fee <= 0) fee = 400000;
       const weeklySessions = parseInt(slider ? slider.value : 3) || 3;
 
       if (sliderLabel) {
@@ -1725,6 +1802,36 @@
         document.body.classList.remove('overflow-hidden');
       }
     }
+
+    // Auto-Hiding Navbar on Scroll Down / Reveal on Scroll Up
+    let lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
+    const header = document.getElementById('main-header');
+    const scrollThreshold = 10;
+
+    window.addEventListener('scroll', () => {
+      // Guard: Never hide navbar while mobile menu is open!
+      if (isMobileMenuOpen) return;
+
+      const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+      if (!header) return;
+
+      // Always show at top of page
+      if (currentScrollY <= 25) {
+        header.classList.remove('-translate-y-full');
+        lastScrollY = currentScrollY;
+        return;
+      }
+
+      // Check scroll direction with threshold
+      if (currentScrollY > lastScrollY + scrollThreshold) {
+        // Scrolling DOWN -> smoothly hide navbar
+        header.classList.add('-translate-y-full');
+      } else if (currentScrollY < lastScrollY - scrollThreshold) {
+        // Scrolling UP -> smoothly show navbar
+        header.classList.remove('-translate-y-full');
+      }
+      lastScrollY = currentScrollY;
+    }, { passive: true });
   </script>
 
 </body>
