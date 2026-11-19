@@ -50,3 +50,7 @@ cache/
 .cache/
 coverage/
 *.bak
+
+# Local Study Guide & Educational Materials
+/local-study-guide/
+

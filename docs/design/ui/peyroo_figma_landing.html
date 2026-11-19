@@ -99,6 +99,14 @@
 
     function handleAuthSubmit(e, mode) {
       e.preventDefault();
+      if (mode === 'login') {
+        const identifierInput = document.getElementById('login-identifier');
+        if (identifierInput && identifierInput.value.toLowerCase().includes('admin')) {
+          closeAuthModal();
+          window.location.href = 'peyroo_admin_dashboard.html';
+          return;
+        }
+      }
       currentUser.isLoggedIn = true;
       if (mode === 'signup') {
         const nameInput = document.getElementById('signup-fullname');
@@ -1347,6 +1355,7 @@
             <li><a href="#how-it-works" class="hover:text-[#2C1A11] transition-colors block py-0.5">مراحل و نحوه کارکرد</a></li>
             <li><a href="#principles" class="hover:text-[#2C1A11] transition-colors block py-0.5">اصول شفافیت و کارمزد</a></li>
             <li><a href="peyroo_dashboard.html" class="hover:text-[#2C1A11] transition-colors inline-flex items-center gap-1 py-0.5 text-[#2C1A11] font-bold">میز کار کاربری <span class="text-[10px] text-sky-600">↗</span></a></li>
+            <li><a href="peyroo_admin_dashboard.html" class="hover:text-[#2C1A11] transition-colors inline-flex items-center gap-1 py-0.5 text-[#5E4131] font-semibold">پنل حاکمیت و مدیریت (Admin) <span class="text-[10px] text-[#2C1A11]">↗</span></a></li>
           </ul>
         </div>
 
@@ -2380,6 +2389,12 @@
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
         </button>
+        <a
+          href="peyroo_admin_dashboard.html"
+          class="w-full h-10 rounded-[14px] bg-[#FBF8F4] hover:bg-[#F2E8DA] border border-[#DFCFC0] text-[#5E4131] hover:text-[#2C1A11] font-bold text-[11.5px] flex items-center justify-center gap-1.5 transition-colors"
+        >
+          <span>ورود آزمایشی به کنسول مدیریت پلتفرم (Admin)</span>
+        </a>
       </form>
 
       <!-- Sign Up Form View (Initially Hidden) -->

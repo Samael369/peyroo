@@ -1,0 +1,2588 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>کنسول حاکمیت و مدیریت پلتفرم — پیرو (Peyroo Admin)</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="../../../assets/brand/peyroo_favicon_32.svg">
+  <link rel="alternate icon" type="image/svg+xml" href="../../../assets/brand/peyroo_favicon_16.svg">
+  <link rel="apple-touch-icon" href="../../../assets/brand/peyroo_app_icon_cream.svg">
+
+  <!-- Tailwind CSS -->
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+
+  <!-- Persian Fonts: Vazirmatn -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --color-cream-100: rgb(251, 245, 236);
+      --color-cream-200: rgb(242, 232, 218);
+      --color-cream-300: rgb(231, 231, 225);
+      --color-espresso: #2C1A11;
+      --color-espresso-muted: #5E4131;
+      --color-border: #DFCFC0;
+      --color-blue-accent: #8EC5FF;
+      --color-blue-hover: #78B4F5;
+      --color-amber-surface: #F5E9CF;
+      --color-amber-text: #79551F;
+    }
+
+    html, body {
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--color-espresso);
+      min-height: 100vh;
+      background: linear-gradient(143.55deg, rgb(251, 245, 236) 8.33%, rgb(242, 232, 218) 50%, rgb(231, 231, 225) 91.67%);
+      background-attachment: fixed;
+      position: relative;
+      direction: rtl;
+      text-align: right;
+    }
+
+    /* Force standard Persian glyph numerals with tabular alignment */
+    .farsi-nums {
+      font-feature-settings: "ss01" on, "tnum" on;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Liquid Glass Surfaces (Scoped strictly to top-level navbar, shells, and modal frames) */
+    .navbar-liquid-surface {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.65) 50%, rgba(255, 255, 255, 0.82) 100%);
+      backdrop-filter: blur(28px) saturate(160%);
+      -webkit-backdrop-filter: blur(28px) saturate(160%);
+    }
+
+    .liquid-glass-card {
+      background: linear-gradient(140deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.62) 45%, rgba(255, 255, 255, 0.78) 100%);
+      backdrop-filter: blur(32px) saturate(160%);
+      -webkit-backdrop-filter: blur(32px) saturate(160%);
+      border: 1px solid rgba(255, 255, 255, 0.92);
+      box-shadow:
+        0 20px 48px -12px rgba(44, 26, 17, 0.07),
+        0 4px 16px -2px rgba(44, 26, 17, 0.02),
+        inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.95),
+        inset 0 -1px 2px 0 rgba(223, 207, 192, 0.3);
+    }
+
+    /* Mobile Floating Island Navigation with Immutable Top Radii */
+    @media (max-width: 767px) {
+      .navbar-mobile-island {
+        border-top-left-radius: 28px !important;
+        border-top-right-radius: 28px !important;
+        border-bottom-left-radius: 28px !important;
+        border-bottom-right-radius: 28px !important;
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        box-shadow:
+          0 16px 40px -10px rgba(44, 26, 17, 0.12),
+          0 2px 8px rgba(44, 26, 17, 0.04),
+          inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.95),
+          inset 0 -1px 2px 0 rgba(223, 207, 192, 0.35);
+        transition: border-bottom-left-radius 240ms cubic-bezier(0.16, 1, 0.3, 1),
+                    border-bottom-right-radius 240ms cubic-bezier(0.16, 1, 0.3, 1),
+                    box-shadow 240ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .navbar-mobile-island.menu-open {
+        border-top-left-radius: 28px !important;
+        border-top-right-radius: 28px !important;
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+        border-bottom: none !important;
+        box-shadow: 0 4px 20px -4px rgba(44, 26, 17, 0.08) !important;
+      }
+      .island-drawer-open {
+        border-top-left-radius: 0 !important;
+        border-top-right-radius: 0 !important;
+        border-bottom-left-radius: 28px !important;
+        border-bottom-right-radius: 28px !important;
+        border-top: none !important;
+        border-left: 1px solid rgba(255, 255, 255, 0.9) !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.9) !important;
+        border-bottom: 1px solid rgba(223, 207, 192, 0.8) !important;
+        box-shadow:
+          0 24px 50px -10px rgba(44, 26, 17, 0.15),
+          inset 0 -1px 2px 0 rgba(223, 207, 192, 0.35) !important;
+      }
+      #mobile-menu-drawer {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px) scale(0.985);
+        transform-origin: top center;
+        pointer-events: none;
+        transition: opacity 240ms cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 240ms cubic-bezier(0.16, 1, 0.3, 1),
+                    visibility 240ms cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: opacity, transform;
+      }
+      #mobile-menu-drawer.drawer-visible {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
+      }
+      #mobile-menu-backdrop {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 240ms cubic-bezier(0.16, 1, 0.3, 1),
+                    visibility 240ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      #mobile-menu-backdrop.backdrop-visible {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .navbar-desktop-full {
+        border-radius: 0 !important;
+        border-top: none !important;
+        border-left: none !important;
+        border-right: none !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.85) !important;
+        box-shadow:
+          0 4px 24px -4px rgba(44, 26, 17, 0.04),
+          inset 0 -1px 1px 0 rgba(223, 207, 192, 0.35) !important;
+      }
+    }
+
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgb(242, 232, 218);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #DFCFC0;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #C4B09E;
+    }
+    .no-scrollbar {
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-[#8EC5FF] selection:text-[#2C1A11] farsi-nums">
+
+  <!-- Ambient Studio Glows (Strictly Viewport-Clipped) -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+    <div class="absolute left-[-80px] top-[120px] w-[540px] h-[540px] bg-[#8EC5FF]/15 rounded-full blur-[130px]"></div>
+    <div class="absolute right-[-60px] top-[40px] w-[500px] h-[500px] bg-white/65 rounded-full blur-[120px]"></div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- RESPONSIVE LIQUID GLASS NAVBAR (DESKTOP BAR / MOBILE ISLAND) -->
+  <!-- ============================================================ -->
+  <header id="main-header" class="fixed top-0 inset-x-0 z-50 pt-3 px-4 md:pt-0 md:px-0 transition-transform duration-300 ease-in-out pointer-events-none">
+    <div class="mx-auto w-full max-w-md md:max-w-none relative pointer-events-auto">
+      <nav class="navbar-liquid-surface navbar-mobile-island navbar-desktop-full mx-auto h-[60px] md:h-[68px] w-full flex items-center justify-between px-4 md:px-8 lg:px-12">
+        <div class="w-full max-w-[1440px] mx-auto flex items-center justify-between gap-2">
+
+          <!-- Right (RTL): Brand & Desktop Cross-Page Links -->
+          <div class="flex items-center gap-2.5 sm:gap-3.5 shrink-0">
+            <a href="peyroo_figma_landing.html" class="flex items-center gap-2 group" title="بازگشت به صفحه اصلی پیرو">
+              <img
+                src="../../../assets/brand/peyroo_logo_cropped_transparent.svg"
+                onerror="this.onerror=null; this.src='peyroo_logo_cropped_transparent.svg'"
+                alt="پیرو • Peyroo"
+                class="h-7 sm:h-8 md:h-9 w-auto object-contain shrink-0"
+              >
+              <span class="hidden sm:inline-flex items-center gap-1.5 text-[11px] font-bold text-[#2C1A11] px-2.5 py-1 rounded-full bg-[#EFE3D5] border border-[#DFCFC0]">
+                <svg class="w-3.5 h-3.5 text-[#5E4131]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                <span>کنسول حاکمیت پلتفرم</span>
+              </span>
+            </a>
+
+            <div class="hidden xl:flex items-center gap-5 text-xs font-semibold text-[#5E4131] border-r border-[#DFCFC0] pr-4 mr-1">
+              <a href="peyroo_figma_landing.html" class="hover:text-[#2C1A11] transition-colors">کاوش منتورها</a>
+              <a href="peyroo_dashboard.html" class="hover:text-[#2C1A11] transition-colors">میز کار دوحالته</a>
+              <a href="peyroo_become_mentor.html" class="hover:text-[#2C1A11] transition-colors">پرتال مربیان</a>
+            </div>
+          </div>
+
+          <!-- Left (RTL): RBAC Guard Test, Admin Pill, Logout, Mobile Menu -->
+          <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+            <!-- Academic Defense Button: Test Non-Admin HTTP 403 Guard -->
+            <button
+              type="button"
+              onclick="openRbacGuardModal()"
+              class="hidden sm:inline-flex items-center gap-1.5 h-9 px-3.5 rounded-full bg-white hover:bg-[#FBF8F4] border border-[#DFCFC0] text-[11.5px] font-bold text-[#5E4131] hover:text-[#2C1A11] transition-colors cursor-pointer"
+              title="شبیه‌سازی کنترل دسترسی نقش‌محور (UC-010 Exception 2a)"
+            >
+              <svg class="w-3.5 h-3.5 text-rose-700 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <span>تست نگهبان ۴۰۳</span>
+            </button>
+
+            <!-- Admin Identity Pill -->
+            <div class="h-8 sm:h-9 md:h-10 flex items-center gap-2 bg-white border border-[#DFCFC0] p-0.5 sm:px-2.5 rounded-full shrink-0">
+              <div class="w-7 h-7 rounded-full bg-[#2C1A11] text-[#F2E8DA] flex items-center justify-center font-bold text-[11px] shrink-0 border border-[#DFCFC0]">
+                <span>ن‌ر</span>
+              </div>
+              <div class="hidden sm:flex flex-col text-right">
+                <span class="text-[11.5px] font-bold text-[#2C1A11] leading-tight">دکتر ندا رادمهر</span>
+                <span class="text-[10px] text-[#5E4131] leading-tight">مدیر ارشد سیستم • isAdmin</span>
+              </div>
+            </div>
+
+            <!-- Logout Button -->
+            <button
+              type="button"
+              onclick="openLogoutModal()"
+              class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white hover:bg-[#F2E8DA] border border-[#DFCFC0] flex items-center justify-center text-[#5E4131] hover:text-[#2C1A11] transition-colors cursor-pointer shrink-0"
+              title="خروج از کنسول مدیریت"
+              aria-label="خروج از حساب مدیر"
+            >
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                <polyline points="16 17 21 12 16 7"/>
+                <line x1="21" y1="12" x2="9" y2="12"/>
+              </svg>
+            </button>
+
+            <!-- Mobile Hamburger Toggle -->
+            <button
+              type="button"
+              onclick="toggleMobileMenu()"
+              class="md:hidden w-9 h-9 rounded-full bg-white border border-[#DFCFC0] flex items-center justify-center text-[#2C1A11] cursor-pointer shrink-0 transition-colors"
+              aria-label="منوی موبایل"
+            >
+              <svg id="menu-icon-bars" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
+              </svg>
+              <svg id="menu-icon-close" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+
+        </div>
+      </nav>
+
+      <!-- Mobile Dropdown Drawer (Attached seamlessly to floating island) -->
+      <div
+        id="mobile-menu-drawer"
+        class="md:hidden absolute top-full inset-x-0 w-full z-50 navbar-liquid-surface island-drawer-open max-h-[calc(100vh-90px)] overflow-y-auto"
+      >
+        <div class="px-5 py-4 space-y-3 text-right">
+          <div class="flex items-center justify-between pb-2.5 border-b border-[#DFCFC0]/70">
+            <div>
+              <span class="text-xs font-extrabold text-[#2C1A11] block">دکتر ندا رادمهر</span>
+              <span class="text-[10.5px] text-[#5E4131]">مدیر ارشد سیستم • isAdmin = true</span>
+            </div>
+            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-[#8EC5FF] text-[#2C1A11]">کنسول حاکمیت</span>
+          </div>
+
+          <div class="space-y-1.5">
+            <span class="text-[10.5px] font-bold text-[#5E4131] block">بخش‌های کنسول مدیریت</span>
+            <button type="button" onclick="switchAdminTab('users'); toggleMobileMenu(true)" class="w-full text-right text-xs font-bold text-[#2C1A11] py-2 px-3 rounded-[12px] bg-white border border-[#DFCFC0]">۱. مدیریت کاربران (FR-027)</button>
+            <button type="button" onclick="switchAdminTab('ledger'); toggleMobileMenu(true)" class="w-full text-right text-xs font-bold text-[#2C1A11] py-2 px-3 rounded-[12px] bg-white border border-[#DFCFC0]">۲. دفترکل مالی و کارمزد ۱۰٪ (FR-028)</button>
+            <button type="button" onclick="switchAdminTab('bookings'); toggleMobileMenu(true)" class="w-full text-right text-xs font-bold text-[#2C1A11] py-2 px-3 rounded-[12px] bg-white border border-[#DFCFC0]">۳. رهگیری سراسری رزروها (FR-029)</button>
+            <button type="button" onclick="switchAdminTab('vetting'); toggleMobileMenu(true)" class="w-full text-right text-xs font-bold text-[#2C1A11] py-2 px-3 rounded-[12px] bg-white border border-[#DFCFC0]">۴. صف داوری مربیان و لاگ ممیزی</button>
+          </div>
+
+          <div class="pt-2 border-t border-[#DFCFC0]/70 space-y-2">
+            <button type="button" onclick="toggleMobileMenu(true); openRbacGuardModal()" class="w-full h-10 rounded-[14px] bg-[#FBF8F4] border border-[#DFCFC0] text-xs font-bold text-[#2C1A11] flex items-center justify-center gap-2 cursor-pointer">
+              <svg class="w-3.5 h-3.5 text-rose-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <span>تست نگهبان دسترسی غیرمجاز (HTTP 403)</span>
+            </button>
+            <div class="grid grid-cols-3 gap-1.5 text-[11px] font-bold">
+              <a href="peyroo_figma_landing.html" class="h-9 rounded-[12px] bg-white border border-[#DFCFC0] text-[#2C1A11] flex items-center justify-center">کاوش</a>
+              <a href="peyroo_dashboard.html" class="h-9 rounded-[12px] bg-white border border-[#DFCFC0] text-[#2C1A11] flex items-center justify-center">میز کار</a>
+              <a href="peyroo_become_mentor.html" class="h-9 rounded-[12px] bg-white border border-[#DFCFC0] text-[#2C1A11] flex items-center justify-center">پرتال مربی</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu Backdrop -->
+  <div
+    id="mobile-menu-backdrop"
+    class="md:hidden fixed inset-0 z-40 bg-[#2C1A11]/35 backdrop-blur-xs pointer-events-auto"
+    onclick="toggleMobileMenu(true)"
+    aria-hidden="true"
+  ></div>
+
+  <!-- Fixed Navbar Spacer -->
+  <div class="h-20 sm:h-24 md:h-24"></div>
+
+  <!-- ============================================================ -->
+  <!-- MAIN ADMIN WORKSPACE                                         -->
+  <!-- ============================================================ -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 pb-20 space-y-6 sm:space-y-8 relative z-10">
+
+    <!-- TOP GOVERNANCE BANNER + 6 RECONCILED PLATFORM KPIs -->
+    <section class="liquid-glass-card rounded-[28px] sm:rounded-[32px] p-5 sm:p-8 space-y-6">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[#DFCFC0]/70 pb-5">
+        <div class="flex items-start sm:items-center gap-4">
+          <div class="w-13 h-13 sm:w-16 sm:h-16 rounded-full bg-[#2C1A11] text-[#F2E8DA] flex items-center justify-center font-black text-lg sm:text-xl shrink-0 border border-[#DFCFC0]">
+            <span>ن‌ر</span>
+          </div>
+          <div class="space-y-1.5">
+            <div class="flex flex-wrap items-center gap-2">
+              <h1 class="text-lg sm:text-2xl font-black text-[#2C1A11] leading-[1.5]">
+                کنسول حاکمیت، نظارت کاربران و حسابرسی مالی پلتفرم پیرو
+              </h1>
+              <span class="px-3 py-0.5 rounded-full text-[11px] font-bold bg-[#8EC5FF] text-[#2C1A11] border border-[#78B4F5]">
+                Administrator (isAdmin = true)
+              </span>
+            </div>
+            <p class="text-xs sm:text-[13.5px] text-[#5E4131] leading-[1.8]">
+              مدیریت وضعیت حساب‌های کاربری <span dir="ltr" class="inline-block whitespace-nowrap">(FR-027)</span>، پایش دفترکل شاپرک و سهم ۱۰٪ پلتفرم <span dir="ltr" class="inline-block whitespace-nowrap">(FR-028)</span>، و بازرسی فقط‌خواندنی چرخه رزروها <span dir="ltr" class="inline-block whitespace-nowrap">(FR-029)</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row lg:flex-col items-start sm:items-center lg:items-end gap-2 shrink-0">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FBF8F4] border border-[#DFCFC0] text-[11px] font-bold text-[#2C1A11]">
+            <svg class="w-3.5 h-3.5 text-[#5E4131]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <span>عدم مداخله در اسلات‌ها، رزروها و تعرفه‌ها (FR-029)</span>
+          </span>
+          <span class="text-[11px] font-medium text-[#5E4131]">
+            تاریخ سامانه: چهارشنبه ۲۱ آبان ۱۴۰۵ • به وقت رسمی ایران (تهران)
+          </span>
+        </div>
+      </div>
+
+      <!-- 6 Solid KPI Summary Cards (Populated dynamically from state) -->
+      <div id="admin-kpi-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Rendered by renderAdminKPIs() -->
+      </div>
+    </section>
+
+    <!-- MAIN 4-TAB GOVERNANCE SHELL -->
+    <section class="liquid-glass-card rounded-[28px] sm:rounded-[32px] p-4 sm:p-7 md:p-8 space-y-6">
+
+      <!-- Tab Navigation Strip -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 border-b border-[#DFCFC0]/70 pb-5">
+        <button
+          type="button"
+          id="admin-tab-users"
+          onclick="switchAdminTab('users')"
+          class="h-11 px-3.5 rounded-[16px] bg-[#2C1A11] text-white font-bold text-xs sm:text-[13px] transition-colors flex items-center justify-between gap-2 cursor-pointer"
+        >
+          <span class="inline-flex items-center gap-2 truncate">
+            <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+            <span class="truncate">مدیریت کاربران (FR-027)</span>
+          </span>
+          <span id="tab-badge-users" class="px-2 py-0.5 rounded-full bg-white/20 text-white text-[11px] font-bold shrink-0">۷</span>
+        </button>
+
+        <button
+          type="button"
+          id="admin-tab-ledger"
+          onclick="switchAdminTab('ledger')"
+          class="h-11 px-3.5 rounded-[16px] bg-white border border-[#DFCFC0] hover:border-[#2C1A11] text-[#5E4131] hover:text-[#2C1A11] font-semibold text-xs sm:text-[13px] transition-colors flex items-center justify-between gap-2 cursor-pointer"
+        >
+          <span class="inline-flex items-center gap-2 truncate">
+            <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="20" height="14" x="2" y="5" rx="2"/>
+              <line x1="2" x2="22" y1="10" y2="10"/>
+            </svg>
+            <span class="truncate">دفترکل مالی (FR-028)</span>
+          </span>
+          <span id="tab-badge-ledger" class="px-2 py-0.5 rounded-full bg-[#EFE3D5] text-[#2C1A11] text-[11px] font-bold shrink-0">۹</span>
+        </button>
+
+        <button
+          type="button"
+          id="admin-tab-bookings"
+          onclick="switchAdminTab('bookings')"
+          class="h-11 px-3.5 rounded-[16px] bg-white border border-[#DFCFC0] hover:border-[#2C1A11] text-[#5E4131] hover:text-[#2C1A11] font-semibold text-xs sm:text-[13px] transition-colors flex items-center justify-between gap-2 cursor-pointer"
+        >
+          <span class="inline-flex items-center gap-2 truncate">
+            <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="18" height="18" x="3" y="4" rx="2"/>
+              <path d="M16 2v4M8 2v4M3 10h18"/>
+            </svg>
+            <span class="truncate">رزروهای سراسری (FR-029)</span>
+          </span>
+          <span id="tab-badge-bookings" class="px-2 py-0.5 rounded-full bg-[#EFE3D5] text-[#2C1A11] text-[11px] font-bold shrink-0">۸</span>
+        </button>
+
+        <button
+          type="button"
+          id="admin-tab-vetting"
+          onclick="switchAdminTab('vetting')"
+          class="h-11 px-3.5 rounded-[16px] bg-white border border-[#DFCFC0] hover:border-[#2C1A11] text-[#5E4131] hover:text-[#2C1A11] font-semibold text-xs sm:text-[13px] transition-colors flex items-center justify-between gap-2 cursor-pointer"
+        >
+          <span class="inline-flex items-center gap-2 truncate">
+            <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <path d="m9 15 2 2 4-4"/>
+            </svg>
+            <span class="truncate">داوری مربیان و ممیزی</span>
+          </span>
+          <span id="tab-badge-vetting" class="px-2 py-0.5 rounded-full bg-[#EFE3D5] text-[#2C1A11] text-[11px] font-bold shrink-0">۲</span>
+        </button>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- TAB 1: USER MANAGEMENT & MODERATION (FR-027)             -->
+      <!-- ======================================================== -->
+      <div id="panel-admin-users" class="space-y-5">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-base sm:text-lg font-extrabold text-[#2C1A11] leading-[1.5]">
+              فهرست حساب‌های کاربری و اعمال وضعیت تعلیق / فعال‌سازی
+            </h2>
+            <p class="text-xs text-[#5E4131] leading-[1.8]">
+              اندپوینت <span class="font-mono text-[11px] text-[#2C1A11] bg-[#FBF8F4] px-2 py-0.5 rounded-md border border-[#DFCFC0]">PATCH /api/admin/users/:userId/status</span> — تعلیق حساب بلافاصله نشست‌های فعال کاربر را باطل و ورود بعدی را با خطای ۴۰۳ مسدود می‌کند.
+            </p>
+          </div>
+          <span class="text-[11px] font-bold text-[#5E4131] bg-[#FBF8F4] px-3 py-1.5 rounded-full border border-[#DFCFC0] self-start md:self-auto shrink-0">
+            محافظت از حساب مدیر سیستم فعال است
+          </span>
+        </div>
+
+        <!-- Search & Filter Bar -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-[#FBF8F4] p-3.5 sm:p-4 rounded-[20px] border border-[#DFCFC0]">
+          <div class="relative flex-1">
+            <svg class="w-4 h-4 text-[#5E4131] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.3-4.3"/>
+            </svg>
+            <input
+              type="text"
+              id="user-search-input"
+              oninput="renderUsersView()"
+              placeholder="جستجوی نام، ایمیل، موبایل یا شناسه کاربر (مثلاً USR-102)..."
+              class="w-full h-10 pr-10 pl-3.5 rounded-[14px] bg-white border border-[#DFCFC0] focus:border-[#2C1A11] outline-none text-xs text-[#2C1A11] placeholder:text-[#5E4131]/65"
+            >
+          </div>
+
+          <div class="flex flex-wrap items-center gap-1.5">
+            <button type="button" id="user-filter-all" onclick="setUserFilter('all')" class="h-9 px-3.5 rounded-full bg-[#2C1A11] text-white text-xs font-bold cursor-pointer transition-colors">همه (۷)</button>
+            <button type="button" id="user-filter-ACTIVE" onclick="setUserFilter('ACTIVE')" class="h-9 px-3.5 rounded-full bg-white border border-[#DFCFC0] text-[#5E4131] hover:border-[#2C1A11] text-xs font-semibold cursor-pointer transition-colors">فعال</button>
+            <button type="button" id="user-filter-SUSPENDED" onclick="setUserFilter('SUSPENDED')" class="h-9 px-3.5 rounded-full bg-white border border-[#DFCFC0] text-[#5E4131] hover:border-[#2C1A11] text-xs font-semibold cursor-pointer transition-colors">تعلیق‌شده</button>
+            <button type="button" id="user-filter-mentor" onclick="setUserFilter('mentor')" class="h-9 px-3.5 rounded-full bg-white border border-[#DFCFC0] text-[#5E4131] hover:border-[#2C1A11] text-xs font-semibold cursor-pointer transition-colors">دارای نقش منتور</button>
+            <button type="button" id="user-filter-mentee" onclick="setUserFilter('mentee')" class="h-9 px-3.5 rounded-full bg-white border border-[#DFCFC0] text-[#5E4131] hover:border-[#2C1A11] text-xs font-semibold cursor-pointer transition-colors">فقط منتی</button>
+          </div>
+        </div>
+
+        <!-- Desktop Table (Solid White Surface) -->
+        <div class="hidden lg:block bg-white rounded-[24px] border border-[#DFCFC0] overflow-hidden">
+          <table class="w-full text-right border-collapse">
+            <thead class="bg-[#FBF8F4] border-b border-[#DFCFC0] text-[11.5px] font-bold text-[#5E4131]">
+              <tr>
+                <th class="py-3.5 px-4">کاربر و شناسه</th>
+                <th class="py-3.5 px-4">اطلاعات تماس</th>
+                <th class="py-3.5 px-4">قابلیت‌ها و نقش</th>
+                <th class="py-3.5 px-4">سوابق / هشدارها</th>
+                <th class="py-3.5 px-4">وضعیت حساب</th>
+                <th class="py-3.5 px-4 text-left">اقدام حاکمیتی</th>
+              </tr>
+            </thead>
+            <tbody id="users-desktop-tbody" class="divide-y divide-[#DFCFC0]/70 text-xs">
+              <!-- Populated by renderUsersView() -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Mobile & Tablet Stacked Cards (Solid White Cards) -->
+        <div id="users-mobile-cards" class="lg:hidden space-y-3">
+          <!-- Populated by renderUsersView() -->
+        </div>
+
+        <div id="users-empty-state" class="hidden bg-[#FBF8F4] border border-[#DFCFC0] rounded-[24px] p-10 text-center space-y-2">
+          <p class="text-sm font-bold text-[#2C1A11]">کاربری با این مشخصات یافت نشد</p>
+          <p class="text-xs text-[#5E4131]">عبارت جستجو یا فیلتر وضعیت را تغییر دهید.</p>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- TAB 2: FINANCIAL LEDGER & 10% COMMISSION AUDIT (FR-028)  -->
+      <!-- ======================================================== -->
+      <div id="panel-admin-ledger" class="hidden space-y-5">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-base sm:text-lg font-extrabold text-[#2C1A11] leading-[1.5]">
+              دفترکل تراکنش‌های پرداخت شاپرک و تفکیک کارمزد ۱۰٪ (فقط‌خواندنی)
+            </h2>
+            <p class="text-xs text-[#5E4131] leading-[1.8]">
+              اندپوینت <span class="font-mono text-[11px] text-[#2C1A11] bg-[#FBF8F4] px-2 py-0.5 rounded-md border border-[#DFCFC0]">GET /api/admin/financial-ledger</span> — کلیه رکوردهای پرداخت و استرداد متصل (<span class="font-mono">parent_transaction_id</span>) بدون قابلیت ویرایش دستی.
+            </p>
+          </div>
+          <button
+            type="button"
+            onclick="exportLedgerCSV()"
+            class="h-10 px-4 rounded-[14px] bg-[#2C1A11] hover:bg-[#432A1C] text-white text-xs font-bold inline-flex items-center justify-center gap-2 transition-colors cursor-pointer self-start md:self-auto shrink-0"
+          >
+            <svg class="w-4 h-4 text-[#8EC5FF]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span>خروجی CSV دفترکل</span>
+          </button>
+        </div>
+
+        <!-- Solid Financial Reconciliation Box -->
+        <div id="ledger-reconciliation-box" class="bg-[#FBF8F4] border border-[#DFCFC0] rounded-[24px] p-4 sm:p-6 space-y-4">
+          <!-- Populated dynamically by renderLedgerView() -->
+        </div>
+
+        <!-- Search & Status Filter Strip -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-[#FBF8F4] p-3.5 sm:p-4 rounded-[20px] border border-[#DFCFC0]">
+          <div class="relative flex-1">
+            <svg class="w-4 h-4 text-[#5E4131] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.3-4.3"/>
+            </svg>
+            <input
+              type="text"
+              id="ledger-search-input"
+              oninput="renderLedgerView()"
+              placeholder="جستجو بر اساس شناسه تراکنش، کد رهگیری رزرو، مرجع شاپرک یا نام کاربر..."
+              class="w-full h-10 pr-10 pl-3.5 rounded-[14px] bg-white border border-[#DFCFC0] focus:border-[#2C1A11] outline-none text-xs text-[#2C1A11] placeholder:text-[#5E4131]/65"
+            >
+          </div>
+
+          <div class="flex flex-wrap items-center gap-1.5">
+            <button type="button" id="ledger-filter-all" onclick="setLedgerFilter('all')" class="h-9 px-3.5 rounded-full bg-[#2C1A11] text-white text-xs font-bold cursor-pointer transition-colors">همه (۹)</button>
+            <button type="button" id="ledger-filter-COMPLETED" onclick="setLedgerFilter('COMPLETED')" class="h-9 px-3.5 rounded-full bg-white border border-[#DFCFC0] text-[#5E4131] hover:border-[#2C1A11] text-xs font-semibold cursor-pointer transition-colors">تاییدشده</button>
+            <button type="button" id="ledger-filter-REFUNDED" onclick="setLedgerFilter('REFUNDED')" class="h-9 px-3.5 rounded-full bg-white border border-[#DFCFC0] text-[#5E4131] hover:border-[#2C1A11] text-xs font-semibold cursor-pointer transition-colors">مستردشده</button>
+            <button type="button" id="ledger-filter-FAILED" onclick="setLedgerFilter('FAILED')" class="h-9 px-3.5 rounded-full bg-white border border-[#DFCFC0] text-[#5E4131] hover:border-[#2C1A11] text-xs font-semibold cursor-pointer transition-colors">ناموفق</button>
+            <button type="button" id="ledger-filter-PENDING" onclick="setLedgerFilter('PENDING')" class="h-9 px-3.5 rounded-full bg-white border border-[#DFCFC0] text-[#5E4131] hover:border-[#2C1A11] text-xs font-semibold cursor-pointer transition-colors">در انتظار</button>
+          </div>
+        </div>
+
+        <!-- Desktop Ledger Table -->
+        <div class="hidden lg:block bg-white rounded-[24px] border border-[#DFCFC0] overflow-hidden">
+          <table class="w-full text-right border-collapse">
+            <thead class="bg-[#FBF8F4] border-b border-[#DFCFC0] text-[11.5px] font-bold text-[#5E4131]">
+              <tr>
+                <th class="py-3.5 px-4">شناسه و نوع تراکنش</th>
+                <th class="py-3.5 px-4">رزرو و طرفین</th>
+                <th class="py-3.5 px-4">سهم منتور (۹۰٪)</th>
+                <th class="py-3.5 px-4">کارمزد پیرو (۱۰٪)</th>
+                <th class="py-3.5 px-4">مبلغ کل</th>
+                <th class="py-3.5 px-4">مرجع شاپرک / Idempotency</th>
+                <th class="py-3.5 px-4">وضعیت</th>
+              </tr>
+            </thead>
+            <tbody id="ledger-desktop-tbody" class="divide-y divide-[#DFCFC0]/70 text-xs">
+              <!-- Populated by renderLedgerView() -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Mobile Ledger Cards -->
+        <div id="ledger-mobile-cards" class="lg:hidden space-y-3">
+          <!-- Populated by renderLedgerView() -->
+        </div>
+
+        <div id="ledger-empty-state" class="hidden bg-[#FBF8F4] border border-[#DFCFC0] rounded-[24px] p-10 text-center space-y-2">
+          <p class="text-sm font-bold text-[#2C1A11]">تراکنشی مطابق فیلتر انتخابی یافت نشد</p>
+          <p class="text-xs text-[#5E4131]">وضعیت فیلتر یا عبارت جستجو را تغییر دهید.</p>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- TAB 3: GLOBAL BOOKINGS AUDIT TRAIL (FR-029)              -->
+      <!-- ======================================================== -->
+      <div id="panel-admin-bookings" class="hidden space-y-5">
+        <!-- Read-Only Boundary Banner -->
+        <div class="bg-[#FBF8F4] border border-[#DFCFC0] rounded-[20px] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-start sm:items-center gap-3">
+            <div class="w-9 h-9 rounded-[12px] bg-[#2C1A11] text-[#8EC5FF] flex items-center justify-center shrink-0">
+              <svg class="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </div>
+            <div class="space-y-0.5">
+              <h2 class="text-sm sm:text-base font-extrabold text-[#2C1A11]">
+                بازرسی فقط‌خواندنی چرخه رزروها و اسلات‌های سراسری (FR-029)
+              </h2>
+              <p class="text-xs text-[#5E4131] leading-[1.75]">
+                مدیر سیستم دسترسی ممیزی کامل به تاریخچه تغییر وضعیت‌ها و دستور کار دارد؛ اما از ایجاد اسلات، ثبت رزرو یا تغییر تعرفه منتورها منع شده است. لینک اتاق جلسه فقط برای وضعیت <span class="font-mono font-bold text-[#2C1A11]">CONFIRMED</span> افشا می‌شود.
+              </p>
+            </div>
+          </div>
+          <span class="px-3 py-1 rounded-full bg-white border border-[#DFCFC0] text-[11px] font-bold text-[#2C1A11] shrink-0 self-start sm:self-center">
+            حالت فقط‌خواندنی (Read-Only)
+          </span>
+        </div>
+
+        <!-- Search & Booking Status Filters -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-[#FBF8F4] p-3.5 sm:p-4 rounded-[20px] border border-[#DFCFC0]">
+          <div class="relative flex-1">
+            <svg class="w-4 h-4 text-[#5E4131] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.3-4.3"/>
+            </svg>
+            <input
+              type="text"
+              id="booking-search-input"
+              oninput="renderBookingsView()"
+              placeholder="جستجوی کد رزرو (#PYR-BK-10492)، نام منتی، نام منتور یا عنوان دستور کار..."
+              class="w-full h-10 pr-10 pl-3.5 rounded-[14px] bg-white border border-[#DFCFC0] focus:border-[#2C1A11] outline-none text-xs text-[#2C1A11] placeholder:text-[#5E4131]/65"
+            >
+          </div>
+
+          <div class="flex flex-wrap items-center gap-1.5">
+            <button type="button" id="booking-filter-all" onclick="setBookingFilter('all')" class="h-9 px-3 rounded-full bg-[#2C1A11] text-white text-xs font-bold cursor-pointer transition-colors">همه (۸)</button>
+            <button type="button" id="booking-filter-CONFIRMED" onclick="setBookingFilter('CONFIRMED')" class="h-9 px-3 rounded-full bg-white border border-[#DFCFC0] text-[#5E4131] hover:border-[#2C1A11] text-xs font-semibold cursor-pointer transition-colors">قطعی</button>
+            <button type="button" id="booking-filter-PENDING_PAYMENT" onclick="setBookingFilter('PENDING_PAYMENT')" class="h-9 px-3 rounded-full bg-white border border-[#DFCFC0] text-[#5E4131] hover:border-[#2C1A11] text-xs font-semibold cursor-pointer transition-colors">قفل ۱۵ دقیقه‌ای</button>
+            <button type="button" id="booking-filter-COMPLETED" onclick="setBookingFilter('COMPLETED')" class="h-9 px-3 rounded-full bg-white border border-[#DFCFC0] text-[#5E4131] hover:border-[#2C1A11] text-xs font-semibold cursor-pointer transition-colors">تکمیل‌شده</button>
+            <button type="button" id="booking-filter-CANCELLED_REFUNDED" onclick="setBookingFilter('CANCELLED_REFUNDED')" class="h-9 px-3 rounded-full bg-white border border-[#DFCFC0] text-[#5E4131] hover:border-[#2C1A11] text-xs font-semibold cursor-pointer transition-colors">لغو + استرداد</button>
+            <button type="button" id="booking-filter-other_terminal" onclick="setBookingFilter('other_terminal')" class="h-9 px-3 rounded-full bg-white border border-[#DFCFC0] text-[#5E4131] hover:border-[#2C1A11] text-xs font-semibold cursor-pointer transition-colors">منقضی / ناموفق / بدون استرداد</button>
+          </div>
+        </div>
+
+        <!-- Desktop Global Bookings Table -->
+        <div class="hidden lg:block bg-white rounded-[24px] border border-[#DFCFC0] overflow-hidden">
+          <table class="w-full text-right border-collapse">
+            <thead class="bg-[#FBF8F4] border-b border-[#DFCFC0] text-[11.5px] font-bold text-[#5E4131]">
+              <tr>
+                <th class="py-3.5 px-4">کد رزرو و اسلات</th>
+                <th class="py-3.5 px-4">منتی و منتور</th>
+                <th class="py-3.5 px-4">موعد جلسه (IRST)</th>
+                <th class="py-3.5 px-4">مبلغ کل</th>
+                <th class="py-3.5 px-4">وضعیت رزرو و اسلات</th>
+                <th class="py-3.5 px-4 text-left">جزئیات پرونده</th>
+              </tr>
+            </thead>
+            <tbody id="bookings-desktop-tbody" class="divide-y divide-[#DFCFC0]/70 text-xs">
+              <!-- Populated by renderBookingsView() -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Mobile Global Bookings Cards -->
+        <div id="bookings-mobile-cards" class="lg:hidden space-y-3">
+          <!-- Populated by renderBookingsView() -->
+        </div>
+
+        <div id="bookings-empty-state" class="hidden bg-[#FBF8F4] border border-[#DFCFC0] rounded-[24px] p-10 text-center space-y-2">
+          <p class="text-sm font-bold text-[#2C1A11]">رزروی با این فیلتر پیدا نشد</p>
+          <p class="text-xs text-[#5E4131]">وضعیت فیلتر یا عبارت جستجو را بررسی کنید.</p>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- TAB 4: MENTOR VETTING QUEUE & ADMIN AUDIT LOG            -->
+      <!-- ======================================================== -->
+      <div id="panel-admin-vetting" class="hidden space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+          <!-- Left/Right Column 1 (7 cols): Mentor Vetting Queue -->
+          <div class="lg:col-span-7 space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h2 class="text-base sm:text-lg font-extrabold text-[#2C1A11] leading-[1.5]">
+                  صف بررسی صلاحیت متقاضیان مربی‌گری (Mentor Vetting)
+                </h2>
+                <p class="text-xs text-[#5E4131]">
+                  همگام با پرونده‌های ثبت‌شده در <a href="peyroo_become_mentor.html" class="font-bold text-[#2C1A11] underline underline-offset-4">پرتال پذیرش مربیان</a>
+                </p>
+              </div>
+              <span class="px-3 py-1 rounded-full bg-[#F5E9CF] text-[#79551F] text-[11px] font-bold">
+                تایید صلاحیت = فعال‌سازی isMentorEnabled
+              </span>
+            </div>
+
+            <div id="vetting-queue-list" class="space-y-4">
+              <!-- Populated by renderVettingView() -->
+            </div>
+          </div>
+
+          <!-- Column 2 (5 cols): Immutable Admin Action Audit Log (UC-010 Postcondition) -->
+          <div class="lg:col-span-5 bg-[#FBF8F4] border border-[#DFCFC0] rounded-[24px] p-4 sm:p-5 space-y-4">
+            <div class="flex items-center justify-between border-b border-[#DFCFC0] pb-3">
+              <div>
+                <h3 class="text-sm font-extrabold text-[#2C1A11]">گزارش ممیزی عملیات مدیر (Audit Log)</h3>
+                <p class="text-[11px] text-[#5E4131]">ثبت تغییرناپذیر کلیه اقدامات حاکمیتی (UC-010)</p>
+              </div>
+              <span id="audit-log-count" class="px-2.5 py-0.5 rounded-full bg-[#2C1A11] text-white text-[11px] font-bold">۳ رویداد</span>
+            </div>
+
+            <div id="audit-log-list" class="space-y-2.5 max-h-[540px] overflow-y-auto pl-1">
+              <!-- Populated by renderVettingView() -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- GOVERNANCE FOOTER                                            -->
+    <!-- ============================================================ -->
+    <footer class="bg-white border border-[#DFCFC0] rounded-[28px] p-6 sm:p-8 space-y-5 text-xs text-[#5E4131]">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4 pb-5 border-b border-[#DFCFC0]/70">
+        <div class="flex items-center gap-3">
+          <img
+            src="../../../assets/brand/peyroo_logo_cropped_transparent.svg"
+            onerror="this.onerror=null; this.src='peyroo_logo_cropped_transparent.svg'"
+            alt="پیرو • Peyroo"
+            class="h-7 sm:h-8 w-auto object-contain"
+          >
+          <div>
+            <span class="font-bold text-xs sm:text-sm text-[#2C1A11] block">کنسول حاکمیت و ممیزی پیرو (Peyroo Admin Governance)</span>
+            <span class="text-[11px] text-[#5E4131]">ردیابی کامل به US-10، UC-010 و نیازمندی‌های FR-027 تا FR-029</span>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-[#5E4131]">
+          <a href="peyroo_figma_landing.html" class="hover:text-[#2C1A11] transition-colors">صفحه اصلی کاوش</a>
+          <a href="peyroo_dashboard.html" class="hover:text-[#2C1A11] transition-colors">میز کار دوحالته (منتی/منتور)</a>
+          <a href="peyroo_become_mentor.html" class="hover:text-[#2C1A11] transition-colors">پرتال پذیرش مربیان</a>
+          <button type="button" onclick="openRbacGuardModal()" class="hover:text-[#2C1A11] transition-colors cursor-pointer">تست نگهبان ۴۰۳</button>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+        <span class="text-[11.5px] leading-[1.75]">
+          تمامی عملیات حسابرسی، تعلیق حساب و بازبینی اسناد تراکنش در لاگ حاکمیتی پلتفرم ثبت می‌شوند و مدیر سیستم مجاز به ایجاد اسلات یا تغییر تعرفه نیست.
+        </span>
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="text-[11px] font-mono text-[#5E4131] bg-[#FBF8F4] px-3 py-1 rounded-full border border-[#DFCFC0]">
+            v1.4.0 • RBAC Admin
+          </span>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- ============================================================ -->
+  <!-- MODAL 1: USER ACCOUNT SUSPEND / REACTIVATE CONFIRM (FR-027)  -->
+  <!-- ============================================================ -->
+  <div
+    id="suspend-modal-backdrop"
+    class="fixed inset-0 z-50 bg-[#2C1A11]/70 backdrop-blur-md hidden flex items-center justify-center p-4 overflow-y-auto"
+    onclick="handleBackdropClose(event, 'suspend-modal-backdrop', closeSuspendModal)"
+  >
+    <div
+      id="suspend-dialog"
+      class="liquid-glass-card w-full max-w-md rounded-[28px] p-6 sm:p-7 space-y-5 text-right relative"
+      onclick="event.stopPropagation()"
+    >
+      <div class="flex items-center justify-between border-b border-[#DFCFC0]/70 pb-3.5">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-full bg-rose-50 border border-rose-200 text-rose-700 flex items-center justify-center shrink-0">
+            <svg class="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+          </div>
+          <div>
+            <h3 id="suspend-modal-title" class="text-base font-extrabold text-[#2C1A11]">تعلیق حساب کاربری</h3>
+            <p id="suspend-modal-subtitle" class="text-[11px] text-[#5E4131] font-mono">PATCH /api/admin/users/:userId/status</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeSuspendModal()" class="w-8 h-8 rounded-full bg-white border border-[#DFCFC0] hover:border-[#2C1A11] text-[#2C1A11] flex items-center justify-center cursor-pointer">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div id="suspend-target-summary" class="bg-white border border-[#DFCFC0] rounded-[18px] p-4 space-y-1 text-xs">
+        <!-- Populated dynamically -->
+      </div>
+
+      <div id="suspend-reason-group" class="space-y-3 text-xs">
+        <div class="space-y-1.5">
+          <label class="block font-bold text-[#2C1A11]">دلیل حاکمیتی تغییر وضعیت:</label>
+          <select id="suspend-reason-select" class="w-full h-11 px-3 rounded-[14px] bg-white border border-[#DFCFC0] focus:border-[#2C1A11] outline-none text-xs font-semibold text-[#2C1A11] cursor-pointer">
+            <option value="ارسال دستور کار نامعتبر یا هرزنامه (Violation of Agenda Policy)">ارسال دستور کار نامعتبر یا هرزنامه (Violation of Agenda Policy)</option>
+            <option value="نقض توافق‌نامه محرمانگی سورس‌کد و NDA">نقض توافق‌نامه محرمانگی سورس‌کد و NDA</option>
+            <option value="تلاش برای دور زدن کارمزد ۱۰٪ پلتفرم یا افشای لینک خصوصی">تلاش برای دور زدن کارمزد ۱۰٪ پلتفرم یا افشای لینک خصوصی</option>
+            <option value="تخلف رفتاری گزارش‌شده در نشست مشاوره">تخلف رفتاری گزارش‌شده در نشست مشاوره</option>
+          </select>
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="block font-bold text-[#2C1A11]">توضیح تکمیلی برای ثبت در لاگ ممیزی:</label>
+          <textarea id="suspend-custom-note" rows="2" placeholder="توضیح اختیاری مدیر سیستم..." class="w-full p-3 rounded-[14px] bg-white border border-[#DFCFC0] focus:border-[#2C1A11] outline-none text-xs text-[#2C1A11] resize-none leading-[1.75]"></textarea>
+        </div>
+      </div>
+
+      <div id="suspend-impact-box" class="bg-[#FBF8F4] border border-[#DFCFC0] rounded-[16px] p-3.5 text-[11.5px] text-[#5E4131] leading-[1.75]">
+        با تایید تعلیق، تمام توکن‌های نشست (<span class="font-mono">HttpOnly Session</span>) این کاربر فوراً ابطال شده و ورود مجدد با خطای <span class="font-mono font-bold text-rose-700">HTTP 403 Forbidden</span> مسدود می‌گردد.
+      </div>
+
+      <div class="flex items-center gap-2.5 pt-1">
+        <button
+          type="button"
+          id="suspend-confirm-btn"
+          onclick="executeUserStatusChange()"
+          class="flex-1 h-11 rounded-[14px] bg-rose-700 hover:bg-rose-800 text-white font-bold text-xs transition-colors cursor-pointer"
+        >
+          تایید تغییر وضعیت حساب
+        </button>
+        <button
+          type="button"
+          onclick="closeSuspendModal()"
+          class="h-11 px-4 rounded-[14px] bg-white border border-[#DFCFC0] hover:border-[#2C1A11] text-xs font-bold text-[#5E4131] cursor-pointer"
+        >
+          انصراف
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- MODAL 2: READ-ONLY GLOBAL BOOKING DOSSIER (FR-029)           -->
+  <!-- ============================================================ -->
+  <div
+    id="booking-dossier-modal-backdrop"
+    class="fixed inset-0 z-50 bg-[#2C1A11]/70 backdrop-blur-md hidden flex items-center justify-center p-4 overflow-y-auto"
+    onclick="handleBackdropClose(event, 'booking-dossier-modal-backdrop', closeBookingDossierModal)"
+  >
+    <div
+      id="booking-dossier-dialog"
+      class="liquid-glass-card w-full max-w-2xl rounded-[32px] p-6 sm:p-8 space-y-5 text-right relative max-h-[92vh] overflow-y-auto no-scrollbar"
+      onclick="event.stopPropagation()"
+    >
+      <div class="flex items-start justify-between gap-3 border-b border-[#DFCFC0]/70 pb-4">
+        <div class="space-y-1.5">
+          <div class="flex flex-wrap items-center gap-2" id="dossier-badges">
+            <!-- Populated dynamically -->
+          </div>
+          <h3 id="dossier-title" class="text-base sm:text-xl font-black text-[#2C1A11]">
+            پرونده ممیزی رزرو
+          </h3>
+        </div>
+        <button type="button" onclick="closeBookingDossierModal()" class="w-8 h-8 rounded-full bg-white border border-[#DFCFC0] hover:border-[#2C1A11] text-[#2C1A11] flex items-center justify-center cursor-pointer shrink-0">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Meta Grid -->
+      <div id="dossier-meta-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+        <!-- Populated dynamically -->
+      </div>
+
+      <!-- Submitted Session Agenda -->
+      <div id="dossier-agenda-box" class="bg-white border border-[#DFCFC0] rounded-[20px] p-4 sm:p-5 space-y-2 text-xs">
+        <!-- Populated dynamically -->
+      </div>
+
+      <!-- Meeting URL Masking Check (US-07 & NFR-005) -->
+      <div id="dossier-meeting-url-box" class="bg-[#FBF8F4] border border-[#DFCFC0] rounded-[18px] p-4 space-y-1.5 text-xs">
+        <!-- Populated dynamically -->
+      </div>
+
+      <!-- Linked Payment Transactions -->
+      <div id="dossier-transactions-box" class="bg-white border border-[#DFCFC0] rounded-[20px] p-4 space-y-2.5 text-xs">
+        <!-- Populated dynamically -->
+      </div>
+
+      <!-- State Machine Transition Timeline -->
+      <div class="bg-[#FBF8F4] border border-[#DFCFC0] rounded-[20px] p-4 space-y-3 text-xs">
+        <h4 class="font-extrabold text-[#2C1A11]">تاریخچه گذار وضعیت‌ها (State Machine Audit Trail)</h4>
+        <div id="dossier-timeline-list" class="space-y-2.5">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-[#DFCFC0]/70">
+        <span class="text-[11px] font-semibold text-[#5E4131]">
+          محدودیت FR-029: امکان ویرایش، لغو دستی یا تغییر قیمت در نمای حاکمیتی غیرفعال است.
+        </span>
+        <button
+          type="button"
+          onclick="closeBookingDossierModal()"
+          class="h-10 px-6 rounded-[14px] bg-[#2C1A11] hover:bg-[#432A1C] text-white font-bold text-xs cursor-pointer transition-colors"
+        >
+          بستن پرونده
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- MODAL 3: NON-ADMIN HTTP 403 RBAC GUARD TEST (UC-010 Exc. 2a) -->
+  <!-- ============================================================ -->
+  <div
+    id="rbac-guard-modal-backdrop"
+    class="fixed inset-0 z-50 bg-[#2C1A11]/70 backdrop-blur-md hidden flex items-center justify-center p-4 overflow-y-auto"
+    onclick="handleBackdropClose(event, 'rbac-guard-modal-backdrop', closeRbacGuardModal)"
+  >
+    <div
+      id="rbac-guard-dialog"
+      class="liquid-glass-card w-full max-w-lg rounded-[28px] p-6 sm:p-7 space-y-4 text-right relative"
+      onclick="event.stopPropagation()"
+    >
+      <div class="flex items-center justify-between border-b border-[#DFCFC0]/70 pb-3.5">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-full bg-rose-50 border border-rose-200 text-rose-700 flex items-center justify-center shrink-0">
+            <svg class="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-base font-extrabold text-[#2C1A11]">شبیه‌سازی نگهبان دسترسی (HTTP 403 Forbidden)</h3>
+            <p class="text-[11px] text-[#5E4131]">سناریوی استثنایی 2a در UC-010 و الزام امنیتی NFR-002</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeRbacGuardModal()" class="w-8 h-8 rounded-full bg-white border border-[#DFCFC0] text-[#2C1A11] flex items-center justify-center cursor-pointer">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="bg-rose-50 border border-rose-200 rounded-[18px] p-4 space-y-1.5 text-xs text-rose-900">
+        <span class="font-extrabold block">تلاش کاربر غیرمدیر (علیرضا عباسی • isAdmin: false) برای فراخوانی مسیرهای /api/admin/*</span>
+        <p class="leading-[1.75] text-rose-800">
+          میان‌افزار RBAC Guard پیش از ورود به ماژول حاکمیت درخواست را مسدود کرده و ساختار خطای استاندارد NFR-012 را برمی‌گرداند:
+        </p>
+      </div>
+
+      <pre dir="ltr" class="bg-[#2C1A11] text-[#F2E8DA] rounded-[18px] p-4 text-[11.5px] font-mono whitespace-pre-wrap break-words leading-relaxed text-left">{
+  "success": false,
+  "error": {
+    "code": "FORBIDDEN_ADMIN_ONLY",
+    "message": "Access denied. Platform Administrator role (isAdmin == true) is required.",
+    "field": "auth.user.isAdmin",
+    "statusCode": 403,
+    "timestamp": "2026-11-11T14:42:10Z"
+  }
+}</pre>
+
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 pt-1">
+        <a href="peyroo_dashboard.html" class="h-10 px-4 rounded-[14px] bg-white border border-[#DFCFC0] hover:border-[#2C1A11] text-xs font-bold text-[#2C1A11] inline-flex items-center justify-center">
+          بازگشت به میز کار کاربر عادی
+        </a>
+        <button type="button" onclick="closeRbacGuardModal()" class="h-10 px-5 rounded-[14px] bg-[#2C1A11] hover:bg-[#432A1C] text-white text-xs font-bold cursor-pointer">
+          ادامه در نشست مجاز مدیر (Admin)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- MODAL 4: ADMIN LOGOUT CONFIRMATION                           -->
+  <!-- ============================================================ -->
+  <div
+    id="logout-modal-backdrop"
+    class="fixed inset-0 z-50 bg-[#2C1A11]/70 backdrop-blur-md hidden flex items-center justify-center p-4 overflow-y-auto"
+    onclick="handleBackdropClose(event, 'logout-modal-backdrop', closeLogoutModal)"
+  >
+    <div
+      id="logout-dialog"
+      class="liquid-glass-card w-full max-w-md rounded-[28px] p-6 sm:p-7 space-y-5 text-right relative"
+      onclick="event.stopPropagation()"
+    >
+      <div class="flex items-center justify-between border-b border-[#DFCFC0]/70 pb-3.5">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-rose-50 border border-rose-200 text-rose-700 flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-[#2C1A11]">خروج از کنسول مدیریت</h3>
+            <p class="text-[11px] text-[#5E4131]">دکتر ندا رادمهر • مدیر ارشد پلتفرم</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeLogoutModal()" class="w-8 h-8 rounded-full bg-white border border-[#DFCFC0] flex items-center justify-center cursor-pointer">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <p class="text-xs sm:text-[13px] text-[#5E4131] leading-[1.8]">
+        با خروج از نشست حاکمیتی، کوکی امن <span class="font-mono font-bold text-[#2C1A11]">peyroo_admin_session</span> باطل شده و به صفحه اصلی پیرو هدایت می‌شوید.
+      </p>
+
+      <div class="space-y-2">
+        <button type="button" onclick="confirmAdminLogout()" class="w-full h-11 rounded-[14px] bg-rose-700 hover:bg-rose-800 text-white font-bold text-xs cursor-pointer transition-colors">
+          خروج قطعی و بازگشت به صفحه کاوش
+        </button>
+        <button type="button" onclick="closeLogoutModal()" class="w-full h-10 rounded-[14px] bg-white border border-[#DFCFC0] text-xs font-bold text-[#5E4131] cursor-pointer">
+          انصراف و ماندن در کنسول
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="admin-toast" class="fixed top-20 inset-x-0 z-50 flex justify-center pointer-events-none transition-[transform,opacity] duration-200 opacity-0 -translate-y-2 px-4">
+    <div class="bg-[#2C1A11] text-white px-5 py-3 rounded-full text-xs font-bold shadow-xl border border-[#DFCFC0]/40 flex items-center gap-2 pointer-events-auto max-w-xl text-center">
+      <svg class="w-4 h-4 text-emerald-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      <span id="admin-toast-message">عملیات ثبت شد</span>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- JAVASCRIPT GOVERNANCE STATE & INTERACTIVE ENGINE             -->
+  <!-- ============================================================ -->
+  <script>
+    const ADMIN_ACTOR_LABEL = 'دکتر ندا رادمهر (USR-001)';
+
+    function toPersianDigits(val) {
+      const digits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      return String(val).replace(/\d/g, d => digits[d]);
+    }
+
+    function formatToman(num) {
+      const n = Number(num) || 0;
+      const formatted = Math.round(n).toLocaleString('en-US').replace(/,/g, '٬');
+      return `${toPersianDigits(formatted)} تومان`;
+    }
+
+    // Seeded User Accounts (FR-027)
+    const usersData = [
+      {
+        id: 'USR-101',
+        monogram: 'م‌س',
+        fullName: 'مهندس مصطفی سدیدی',
+        email: 'mostafa.sadidi@peyroo.ir',
+        phone: '۰۹۱۲۳۴۵۱۱۱۰',
+        isMenteeEnabled: true,
+        isMentorEnabled: true,
+        isAdmin: false,
+        status: 'ACTIVE',
+        sessionsCount: 62,
+        rating: '۴.۹۸',
+        alertFlag: '',
+        joinedAt: '۱۴۰۵/۰۴/۱۲'
+      },
+      {
+        id: 'USR-102',
+        monogram: 'س‌ک',
+        fullName: 'سروش کاظمی',
+        email: 'soroush.kazemi@mail.ir',
+        phone: '۰۹۳۵۴۴۸۲۱۲۰',
+        isMenteeEnabled: true,
+        isMentorEnabled: false,
+        isAdmin: false,
+        status: 'ACTIVE',
+        sessionsCount: 4,
+        rating: '',
+        alertFlag: '۲ گزارش تخلف دستور کار',
+        joinedAt: '۱۴۰۵/۰۷/۰۳'
+      },
+      {
+        id: 'USR-103',
+        monogram: 'ب‌د',
+        fullName: 'مهندس بهنود دهقان',
+        email: 'behnood.dehghan@peyroo.ir',
+        phone: '۰۹۱۲۲۸۹۷۷۴۱',
+        isMenteeEnabled: true,
+        isMentorEnabled: true,
+        isAdmin: false,
+        status: 'ACTIVE',
+        sessionsCount: 48,
+        rating: '۴.۹۵',
+        alertFlag: '',
+        joinedAt: '۱۴۰۵/۰۴/۲۵'
+      },
+      {
+        id: 'USR-104',
+        monogram: 'ع‌ع',
+        fullName: 'علیرضا عباسی',
+        email: 'alireza.abbasi@ut.ac.ir',
+        phone: '۰۹۱۲۳۴۵۶۷۸۹',
+        isMenteeEnabled: true,
+        isMentorEnabled: false,
+        isAdmin: false,
+        status: 'ACTIVE',
+        sessionsCount: 3,
+        rating: '',
+        alertFlag: '',
+        joinedAt: '۱۴۰۵/۰۶/۱۸'
+      },
+      {
+        id: 'USR-105',
+        monogram: 'ا‌س',
+        fullName: 'مهندس ابوالفضل سمرقندی',
+        email: 'a.samarghandi@peyroo.ir',
+        phone: '۰۹۱۲۷۷۴۹۰۳۲',
+        isMenteeEnabled: true,
+        isMentorEnabled: true,
+        isAdmin: false,
+        status: 'ACTIVE',
+        sessionsCount: 35,
+        rating: '۴.۹۲',
+        alertFlag: '',
+        joinedAt: '۱۴۰۵/۰۵/۰۹'
+      },
+      {
+        id: 'USR-106',
+        monogram: 'ک‌ف',
+        fullName: 'کامران فرهادی',
+        email: 'kamran.farhadi@devmail.ir',
+        phone: '۰۹۱۹۶۰۱۲۴۸۸',
+        isMenteeEnabled: true,
+        isMentorEnabled: false,
+        isAdmin: false,
+        status: 'SUSPENDED',
+        sessionsCount: 2,
+        rating: '',
+        alertFlag: 'نقض توافق‌نامه NDA و اسکرپینگ لینک جلسات',
+        joinedAt: '۱۴۰۵/۰۷/۲۲'
+      },
+      {
+        id: 'USR-001',
+        monogram: 'ن‌ر',
+        fullName: 'دکتر ندا رادمهر',
+        email: 'admin@peyroo.ir',
+        phone: '۰۹۱۲۱۰۰۰۰۰۰',
+        isMenteeEnabled: false,
+        isMentorEnabled: false,
+        isAdmin: true,
+        status: 'ACTIVE',
+        sessionsCount: 0,
+        rating: '',
+        alertFlag: '',
+        joinedAt: '۱۴۰۵/۰۱/۱۰'
+      }
+    ];
+
+    // Seeded Payment Ledger (FR-028) - Strictly 10% Commission + Linked Refund Parents
+    const ledgerData = [
+      {
+        id: 'TX-9050',
+        bookingId: '#PYR-BK-10495',
+        transactionType: 'SESSION_PAYMENT',
+        parentTransactionId: null,
+        status: 'PENDING',
+        mentorName: 'ابوالفضل سمرقندی',
+        menteeName: 'سروش کاظمی',
+        mentorFee: 260000,
+        platformCommission: 26000,
+        totalAmount: 286000,
+        externalTxRef: 'PENDING-GATEWAY',
+        idempotencyKey: 'IDEMP-10495-PAY-1',
+        note: 'اسلات به مدت ۱۵ دقیقه در قفل همزمانی (HELD) قرار دارد',
+        timestamp: '۱۴۰۵/۰۸/۲۱ — ۱۸:۱۲'
+      },
+      {
+        id: 'TX-9049',
+        bookingId: '#PYR-BK-10490',
+        transactionType: 'SESSION_PAYMENT',
+        parentTransactionId: null,
+        status: 'FAILED',
+        mentorName: 'مصطفی سدیدی',
+        menteeName: 'کامران فرهادی',
+        mentorFee: 250000,
+        platformCommission: 25000,
+        totalAmount: 275000,
+        externalTxRef: 'TRX-1405-88204-ERR',
+        idempotencyKey: 'IDEMP-10490-PAY-1',
+        note: 'خطای کد ۵۱ شاپرک (عدم کسر وجه • بازگشت اسلات به OPEN)',
+        timestamp: '۱۴۰۵/۰۸/۲۰ — ۱۶:۰۴'
+      },
+      {
+        id: 'TX-9048',
+        bookingId: '#PYR-BK-10492',
+        transactionType: 'SESSION_PAYMENT',
+        parentTransactionId: null,
+        status: 'COMPLETED',
+        mentorName: 'مصطفی سدیدی',
+        menteeName: 'علیرضا عباسی',
+        mentorFee: 250000,
+        platformCommission: 25000,
+        totalAmount: 275000,
+        externalTxRef: 'TRX-1405-88392',
+        idempotencyKey: 'IDEMP-10492-PAY-1',
+        note: 'تک‌جلسه ۴۵ دقیقه‌ای • تاییدشده درگاه شاپرک',
+        timestamp: '۱۴۰۵/۰۸/۲۰ — ۱۱:۳۸'
+      },
+      {
+        id: 'TX-9047',
+        bookingId: '#PYR-BK-10485',
+        transactionType: 'SESSION_PAYMENT',
+        parentTransactionId: null,
+        status: 'COMPLETED',
+        mentorName: 'بهنود دهقان',
+        menteeName: 'علیرضا عباسی',
+        mentorFee: 250000,
+        platformCommission: 25000,
+        totalAmount: 275000,
+        externalTxRef: 'TRX-1405-87910',
+        idempotencyKey: 'IDEMP-10485-PAY-1',
+        note: 'نشست تکمیل‌شده و دارای سند تصمیم معماری ADR-1042',
+        timestamp: '۱۴۰۵/۰۸/۱۵ — ۱۹:۲۱'
+      },
+      {
+        id: 'TX-9046',
+        bookingId: '#PYR-BK-10479',
+        transactionType: 'SESSION_PAYMENT',
+        parentTransactionId: null,
+        status: 'COMPLETED',
+        mentorName: 'مصطفی سدیدی',
+        menteeName: 'علیرضا عباسی',
+        mentorFee: 850000,
+        platformCommission: 85000,
+        totalAmount: 935000,
+        externalTxRef: 'TRX-1405-87402',
+        idempotencyKey: 'IDEMP-10479-PAY-1',
+        note: 'اسپرینت ۴ هفته‌ای (۴ نشست + ۱۵٪ تخفیف پکیج)',
+        timestamp: '۱۴۰۵/۰۸/۱۲ — ۱۴:۰۵'
+      },
+      {
+        id: 'TX-9045',
+        bookingId: '#PYR-BK-10471',
+        transactionType: 'CANCELLATION_REFUND',
+        parentTransactionId: 'TX-9044',
+        status: 'REFUNDED',
+        mentorName: 'ابوالفضل سمرقندی',
+        menteeName: 'سروش کاظمی',
+        mentorFee: 260000,
+        platformCommission: 26000,
+        totalAmount: 286000,
+        externalTxRef: 'REF-984210-PYR',
+        idempotencyKey: 'IDEMP-10471-REF-1',
+        note: 'لغو زودهنگام بیش از ۲۴ ساعت مانده به جلسه • استرداد ۱۰۰٪',
+        timestamp: '۱۴۰۵/۰۸/۱۰ — ۱۰:۱۲'
+      },
+      {
+        id: 'TX-9044',
+        bookingId: '#PYR-BK-10471',
+        transactionType: 'SESSION_PAYMENT',
+        parentTransactionId: null,
+        status: 'COMPLETED',
+        mentorName: 'ابوالفضل سمرقندی',
+        menteeName: 'سروش کاظمی',
+        mentorFee: 260000,
+        platformCommission: 26000,
+        totalAmount: 286000,
+        externalTxRef: 'TRX-1405-86955',
+        idempotencyKey: 'IDEMP-10471-PAY-1',
+        note: 'پرداخت اولیه پیش از لغو زودهنگام منتی',
+        timestamp: '۱۴۰۵/۰۸/۰۹ — ۲۱:۴۰'
+      },
+      {
+        id: 'TX-9043',
+        bookingId: '#PYR-BK-10464',
+        transactionType: 'CANCELLATION_REFUND',
+        parentTransactionId: 'TX-9042',
+        status: 'REFUNDED',
+        mentorName: 'مصطفی سدیدی',
+        menteeName: 'سروش کاظمی',
+        mentorFee: 280000,
+        platformCommission: 28000,
+        totalAmount: 308000,
+        externalTxRef: 'REF-86113-AUTO',
+        idempotencyKey: 'IDEMP-10464-REF-AUTO',
+        note: 'استرداد آنی Policy Option A پس از انقضای قفل ۱۵ دقیقه‌ای',
+        timestamp: '۱۴۰۵/۰۸/۰۷ — ۱۶:۳۰'
+      },
+      {
+        id: 'TX-9042',
+        bookingId: '#PYR-BK-10464',
+        transactionType: 'SESSION_PAYMENT',
+        parentTransactionId: null,
+        status: 'COMPLETED',
+        mentorName: 'مصطفی سدیدی',
+        menteeName: 'سروش کاظمی',
+        mentorFee: 280000,
+        platformCommission: 28000,
+        totalAmount: 308000,
+        externalTxRef: 'TRX-1405-86112',
+        idempotencyKey: 'IDEMP-10464-PAY-1',
+        note: 'کالبک دیرهنگام پس از انقضای ۱۵ دقیقه (ثبت قطعی + استرداد متصل)',
+        timestamp: '۱۴۰۵/۰۸/۰۷ — ۱۶:۳۰'
+      }
+    ];
+
+    // Seeded Global Bookings Audit (FR-029)
+    const bookingsData = [
+      {
+        id: '#PYR-BK-10495',
+        slotId: 'SLT-512',
+        mentorName: 'مهندس ابوالفضل سمرقندی',
+        menteeName: 'سروش کاظمی',
+        scheduledTime: 'شنبه ۲۴ آبان ۱۴۰۵ • ۲۰:۰۰',
+        duration: '۴۵ دقیقه',
+        bookingStatus: 'PENDING_PAYMENT',
+        slotStatus: 'HELD',
+        mentorFee: 260000,
+        commission: 26000,
+        totalAmount: 286000,
+        meetingUrl: null,
+        agenda: {
+          topic: 'بهینه‌سازی مصرف منابع در کلاستر Kubernetes و تنظیم HPA',
+          questions: 'چگونه از OOMKilled شدن سرویس‌های Go تحت بار ناگهانی جلوگیری کنیم و متریک‌های Prometheus را دقیق‌تر کنیم؟',
+          repoUrl: 'https://github.com/soroush-k/k8s-autoscaler-demo'
+        },
+        txIds: ['TX-9050'],
+        transitions: [
+          { time: '۱۴۰۵/۰۸/۲۱ — ۱۸:۱۲', label: 'INITIATED → PENDING_PAYMENT', detail: 'قفل انحصاری ۱۵ دقیقه‌ای با SELECT ... FOR UPDATE ثبت شد (انقضا: ۱۸:۲۷)' }
+        ]
+      },
+      {
+        id: '#PYR-BK-10492',
+        slotId: 'SLT-508',
+        mentorName: 'مهندس مصطفی سدیدی',
+        menteeName: 'علیرضا عباسی',
+        scheduledTime: 'پنج‌شنبه ۲۲ آبان ۱۴۰۵ • ۱۸:۰۰',
+        duration: '۴۵ دقیقه',
+        bookingStatus: 'CONFIRMED',
+        slotStatus: 'BOOKED',
+        mentorFee: 250000,
+        commission: 25000,
+        totalAmount: 275000,
+        meetingUrl: 'https://meet.google.com/pyr-sara-9842',
+        agenda: {
+          topic: 'بررسی مشکل Lag در بازتوازن پارتیشن‌های Kafka و ایندکس‌گذاری بهینه',
+          questions: 'بهینه‌سازی پارامترهای Fetch Min Bytes و Commit Sync در سناریوهای ترافیک نامتقارن.',
+          repoUrl: 'https://github.com/alireza-abbasi/kafka-payment-pipeline/pull/42'
+        },
+        txIds: ['TX-9048'],
+        transitions: [
+          { time: '۱۴۰۵/۰۸/۲۰ — ۱۱:۳۵', label: 'INITIATED → PENDING_PAYMENT', detail: 'ثبت دستور کار و قفل ۱۵ دقیقه‌ای اسلات SLT-508' },
+          { time: '۱۴۰۵/۰۸/۲۰ — ۱۱:۳۸', label: 'PENDING_PAYMENT → CONFIRMED', detail: 'تایید کالبک شاپرک (TRX-1405-88392) و صدور لینک محرمانه جلسه' }
+        ]
+      },
+      {
+        id: '#PYR-BK-10479',
+        slotId: 'SLT-499',
+        mentorName: 'مهندس مصطفی سدیدی',
+        menteeName: 'علیرضا عباسی',
+        scheduledTime: 'یک‌شنبه ۲۵ آبان ۱۴۰۵ • ۱۹:۰۰',
+        duration: 'اسپرینت ۴ هفته‌ای',
+        bookingStatus: 'CONFIRMED',
+        slotStatus: 'BOOKED',
+        mentorFee: 850000,
+        commission: 85000,
+        totalAmount: 935000,
+        meetingUrl: 'https://meet.google.com/pyr-sprint-4079',
+        agenda: {
+          topic: 'بازطراحی معماری سیستم پرداخت و پیاده‌سازی الگوی Outbox در ۴ هفته',
+          questions: 'تفکیک دامنه‌های تسویه حساب، ایزوله‌سازی صف‌های رویداد و بررسی هفتگی Pull Requestها.',
+          repoUrl: 'https://github.com/alireza-abbasi/core-ledger-go'
+        },
+        txIds: ['TX-9046'],
+        transitions: [
+          { time: '۱۴۰۵/۰۸/۱۲ — ۱۴:۰۰', label: 'INITIATED → PENDING_PAYMENT', detail: 'انتخاب پکیج اسپرینت ۴ هفته‌ای و ثبت دستور کار' },
+          { time: '۱۴۰۵/۰۸/۱۲ — ۱۴:۰۵', label: 'PENDING_PAYMENT → CONFIRMED', detail: 'تایید پرداخت پکیج (TRX-1405-87402)' }
+        ]
+      },
+      {
+        id: '#PYR-BK-10485',
+        slotId: 'SLT-481',
+        mentorName: 'مهندس بهنود دهقان',
+        menteeName: 'علیرضا عباسی',
+        scheduledTime: 'پنج‌شنبه ۱۵ آبان ۱۴۰۵ • ۱۸:۰۰',
+        duration: '۴۵ دقیقه',
+        bookingStatus: 'COMPLETED',
+        slotStatus: 'BOOKED',
+        mentorFee: 250000,
+        commission: 25000,
+        totalAmount: 275000,
+        meetingUrl: null,
+        agenda: {
+          topic: 'طراحی ایندکس‌های BRIN و پارتیشن‌بندی زمانی در PostgreSQL',
+          questions: 'کاهش زمان اجرای کوئری‌های گزارش‌گیری روی جدول ۵۰ میلیون رکوردی تراکنش‌ها و کنترل Vacuum.',
+          repoUrl: 'https://github.com/alireza-abbasi/pg-partition-bench'
+        },
+        txIds: ['TX-9047'],
+        transitions: [
+          { time: '۱۴۰۵/۰۸/۱۴ — ۱۰:۱۵', label: 'PENDING_PAYMENT → CONFIRMED', detail: 'پرداخت تایید و لینک جلسه فعال شد' },
+          { time: '۱۴۰۵/۰۸/۱۵ — ۱۸:۴۵', label: 'CONFIRMED → COMPLETED', detail: 'اتمام نشست توسط زمان‌بند خودکار و ثبت امتیاز ۵ از ۵ به همراه ADR-1042' }
+        ]
+      },
+      {
+        id: '#PYR-BK-10471',
+        slotId: 'SLT-460',
+        mentorName: 'مهندس ابوالفضل سمرقندی',
+        menteeName: 'سروش کاظمی',
+        scheduledTime: 'دوشنبه ۱۹ آبان ۱۴۰۵ • ۲۰:۰۰',
+        duration: '۴۵ دقیقه',
+        bookingStatus: 'CANCELLED_REFUNDED',
+        slotStatus: 'OPEN',
+        mentorFee: 260000,
+        commission: 26000,
+        totalAmount: 286000,
+        meetingUrl: null,
+        agenda: {
+          topic: 'راه‌اندازی پایپ‌لاین مانیتورینگ OpenTelemetry برای میکروسرویس‌ها',
+          questions: 'ساختار Trace Context Propagation بین سرویس‌های gRPC و HTTP.',
+          repoUrl: ''
+        },
+        txIds: ['TX-9044', 'TX-9045'],
+        transitions: [
+          { time: '۱۴۰۵/۰۸/۰۹ — ۲۱:۴۰', label: 'PENDING_PAYMENT → CONFIRMED', detail: 'پرداخت اولیه تایید شد (TRX-1405-86955)' },
+          { time: '۱۴۰۵/۰۸/۱۰ — ۱۰:۱۲', label: 'CONFIRMED → CANCELLED_REFUNDED', detail: 'لغو توسط منتی بیش از ۲۴ ساعت قبل • استرداد ۱۰۰٪ (REF-984210-PYR) و بازگشایی اسلات به OPEN' }
+        ]
+      },
+      {
+        id: '#PYR-BK-10468',
+        slotId: 'SLT-442',
+        mentorName: 'مهندس بهنود دهقان',
+        menteeName: 'کامران فرهادی',
+        scheduledTime: 'شنبه ۱۷ آبان ۱۴۰۵ • ۱۷:۰۰',
+        duration: '۴۵ دقیقه',
+        bookingStatus: 'CANCELLED_NO_REFUND',
+        slotStatus: 'CANCELLED',
+        mentorFee: 250000,
+        commission: 25000,
+        totalAmount: 275000,
+        meetingUrl: null,
+        agenda: {
+          topic: 'رفع گلوگاه همزمانی در سرویس احراز هویت و نشست‌ها',
+          questions: 'مقایسه Mutex با Channel در مدیریت Pool کانکشن‌های Redis.',
+          repoUrl: ''
+        },
+        txIds: [],
+        archiveSettlementNote: 'تراکنش تسویه دوره مالی مهر ۱۴۰۵ (بایگانی شده • بدون استرداد به علت لغو زیر ۲۴ ساعت)',
+        transitions: [
+          { time: '۱۴۰۵/۰۸/۱۵ — ۱۱:۰۰', label: 'PENDING_PAYMENT → CONFIRMED', detail: 'رزرو قطعی شد' },
+          { time: '۱۴۰۵/۰۸/۱۷ — ۱۰:۳۰', label: 'CONFIRMED → CANCELLED_NO_REFUND', detail: 'لغو دیرهنگام (کمتر از ۲۴ ساعت مانده به جلسه) • حفظ حقوق منتور و بایگانی اسلات' }
+        ]
+      },
+      {
+        id: '#PYR-BK-10464',
+        slotId: 'SLT-438',
+        mentorName: 'مهندس مصطفی سدیدی',
+        menteeName: 'سروش کاظمی',
+        scheduledTime: 'چهارشنبه ۱۴ آبان ۱۴۰۵ • ۱۸:۰۰',
+        duration: '۴۵ دقیقه',
+        bookingStatus: 'EXPIRED',
+        slotStatus: 'OPEN',
+        mentorFee: 280000,
+        commission: 28000,
+        totalAmount: 308000,
+        meetingUrl: null,
+        agenda: {
+          topic: 'مهاجرت امن اسکیمای دیتابیس بدون Downtime',
+          questions: 'الگوی Expand-and-Contract در جداول پرکاربرد.',
+          repoUrl: 'https://github.com/soroush-k/zero-downtime-migrations'
+        },
+        txIds: ['TX-9042', 'TX-9043'],
+        transitions: [
+          { time: '۱۴۰۵/۰۸/۰۷ — ۱۶:۱۴', label: 'INITIATED → PENDING_PAYMENT', detail: 'شروع قفل ۱۵ دقیقه‌ای (انقضا: ۱۶:۲۹)' },
+          { time: '۱۴۰۵/۰۸/۰۷ — ۱۶:۲۹', label: 'PENDING_PAYMENT → EXPIRED', detail: 'پایان مهلت ۱۵ دقیقه و آزادسازی اسلات به OPEN توسط زمان‌بند' },
+          { time: '۱۴۰۵/۰۸/۰۷ — ۱۶:۳۰', label: 'Policy Option A Enforced', detail: 'کالبک دیرهنگام ثبت شد (TX-9042) و استرداد خودکار متصل (TX-9043) صادر گردید' }
+        ]
+      },
+      {
+        id: '#PYR-BK-10490',
+        slotId: 'SLT-501',
+        mentorName: 'مهندس مصطفی سدیدی',
+        menteeName: 'کامران فرهادی',
+        scheduledTime: 'جمعه ۲۳ آبان ۱۴۰۵ • ۱۹:۳۰',
+        duration: '۴۵ دقیقه',
+        bookingStatus: 'PAYMENT_FAILED',
+        slotStatus: 'OPEN',
+        mentorFee: 250000,
+        commission: 25000,
+        totalAmount: 275000,
+        meetingUrl: null,
+        agenda: {
+          topic: 'بازبینی معماری کشینگ چندلایه با Redis',
+          questions: 'مدیریت Cache Stampede در زمان انقضای هم‌زمان کلیدها.',
+          repoUrl: ''
+        },
+        txIds: ['TX-9049'],
+        transitions: [
+          { time: '۱۴۰۵/۰۸/۲۰ — ۱۶:۰۰', label: 'INITIATED → PENDING_PAYMENT', detail: 'انتقال منتی به درگاه شاپرک' },
+          { time: '۱۴۰۵/۰۸/۲۰ — ۱۶:۰۴', label: 'PENDING_PAYMENT → PAYMENT_FAILED', detail: 'کد ۵۱ شاپرک • تراکنش FAILED و اسلات فوراً به OPEN بازگشت' }
+        ]
+      }
+    ];
+
+    // Seeded Mentor Vetting Queue (Aligned with peyroo_become_mentor.html)
+    const vettingQueueData = [
+      {
+        id: 'PEY-MTR-89421',
+        fullName: 'مهندس سارا راد',
+        email: 'sara.rad@techfirm.ir',
+        phone: '۰۹۱۲۳۴۵۶۷۸۹',
+        headline: 'Principal Software Architect • کافه‌بازار (پیش از این در اسنپ)',
+        experience: 'بیش از ۸ سال سابقه حرفه‌ای',
+        proposedFee: 400000,
+        tags: ['Distributed Systems', 'Kafka', 'PostgreSQL', 'Golang'],
+        githubUrl: 'https://github.com/sararad',
+        linkedinUrl: 'https://linkedin.com/in/sararad-architect',
+        submittedAt: '۱۴۰۵/۰۸/۲۰ — ۱۴:۲۰',
+        status: 'PENDING_REVIEW'
+      },
+      {
+        id: 'PEY-MTR-89418',
+        fullName: 'مهندس کیوان نوری',
+        email: 'keyvan.nouri@tapsi.cab',
+        phone: '۰۹۱۲۶۰۲۹۱۹۰',
+        headline: 'Senior Backend Lead • تپسی',
+        experience: '۵ الی ۸ سال سابقه تخصصی',
+        proposedFee: 300000,
+        tags: ['Microservices', 'Redis', 'Go Concurrency', 'System Design'],
+        githubUrl: 'https://github.com/keyvan-nouri',
+        linkedinUrl: 'https://linkedin.com/in/keyvan-nouri',
+        submittedAt: '۱۴۰۵/۰۸/۱۹ — ۱۰:۴۵',
+        status: 'PENDING_REVIEW'
+      }
+    ];
+
+    // Seeded Admin Governance Audit Trail (UC-010 Postcondition)
+    const auditLogsData = [
+      {
+        id: 'AUD-409',
+        actionType: 'USER_SUSPENDED',
+        actionLabel: 'تعلیق حساب کاربری',
+        target: 'کامران فرهادی (USR-106)',
+        actor: ADMIN_ACTOR_LABEL,
+        reason: 'نقض توافق‌نامه NDA و اسکرپینگ لینک جلسات • ابطال نشست کاری',
+        timestamp: '۱۴۰۵/۰۸/۱۸ — ۰۹:۱۴'
+      },
+      {
+        id: 'AUD-408',
+        actionType: 'LEDGER_AUDIT',
+        actionLabel: 'تطبیق خودکار Policy Option A',
+        target: 'تراکنش TX-9042 / TX-9043',
+        actor: 'سامانه حسابرسی خودکار پیرو',
+        reason: 'توازن مالی خالص صفر تایید شد (۲۸۰٬۰۰۰ + ۲۸٬۰۰۰ تومان مسترد گردید)',
+        timestamp: '۱۴۰۵/۰۸/۰۷ — ۱۶:۳۰'
+      },
+      {
+        id: 'AUD-407',
+        actionType: 'MENTOR_APPROVED',
+        actionLabel: 'تایید صلاحیت مربی ارشد',
+        target: 'مهندس ابوالفضل سمرقندی (USR-105)',
+        actor: ADMIN_ACTOR_LABEL,
+        reason: 'تایید سوابق SRE/Kubernetes توسط شورای علمی • فعال‌سازی isMentorEnabled',
+        timestamp: '۱۴۰۵/۰۵/۰۹ — ۱۱:۰۰'
+      }
+    ];
+
+    let activeAdminTab = 'users';
+    let userFilter = 'all';
+    let ledgerFilter = 'all';
+    let bookingFilter = 'all';
+    let pendingSuspendUserId = null;
+
+    function getCurrentIrstStamp() {
+      const now = new Date();
+      const hh = toPersianDigits(String(now.getHours()).padStart(2, '0'));
+      const mm = toPersianDigits(String(now.getMinutes()).padStart(2, '0'));
+      return `۱۴۰۵/۰۸/۲۱ — ${hh}:${mm}`;
+    }
+
+    function showAdminToast(message) {
+      const toast = document.getElementById('admin-toast');
+      const msgEl = document.getElementById('admin-toast-message');
+      if (!toast || !msgEl) return;
+      msgEl.textContent = message;
+      toast.classList.remove('opacity-0', '-translate-y-2');
+      toast.classList.add('opacity-100', 'translate-y-0');
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', '-translate-y-2');
+      }, 3000);
+    }
+
+    function computeFinancialMetrics() {
+      let grossCompletedTotal = 0;
+      let grossCompletedMentor = 0;
+      let grossCompletedCommission = 0;
+      let refundedTotal = 0;
+      let refundedMentor = 0;
+      let refundedCommission = 0;
+      let refundCount = 0;
+
+      ledgerData.forEach(tx => {
+        if (tx.status === 'COMPLETED') {
+          grossCompletedTotal += tx.totalAmount;
+          grossCompletedMentor += tx.mentorFee;
+          grossCompletedCommission += tx.platformCommission;
+        } else if (tx.status === 'REFUNDED') {
+          refundedTotal += tx.totalAmount;
+          refundedMentor += tx.mentorFee;
+          refundedCommission += tx.platformCommission;
+          refundCount += 1;
+        }
+      });
+
+      return {
+        grossCompletedTotal,
+        refundedTotal,
+        refundCount,
+        netSettledTotal: grossCompletedTotal - refundedTotal,
+        netMentorPayout: grossCompletedMentor - refundedMentor,
+        netPlatformCommission: grossCompletedCommission - refundedCommission
+      };
+    }
+
+    function renderAdminKPIs() {
+      const grid = document.getElementById('admin-kpi-grid');
+      if (!grid) return;
+
+      const totalUsers = usersData.length;
+      const activeUsers = usersData.filter(u => u.status === 'ACTIVE').length;
+      const suspendedUsers = usersData.filter(u => u.status === 'SUSPENDED').length;
+      const activeMentors = usersData.filter(u => u.isMentorEnabled && u.status === 'ACTIVE').length;
+      const pendingVetting = vettingQueueData.filter(v => v.status === 'PENDING_REVIEW').length;
+
+      const totalBookings = bookingsData.length;
+      const confirmedBookings = bookingsData.filter(b => b.bookingStatus === 'CONFIRMED').length;
+      const heldBookings = bookingsData.filter(b => b.bookingStatus === 'PENDING_PAYMENT').length;
+      const completedBookings = bookingsData.filter(b => b.bookingStatus === 'COMPLETED').length;
+      const terminalOtherBookings = totalBookings - confirmedBookings - heldBookings - completedBookings;
+
+      const fin = computeFinancialMetrics();
+
+      grid.innerHTML = `
+        <div class="bg-white rounded-[22px] border border-[#DFCFC0] p-4 sm:p-5 flex flex-col justify-between gap-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-[#5E4131]">کل کاربران ثبت‌شده</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[10.5px] font-bold bg-[#FBF8F4] border border-[#DFCFC0] text-[#2C1A11]">Identity</span>
+          </div>
+          <div class="text-2xl font-black text-[#2C1A11]">${toPersianDigits(totalUsers)} کاربر</div>
+          <div class="text-[11px] font-semibold text-[#5E4131] flex items-center gap-2">
+            <span class="text-emerald-800">${toPersianDigits(activeUsers)} فعال</span>
+            <span>•</span>
+            <span class="text-rose-700">${toPersianDigits(suspendedUsers)} تعلیق‌شده</span>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-[22px] border border-[#DFCFC0] p-4 sm:p-5 flex flex-col justify-between gap-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-[#5E4131]">منتورهای تاییدشده و فعال</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[10.5px] font-bold bg-[#F5E9CF] text-[#79551F]">${toPersianDigits(pendingVetting)} در صف داوری</span>
+          </div>
+          <div class="text-2xl font-black text-[#2C1A11]">${toPersianDigits(activeMentors)} منتور</div>
+          <div class="text-[11px] text-[#5E4131]">تایید صلاحیت شده توسط شورای فنی پیرو</div>
+        </div>
+
+        <div class="bg-white rounded-[22px] border border-[#DFCFC0] p-4 sm:p-5 flex flex-col justify-between gap-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-[#5E4131]">کل نشست‌های پلتفرم</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[10.5px] font-bold bg-[#F3F8FF] border border-[#8EC5FF] text-[#2C1A11]">فقط‌خواندنی</span>
+          </div>
+          <div class="text-2xl font-black text-[#2C1A11]">${toPersianDigits(totalBookings)} نشست</div>
+          <div class="text-[11px] font-medium text-[#5E4131] truncate">
+            ${toPersianDigits(confirmedBookings)} قطعی • ${toPersianDigits(heldBookings)} قفل ۱۵m • ${toPersianDigits(completedBookings)} تکمیل • ${toPersianDigits(terminalOtherBookings)} لغو/منقضی
+          </div>
+        </div>
+
+        <div class="bg-white rounded-[22px] border border-[#DFCFC0] p-4 sm:p-5 flex flex-col justify-between gap-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-[#5E4131]">حجم کل تراکنش‌های جذب‌شده (GMV)</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[10.5px] font-bold bg-emerald-50 border border-emerald-200 text-emerald-800">شاپرک</span>
+          </div>
+          <div class="text-xl sm:text-2xl font-black text-[#2C1A11]">${formatToman(fin.grossCompletedTotal)}</div>
+          <div class="text-[11px] font-semibold text-[#5E4131]">
+            خالص تسویه‌شده پس از کسورات استرداد: <span class="text-[#2C1A11] font-bold">${formatToman(fin.netSettledTotal)}</span>
+          </div>
+        </div>
+
+        <div class="bg-[#FBF8F4] rounded-[22px] border-2 border-[#8EC5FF] p-4 sm:p-5 flex flex-col justify-between gap-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-[#2C1A11]">کارمزد ۱۰٪ خالص پلتفرم پیرو</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[10.5px] font-bold bg-[#8EC5FF] text-[#2C1A11]">سهم ۱۰٪</span>
+          </div>
+          <div class="text-xl sm:text-2xl font-black text-[#2C1A11]">${formatToman(fin.netPlatformCommission)}</div>
+          <div class="text-[11px] font-semibold text-[#5E4131]">
+            سهم پایه منتورها (۹۰٪): <span class="text-[#2C1A11] font-bold">${formatToman(fin.netMentorPayout)}</span>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-[22px] border border-[#DFCFC0] p-4 sm:p-5 flex flex-col justify-between gap-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-[#5E4131]">مجموع استردادهای ۱۰۰٪ وجه</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[10.5px] font-bold bg-rose-50 border border-rose-200 text-rose-800">${toPersianDigits(fin.refundCount)} تراکنش</span>
+          </div>
+          <div class="text-xl sm:text-2xl font-black text-rose-800">${formatToman(fin.refundedTotal)}</div>
+          <div class="text-[11px] text-[#5E4131]">ثبت شده با ردیف مستقل CANCELLATION_REFUND</div>
+        </div>
+      `;
+
+      // Sync tab badges
+      const uBadge = document.getElementById('tab-badge-users');
+      const lBadge = document.getElementById('tab-badge-ledger');
+      const bBadge = document.getElementById('tab-badge-bookings');
+      const vBadge = document.getElementById('tab-badge-vetting');
+      if (uBadge) uBadge.textContent = toPersianDigits(totalUsers);
+      if (lBadge) lBadge.textContent = toPersianDigits(ledgerData.length);
+      if (bBadge) bBadge.textContent = toPersianDigits(totalBookings);
+      if (vBadge) vBadge.textContent = toPersianDigits(pendingVetting);
+    }
+
+    function switchAdminTab(tab) {
+      const tabs = ['users', 'ledger', 'bookings', 'vetting'];
+      activeAdminTab = tabs.includes(tab) ? tab : 'users';
+
+      tabs.forEach(t => {
+        const btn = document.getElementById(`admin-tab-${t}`);
+        const badge = document.getElementById(`tab-badge-${t}`);
+        const panel = document.getElementById(`panel-admin-${t}`);
+        const isActive = t === activeAdminTab;
+
+        if (panel) panel.classList.toggle('hidden', !isActive);
+        if (btn) {
+          btn.className = isActive
+            ? 'h-11 px-3.5 rounded-[16px] bg-[#2C1A11] text-white font-bold text-xs sm:text-[13px] transition-colors flex items-center justify-between gap-2 cursor-pointer'
+            : 'h-11 px-3.5 rounded-[16px] bg-white border border-[#DFCFC0] hover:border-[#2C1A11] text-[#5E4131] hover:text-[#2C1A11] font-semibold text-xs sm:text-[13px] transition-colors flex items-center justify-between gap-2 cursor-pointer';
+        }
+        if (badge) {
+          badge.className = isActive
+            ? 'px-2 py-0.5 rounded-full bg-white/20 text-white text-[11px] font-bold shrink-0'
+            : 'px-2 py-0.5 rounded-full bg-[#EFE3D5] text-[#2C1A11] text-[11px] font-bold shrink-0';
+        }
+      });
+
+      if (activeAdminTab === 'users') renderUsersView();
+      if (activeAdminTab === 'ledger') renderLedgerView();
+      if (activeAdminTab === 'bookings') renderBookingsView();
+      if (activeAdminTab === 'vetting') renderVettingView();
+    }
+
+    function setUserFilter(filter) {
+      userFilter = filter;
+      ['all', 'ACTIVE', 'SUSPENDED', 'mentor', 'mentee'].forEach(f => {
+        const el = document.getElementById(`user-filter-${f}`);
+        if (!el) return;
+        el.className = f === filter
+          ? 'h-9 px-3.5 rounded-full bg-[#2C1A11] text-white text-xs font-bold cursor-pointer transition-colors'
+          : 'h-9 px-3.5 rounded-full bg-white border border-[#DFCFC0] text-[#5E4131] hover:border-[#2C1A11] text-xs font-semibold cursor-pointer transition-colors';
+      });
+      renderUsersView();
+    }
+
+    function getUserRoleBadgesHtml(u) {
+      const pills = [];
+      if (u.isAdmin) {
+        pills.push('<span class="px-2 py-0.5 rounded-full text-[10.5px] font-bold bg-[#2C1A11] text-[#F2E8DA]">مدیر سیستم (Admin)</span>');
+      }
+      if (u.isMentorEnabled) {
+        pills.push('<span class="px-2 py-0.5 rounded-full text-[10.5px] font-bold bg-[#F5E9CF] text-[#79551F]">منتور ارشد</span>');
+      }
+      if (u.isMenteeEnabled) {
+        pills.push('<span class="px-2 py-0.5 rounded-full text-[10.5px] font-bold bg-[#F3F8FF] border border-[#8EC5FF] text-[#2C1A11]">منتی</span>');
+      }
+      return pills.join(' ');
+    }
+
+    function renderUsersView() {
+      const tbody = document.getElementById('users-desktop-tbody');
+      const mobileList = document.getElementById('users-mobile-cards');
+      const emptyBox = document.getElementById('users-empty-state');
+      const searchVal = (document.getElementById('user-search-input')?.value || '').trim().toLowerCase();
+      const allBtn = document.getElementById('user-filter-all');
+      if (allBtn) allBtn.textContent = `همه (${toPersianDigits(usersData.length)})`;
+
+      const filtered = usersData.filter(u => {
+        if (userFilter === 'ACTIVE' && u.status !== 'ACTIVE') return false;
+        if (userFilter === 'SUSPENDED' && u.status !== 'SUSPENDED') return false;
+        if (userFilter === 'mentor' && !u.isMentorEnabled) return false;
+        if (userFilter === 'mentee' && (!u.isMenteeEnabled || u.isMentorEnabled || u.isAdmin)) return false;
+        if (searchVal) {
+          const hay = `${u.id} ${u.fullName} ${u.email} ${u.phone}`.toLowerCase();
+          if (!hay.includes(searchVal)) return false;
+        }
+        return true;
+      });
+
+      if (emptyBox) emptyBox.classList.toggle('hidden', filtered.length > 0);
+      if (!tbody || !mobileList) return;
+
+      tbody.innerHTML = filtered.map(u => {
+        const statusPill = u.status === 'ACTIVE'
+          ? '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 border border-emerald-200 text-emerald-800"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>ACTIVE • فعال</span>'
+          : '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-50 border border-rose-200 text-rose-800"><span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span>SUSPENDED • تعلیق</span>';
+
+        const metaText = u.isMentorEnabled
+          ? `${toPersianDigits(u.sessionsCount)} جلسه • امتیاز ${u.rating}`
+          : (u.isAdmin ? 'حاکمیت و ممیزی کل سامانه' : `${toPersianDigits(u.sessionsCount)} نشست ثبت‌شده`);
+
+        const alertHtml = u.alertFlag
+          ? `<div class="mt-1 inline-block px-2 py-0.5 rounded-md bg-rose-50 border border-rose-200 text-[10.5px] font-bold text-rose-800">${u.alertFlag}</div>`
+          : '';
+
+        const actionBtn = u.isAdmin
+          ? '<span class="inline-flex items-center px-3 py-1.5 rounded-[12px] bg-[#FBF8F4] border border-[#DFCFC0] text-[11px] font-bold text-[#5E4131]">حساب ادمین فعلی</span>'
+          : (u.status === 'ACTIVE'
+              ? `<button type="button" onclick="openSuspendModal('${u.id}')" class="h-9 px-3.5 rounded-[12px] bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-800 font-bold text-xs cursor-pointer transition-colors">تعلیق حساب</button>`
+              : `<button type="button" onclick="openSuspendModal('${u.id}')" class="h-9 px-3.5 rounded-[12px] bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 font-bold text-xs cursor-pointer transition-colors">رفع تعلیق (ACTIVE)</button>`);
+
+        return `
+          <tr class="hover:bg-[#FBF8F4]/70 transition-colors">
+            <td class="py-3.5 px-4">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full bg-[#2C1A11] text-[#F2E8DA] flex items-center justify-center font-bold text-xs shrink-0">${u.monogram}</div>
+                <div>
+                  <div class="font-bold text-[#2C1A11]">${u.fullName}</div>
+                  <div class="font-mono text-[10.5px] text-[#5E4131]">${u.id} • عضویت ${u.joinedAt}</div>
+                </div>
+              </div>
+            </td>
+            <td class="py-3.5 px-4">
+              <div class="font-mono text-[11.5px] text-[#2C1A11]">${u.email}</div>
+              <div class="text-[11px] text-[#5E4131]">${u.phone}</div>
+            </td>
+            <td class="py-3.5 px-4">
+              <div class="flex flex-wrap gap-1">${getUserRoleBadgesHtml(u)}</div>
+            </td>
+            <td class="py-3.5 px-4">
+              <div class="text-[#2C1A11] font-medium">${metaText}</div>
+              ${alertHtml}
+            </td>
+            <td class="py-3.5 px-4">${statusPill}</td>
+            <td class="py-3.5 px-4 text-left">${actionBtn}</td>
+          </tr>
+        `;
+      }).join('');
+
+      mobileList.innerHTML = filtered.map(u => {
+        const statusPill = u.status === 'ACTIVE'
+          ? '<span class="px-2.5 py-0.5 rounded-full text-[10.5px] font-bold bg-emerald-50 border border-emerald-200 text-emerald-800">ACTIVE</span>'
+          : '<span class="px-2.5 py-0.5 rounded-full text-[10.5px] font-bold bg-rose-50 border border-rose-200 text-rose-800">SUSPENDED</span>';
+
+        const actionBtn = u.isAdmin
+          ? '<span class="w-full h-9 rounded-[12px] bg-[#FBF8F4] border border-[#DFCFC0] text-[11px] font-bold text-[#5E4131] flex items-center justify-center">حساب ادمین فعلی (محافظت‌شده)</span>'
+          : (u.status === 'ACTIVE'
+              ? `<button type="button" onclick="openSuspendModal('${u.id}')" class="w-full h-9 rounded-[12px] bg-rose-50 border border-rose-200 text-rose-800 font-bold text-xs cursor-pointer">تعلیق حساب کاربری</button>`
+              : `<button type="button" onclick="openSuspendModal('${u.id}')" class="w-full h-9 rounded-[12px] bg-emerald-50 border border-emerald-200 text-emerald-800 font-bold text-xs cursor-pointer">رفع تعلیق و فعال‌سازی</button>`);
+
+        return `
+          <div class="bg-white rounded-[20px] border border-[#DFCFC0] p-4 space-y-3 text-xs">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-full bg-[#2C1A11] text-[#F2E8DA] flex items-center justify-center font-bold text-xs shrink-0">${u.monogram}</div>
+                <div>
+                  <div class="font-bold text-[#2C1A11]">${u.fullName}</div>
+                  <div class="font-mono text-[10.5px] text-[#5E4131]">${u.id} • ${u.email}</div>
+                </div>
+              </div>
+              ${statusPill}
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5">${getUserRoleBadgesHtml(u)}</div>
+            ${u.alertFlag ? `<div class="p-2 rounded-[12px] bg-rose-50 border border-rose-200 text-[11px] font-bold text-rose-800">${u.alertFlag}</div>` : ''}
+            <div class="pt-1">${actionBtn}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function setLedgerFilter(filter) {
+      ledgerFilter = filter;
+      ['all', 'COMPLETED', 'REFUNDED', 'FAILED', 'PENDING'].forEach(f => {
+        const el = document.getElementById(`ledger-filter-${f}`);
+        if (!el) return;
+        el.className = f === filter
+          ? 'h-9 px-3.5 rounded-full bg-[#2C1A11] text-white text-xs font-bold cursor-pointer transition-colors'
+          : 'h-9 px-3.5 rounded-full bg-white border border-[#DFCFC0] text-[#5E4131] hover:border-[#2C1A11] text-xs font-semibold cursor-pointer transition-colors';
+      });
+      renderLedgerView();
+    }
+
+    function getLedgerStatusBadge(status) {
+      const map = {
+        COMPLETED: '<span class="px-2.5 py-1 rounded-full text-[10.5px] font-bold bg-emerald-50 border border-emerald-200 text-emerald-800">COMPLETED</span>',
+        REFUNDED: '<span class="px-2.5 py-1 rounded-full text-[10.5px] font-bold bg-amber-50 border border-amber-300 text-[#79551F]">REFUNDED</span>',
+        FAILED: '<span class="px-2.5 py-1 rounded-full text-[10.5px] font-bold bg-rose-50 border border-rose-200 text-rose-800">FAILED</span>',
+        PENDING: '<span class="px-2.5 py-1 rounded-full text-[10.5px] font-bold bg-[#F3F8FF] border border-[#8EC5FF] text-[#2C1A11]">PENDING</span>'
+      };
+      return map[status] || status;
+    }
+
+    function renderLedgerView() {
+      const recBox = document.getElementById('ledger-reconciliation-box');
+      const tbody = document.getElementById('ledger-desktop-tbody');
+      const mobileList = document.getElementById('ledger-mobile-cards');
+      const emptyBox = document.getElementById('ledger-empty-state');
+      const searchVal = (document.getElementById('ledger-search-input')?.value || '').trim().toLowerCase();
+
+      const fin = computeFinancialMetrics();
+      if (recBox) {
+        recBox.innerHTML = `
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <h3 class="text-xs sm:text-sm font-extrabold text-[#2C1A11]">
+              خلاصه تطبیق مالی دفترکل (Financial Audit Reconciliation)
+            </h3>
+            <span class="text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full self-start sm:self-auto">
+              توازن ۱۰۰٪ حسابرسی تایید شده
+            </span>
+          </div>
+
+          <div class="w-full h-3 rounded-full bg-[#EFE3D5] overflow-hidden flex">
+            <div class="bg-[#2C1A11] h-full" style="width: 65%" title="سهم خالص منتورها (۹۰٪)"></div>
+            <div class="bg-[#8EC5FF] h-full" style="width: 6.5%" title="کارمزد پلتفرم پیرو (۱۰٪)"></div>
+            <div class="bg-rose-400 h-full" style="width: 28.5%" title="استردادهای ۱۰۰٪ وجه"></div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 text-xs">
+            <div class="bg-white p-3 rounded-[14px] border border-[#DFCFC0]">
+              <span class="text-[10.5px] text-[#5E4131] block">جذب ناخالص تاییدشده</span>
+              <span class="font-black text-[#2C1A11]">${formatToman(fin.grossCompletedTotal)}</span>
+            </div>
+            <div class="bg-white p-3 rounded-[14px] border border-rose-200">
+              <span class="text-[10.5px] text-[#5E4131] block">کسر استردادهای ۱۰۰٪</span>
+              <span class="font-black text-rose-700">${formatToman(fin.refundedTotal)}</span>
+            </div>
+            <div class="bg-white p-3 rounded-[14px] border border-[#DFCFC0]">
+              <span class="text-[10.5px] text-[#5E4131] block">خالص تسویه شده</span>
+              <span class="font-black text-[#2C1A11]">${formatToman(fin.netSettledTotal)}</span>
+            </div>
+            <div class="bg-white p-3 rounded-[14px] border border-[#DFCFC0]">
+              <span class="text-[10.5px] text-[#5E4131] block">سهم منتورها (۹۰٪ پایه)</span>
+              <span class="font-black text-[#2C1A11]">${formatToman(fin.netMentorPayout)}</span>
+            </div>
+            <div class="bg-[#F3F8FF] p-3 rounded-[14px] border border-[#8EC5FF]">
+              <span class="text-[10.5px] text-[#2C1A11] block font-bold">درآمد ۱۰٪ پیرو</span>
+              <span class="font-black text-[#2C1A11]">${formatToman(fin.netPlatformCommission)}</span>
+            </div>
+          </div>
+
+          <p class="text-[11px] text-[#5E4131] leading-[1.75]">
+            <span class="font-bold text-[#2C1A11]">سیاست Option A در کالبک دیرهنگام:</span> در پرونده <span class="font-mono font-bold">#PYR-BK-10464</span> پرداخت جذب‌شده به عنوان <span class="font-mono">COMPLETED</span> (<span class="font-mono">TX-9042</span>) ثبت و بلافاصله ردیف <span class="font-mono">CANCELLATION_REFUND</span> (<span class="font-mono">TX-9043</span>) با مرجع والد <span class="font-mono">parent_transaction_id</span> صادر شده تا توازن خالص صفر حفظ شود.
+          </p>
+        `;
+      }
+
+      const filtered = ledgerData.filter(tx => {
+        if (ledgerFilter !== 'all' && tx.status !== ledgerFilter) return false;
+        if (searchVal) {
+          const hay = `${tx.id} ${tx.bookingId} ${tx.externalTxRef} ${tx.idempotencyKey} ${tx.mentorName} ${tx.menteeName} ${tx.note}`.toLowerCase();
+          if (!hay.includes(searchVal)) return false;
+        }
+        return true;
+      });
+
+      if (emptyBox) emptyBox.classList.toggle('hidden', filtered.length > 0);
+      if (!tbody || !mobileList) return;
+
+      tbody.innerHTML = filtered.map(tx => {
+        const typeLabel = tx.transactionType === 'CANCELLATION_REFUND'
+          ? '<span class="text-[10.5px] font-bold text-rose-800 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-md">CANCELLATION_REFUND</span>'
+          : '<span class="text-[10.5px] font-bold text-[#2C1A11] bg-[#FBF8F4] border border-[#DFCFC0] px-2 py-0.5 rounded-md">SESSION_PAYMENT</span>';
+
+        const parentHtml = tx.parentTransactionId
+          ? `<div class="text-[10.5px] font-bold text-[#79551F] mt-1">والد: <span class="font-mono">${tx.parentTransactionId}</span></div>`
+          : '';
+
+        return `
+          <tr class="hover:bg-[#FBF8F4]/70 transition-colors">
+            <td class="py-3.5 px-4">
+              <div class="font-mono font-bold text-[#2C1A11]">${tx.id}</div>
+              <div class="mt-1">${typeLabel}</div>
+              ${parentHtml}
+            </td>
+            <td class="py-3.5 px-4">
+              <div class="font-mono font-bold text-[#2C1A11]">${tx.bookingId}</div>
+              <div class="text-[11px] text-[#5E4131]">${tx.menteeName} ← ${tx.mentorName}</div>
+              <div class="text-[10.5px] text-[#5E4131] mt-0.5">${tx.note}</div>
+            </td>
+            <td class="py-3.5 px-4 font-bold text-[#2C1A11]">${formatToman(tx.mentorFee)}</td>
+            <td class="py-3.5 px-4 font-bold text-[#5E4131]">${formatToman(tx.platformCommission)}</td>
+            <td class="py-3.5 px-4 font-black text-[#2C1A11]">${formatToman(tx.totalAmount)}</td>
+            <td class="py-3.5 px-4">
+              <div class="font-mono text-[11px] text-[#2C1A11]">${tx.externalTxRef}</div>
+              <div class="font-mono text-[10px] text-[#5E4131]">${tx.idempotencyKey}</div>
+              <div class="text-[10px] text-[#5E4131] mt-0.5">${tx.timestamp}</div>
+            </td>
+            <td class="py-3.5 px-4">${getLedgerStatusBadge(tx.status)}</td>
+          </tr>
+        `;
+      }).join('');
+
+      mobileList.innerHTML = filtered.map(tx => `
+        <div class="bg-white rounded-[20px] border border-[#DFCFC0] p-4 space-y-2.5 text-xs">
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <div class="font-mono font-bold text-[#2C1A11]">${tx.id} • ${tx.bookingId}</div>
+              <div class="text-[11px] text-[#5E4131]">${tx.menteeName} ← ${tx.mentorName}</div>
+            </div>
+            ${getLedgerStatusBadge(tx.status)}
+          </div>
+          <div class="grid grid-cols-3 gap-2 bg-[#FBF8F4] p-2.5 rounded-[14px] border border-[#DFCFC0] text-[11px]">
+            <div><span class="text-[#5E4131] block">پایه منتور</span><span class="font-bold text-[#2C1A11]">${formatToman(tx.mentorFee)}</span></div>
+            <div><span class="text-[#5E4131] block">کارمزد ۱۰٪</span><span class="font-bold text-[#5E4131]">${formatToman(tx.platformCommission)}</span></div>
+            <div><span class="text-[#5E4131] block">مبلغ کل</span><span class="font-black text-[#2C1A11]">${formatToman(tx.totalAmount)}</span></div>
+          </div>
+          <div class="text-[11px] text-[#5E4131] leading-[1.7]">${tx.note}</div>
+          <div class="flex flex-wrap items-center justify-between gap-2 text-[10.5px] font-mono text-[#5E4131] pt-1 border-t border-[#DFCFC0]/60">
+            <span>${tx.externalTxRef}</span>
+            ${tx.parentTransactionId ? `<span class="font-bold text-[#79551F]">parent: ${tx.parentTransactionId}</span>` : `<span>${tx.timestamp}</span>`}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function exportLedgerCSV() {
+      const headers = ['TransactionID', 'BookingID', 'Type', 'ParentTransactionID', 'Status', 'MentorFee_IRR', 'PlatformCommission10Pct_IRR', 'TotalAmount_IRR', 'ExternalTxRef', 'IdempotencyKey', 'Timestamp'];
+      const rows = ledgerData.map(tx => [
+        tx.id,
+        tx.bookingId,
+        tx.transactionType,
+        tx.parentTransactionId || '',
+        tx.status,
+        tx.mentorFee,
+        tx.platformCommission,
+        tx.totalAmount,
+        tx.externalTxRef,
+        tx.idempotencyKey,
+        tx.timestamp
+      ]);
+      const csvContent = '\uFEFF' + [headers, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'peyroo-admin-financial-ledger-1405.csv';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      auditLogsData.unshift({
+        id: `AUD-${410 + auditLogsData.length}`,
+        actionType: 'LEDGER_EXPORTED',
+        actionLabel: 'دریافت خروجی CSV دفترکل مالی',
+        target: `${toPersianDigits(ledgerData.length)} ردیف تراکنش`,
+        actor: ADMIN_ACTOR_LABEL,
+        reason: 'خروجی حسابرسی دوره آبان ۱۴۰۵ توسط مدیر پلتفرم دریافت شد',
+        timestamp: getCurrentIrstStamp()
+      });
+      showAdminToast('فایل CSV دفترکل مالی صادر شد و رویداد ممیزی در Audit Log ثبت گردید.');
+    }
+
+    function setBookingFilter(filter) {
+      bookingFilter = filter;
+      ['all', 'CONFIRMED', 'PENDING_PAYMENT', 'COMPLETED', 'CANCELLED_REFUNDED', 'other_terminal'].forEach(f => {
+        const el = document.getElementById(`booking-filter-${f}`);
+        if (!el) return;
+        el.className = f === filter
+          ? 'h-9 px-3 rounded-full bg-[#2C1A11] text-white text-xs font-bold cursor-pointer transition-colors'
+          : 'h-9 px-3 rounded-full bg-white border border-[#DFCFC0] text-[#5E4131] hover:border-[#2C1A11] text-xs font-semibold cursor-pointer transition-colors';
+      });
+      renderBookingsView();
+    }
+
+    function getBookingStatusBadge(status) {
+      const styles = {
+        CONFIRMED: 'bg-emerald-50 border-emerald-200 text-emerald-800',
+        PENDING_PAYMENT: 'bg-[#F5E9CF] border-amber-300 text-[#79551F]',
+        COMPLETED: 'bg-[#FBF8F4] border-[#DFCFC0] text-[#2C1A11]',
+        CANCELLED_REFUNDED: 'bg-amber-50 border-amber-200 text-amber-900',
+        CANCELLED_NO_REFUND: 'bg-rose-50 border-rose-200 text-rose-800',
+        EXPIRED: 'bg-stone-100 border-stone-300 text-stone-700',
+        PAYMENT_FAILED: 'bg-rose-50 border-rose-200 text-rose-800'
+      };
+      const dot = status === 'PENDING_PAYMENT' ? '<span class="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse"></span>' : '';
+      return `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-[10.5px] font-mono font-bold ${styles[status] || 'bg-white border-[#DFCFC0] text-[#2C1A11]'}">${dot}${status}</span>`;
+    }
+
+    function renderBookingsView() {
+      const tbody = document.getElementById('bookings-desktop-tbody');
+      const mobileList = document.getElementById('bookings-mobile-cards');
+      const emptyBox = document.getElementById('bookings-empty-state');
+      const searchVal = (document.getElementById('booking-search-input')?.value || '').trim().toLowerCase();
+
+      const filtered = bookingsData.filter(b => {
+        if (bookingFilter === 'other_terminal') {
+          if (!['CANCELLED_NO_REFUND', 'EXPIRED', 'PAYMENT_FAILED'].includes(b.bookingStatus)) return false;
+        } else if (bookingFilter !== 'all' && b.bookingStatus !== bookingFilter) {
+          return false;
+        }
+        if (searchVal) {
+          const hay = `${b.id} ${b.slotId} ${b.mentorName} ${b.menteeName} ${b.agenda.topic} ${b.bookingStatus}`.toLowerCase();
+          if (!hay.includes(searchVal)) return false;
+        }
+        return true;
+      });
+
+      if (emptyBox) emptyBox.classList.toggle('hidden', filtered.length > 0);
+      if (!tbody || !mobileList) return;
+
+      tbody.innerHTML = filtered.map(b => `
+        <tr class="hover:bg-[#FBF8F4]/70 transition-colors">
+          <td class="py-3.5 px-4">
+            <div class="font-mono font-bold text-[#2C1A11]">${b.id}</div>
+            <div class="font-mono text-[10.5px] text-[#5E4131]">اسلات ${b.slotId} • ${b.duration}</div>
+          </td>
+          <td class="py-3.5 px-4">
+            <div class="font-bold text-[#2C1A11]">${b.menteeName} ← ${b.mentorName}</div>
+            <div class="text-[11px] text-[#5E4131] truncate max-w-[260px]">${b.agenda.topic}</div>
+          </td>
+          <td class="py-3.5 px-4 font-semibold text-[#2C1A11]">${b.scheduledTime}</td>
+          <td class="py-3.5 px-4 font-black text-[#2C1A11]">${formatToman(b.totalAmount)}</td>
+          <td class="py-3.5 px-4">
+            <div class="flex flex-wrap items-center gap-1.5">
+              ${getBookingStatusBadge(b.bookingStatus)}
+              <span class="px-2 py-0.5 rounded-md bg-white border border-[#DFCFC0] font-mono text-[10px] font-bold text-[#5E4131]">Slot: ${b.slotStatus}</span>
+            </div>
+          </td>
+          <td class="py-3.5 px-4 text-left">
+            <button type="button" onclick="openBookingDossier('${b.id}')" class="h-9 px-3.5 rounded-[12px] bg-[#2C1A11] hover:bg-[#432A1C] text-white text-xs font-bold cursor-pointer transition-colors">
+              بازرسی پرونده و چرخه وضعیت
+            </button>
+          </td>
+        </tr>
+      `).join('');
+
+      mobileList.innerHTML = filtered.map(b => `
+        <div class="bg-white rounded-[20px] border border-[#DFCFC0] p-4 space-y-2.5 text-xs">
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <div class="font-mono font-bold text-[#2C1A11]">${b.id} • ${b.slotId}</div>
+              <div class="font-bold text-[#2C1A11] mt-0.5">${b.menteeName} ← ${b.mentorName}</div>
+            </div>
+            ${getBookingStatusBadge(b.bookingStatus)}
+          </div>
+          <div class="text-[11px] text-[#5E4131] leading-[1.7]">${b.agenda.topic}</div>
+          <div class="flex items-center justify-between text-[11px] bg-[#FBF8F4] p-2.5 rounded-[12px] border border-[#DFCFC0]">
+            <span class="text-[#5E4131]">${b.scheduledTime}</span>
+            <span class="font-black text-[#2C1A11]">${formatToman(b.totalAmount)}</span>
+          </div>
+          <button type="button" onclick="openBookingDossier('${b.id}')" class="w-full h-9 rounded-[12px] bg-[#2C1A11] text-white text-xs font-bold cursor-pointer">
+            بازرسی پرونده و چرخه وضعیت
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function renderVettingView() {
+      const queueList = document.getElementById('vetting-queue-list');
+      const auditList = document.getElementById('audit-log-list');
+      const auditCount = document.getElementById('audit-log-count');
+
+      if (queueList) {
+        queueList.innerHTML = vettingQueueData.map(v => {
+          const statusBadge = v.status === 'PENDING_REVIEW'
+            ? '<span class="px-2.5 py-1 rounded-full text-[10.5px] font-bold bg-[#F5E9CF] text-[#79551F]">در انتظار داوری هیئت علمی</span>'
+            : (v.status === 'APPROVED'
+                ? '<span class="px-2.5 py-1 rounded-full text-[10.5px] font-bold bg-emerald-50 border border-emerald-200 text-emerald-800">تایید شده • نقش منتور فعال شد</span>'
+                : '<span class="px-2.5 py-1 rounded-full text-[10.5px] font-bold bg-rose-50 border border-rose-200 text-rose-800">رد شده توسط مدیر</span>');
+
+          const actionsHtml = v.status === 'PENDING_REVIEW'
+            ? `
+              <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-3 border-t border-[#DFCFC0]/70">
+                <button type="button" onclick="approveMentorApplication('${v.id}')" class="flex-1 h-10 px-4 rounded-[14px] bg-[#2C1A11] hover:bg-[#432A1C] text-white text-xs font-bold cursor-pointer transition-colors">
+                  تایید و فعال‌سازی نقش منتور
+                </button>
+                <button type="button" onclick="rejectMentorApplication('${v.id}')" class="h-10 px-4 rounded-[14px] bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-800 text-xs font-bold cursor-pointer transition-colors">
+                  رد درخواست
+                </button>
+              </div>
+            `
+            : `<div class="pt-2 border-t border-[#DFCFC0]/70 text-[11px] font-semibold text-[#5E4131]">وضعیت پرونده نهایی شده و در لاگ ممیزی ثبت گردیده است.</div>`;
+
+          return `
+            <div class="bg-white rounded-[22px] border border-[#DFCFC0] p-4 sm:p-5 space-y-3 text-xs">
+              <div class="flex flex-wrap items-start justify-between gap-2">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="font-black text-sm text-[#2C1A11]">${v.fullName}</span>
+                    <span class="font-mono text-[10.5px] bg-[#FBF8F4] px-2 py-0.5 rounded-md border border-[#DFCFC0] text-[#5E4131]">${v.id}</span>
+                  </div>
+                  <p class="text-[11.5px] font-semibold text-[#5E4131] mt-0.5">${v.headline}</p>
+                </div>
+                ${statusBadge}
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 bg-[#FBF8F4] p-3 rounded-[14px] border border-[#DFCFC0] text-[11px]">
+                <div><span class="text-[#5E4131] block">سابقه ارشدیت</span><span class="font-bold text-[#2C1A11]">${v.experience}</span></div>
+                <div><span class="text-[#5E4131] block">تعرفه پیشنهادی</span><span class="font-bold text-[#2C1A11]">${formatToman(v.proposedFee)}</span></div>
+                <div><span class="text-[#5E4131] block">زمان ثبت</span><span class="font-bold text-[#2C1A11]">${v.submittedAt}</span></div>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-1.5">
+                ${v.tags.map(t => `<span class="px-2.5 py-0.5 rounded-[10px] bg-[#FBF8F4] border border-[#DFCFC0] text-[11px] font-medium text-[#2C1A11]">${t}</span>`).join('')}
+              </div>
+
+              <div class="flex flex-wrap items-center gap-4 text-[11px] font-mono text-[#5E4131]">
+                <span>GitHub: ${v.githubUrl}</span>
+                <span>LinkedIn: ${v.linkedinUrl}</span>
+              </div>
+
+              ${actionsHtml}
+            </div>
+          `;
+        }).join('');
+      }
+
+      if (auditCount) {
+        auditCount.textContent = `${toPersianDigits(auditLogsData.length)} رویداد`;
+      }
+
+      if (auditList) {
+        auditList.innerHTML = auditLogsData.map(log => {
+          const badgeClass = log.actionType.includes('SUSPEND') || log.actionType.includes('REJECT')
+            ? 'bg-rose-50 border-rose-200 text-rose-800'
+            : (log.actionType.includes('APPROVED')
+                ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                : 'bg-[#F3F8FF] border-[#8EC5FF] text-[#2C1A11]');
+
+          return `
+            <div class="bg-white rounded-[16px] border border-[#DFCFC0] p-3.5 space-y-1.5 text-xs">
+              <div class="flex items-center justify-between gap-2">
+                <span class="px-2 py-0.5 rounded-full border text-[10.5px] font-bold ${badgeClass}">${log.actionLabel}</span>
+                <span class="font-mono text-[10px] text-[#5E4131]">${log.id}</span>
+              </div>
+              <div class="font-bold text-[#2C1A11]">${log.target}</div>
+              <p class="text-[11px] text-[#5E4131] leading-[1.7]">${log.reason}</p>
+              <div class="flex items-center justify-between text-[10px] text-[#5E4131] pt-1 border-t border-[#DFCFC0]/60">
+                <span>عامل: ${log.actor}</span>
+                <span>${log.timestamp}</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    function approveMentorApplication(appId) {
+      const app = vettingQueueData.find(v => v.id === appId);
+      if (!app || app.status !== 'PENDING_REVIEW') return;
+      app.status = 'APPROVED';
+
+      const existing = usersData.find(u => u.email === app.email);
+      if (existing) {
+        existing.isMentorEnabled = true;
+        existing.status = 'ACTIVE';
+      } else {
+        const parts = app.fullName.replace('مهندس ', '').split(' ');
+        const mono = parts.length >= 2 ? `${parts[0][0]}‌${parts[1][0]}` : app.fullName.slice(0, 2);
+        usersData.unshift({
+          id: `USR-${107 + usersData.length}`,
+          monogram: mono,
+          fullName: app.fullName,
+          email: app.email,
+          phone: app.phone,
+          isMenteeEnabled: true,
+          isMentorEnabled: true,
+          isAdmin: false,
+          status: 'ACTIVE',
+          sessionsCount: 0,
+          rating: '۵.۰',
+          alertFlag: '',
+          joinedAt: '۱۴۰۵/۰۸/۲۱'
+        });
+      }
+
+      auditLogsData.unshift({
+        id: `AUD-${410 + auditLogsData.length}`,
+        actionType: 'MENTOR_APPROVED',
+        actionLabel: 'تایید و فعال‌سازی منتور',
+        target: `${app.fullName} (${app.id})`,
+        actor: ADMIN_ACTOR_LABEL,
+        reason: 'پرونده مربی‌گری تایید شد و قابلیت isMentorEnabled در حساب کاربر فعال گردید',
+        timestamp: getCurrentIrstStamp()
+      });
+
+      renderAdminKPIs();
+      renderVettingView();
+      renderUsersView();
+      showAdminToast(`صلاحیت ${app.fullName} تایید شد و نقش منتور به فهرست کاربران فعال اضافه گردید.`);
+    }
+
+    function rejectMentorApplication(appId) {
+      const app = vettingQueueData.find(v => v.id === appId);
+      if (!app || app.status !== 'PENDING_REVIEW') return;
+      app.status = 'REJECTED';
+
+      auditLogsData.unshift({
+        id: `AUD-${410 + auditLogsData.length}`,
+        actionType: 'MENTOR_REJECTED',
+        actionLabel: 'رد درخواست مربی‌گری',
+        target: `${app.fullName} (${app.id})`,
+        actor: ADMIN_ACTOR_LABEL,
+        reason: 'نیاز به تکمیل مستندات معماری و نمونه‌کدهای گیت‌هاب پیش از تایید نهایی',
+        timestamp: getCurrentIrstStamp()
+      });
+
+      renderAdminKPIs();
+      renderVettingView();
+      showAdminToast(`پرونده ${app.id} با وضعیت رد شده در گزارش ممیزی ثبت شد.`);
+    }
+
+    // Suspend / Reactivate Modal Logic (FR-027)
+    function openSuspendModal(userId) {
+      const user = usersData.find(u => u.id === userId);
+      if (!user || user.isAdmin) return;
+      pendingSuspendUserId = userId;
+
+      const isSuspending = user.status === 'ACTIVE';
+      document.getElementById('suspend-modal-title').textContent = isSuspending
+        ? 'تعلیق حساب کاربری (SUSPEND)'
+        : 'رفع تعلیق و فعال‌سازی مجدد (ACTIVATE)';
+      document.getElementById('suspend-modal-subtitle').textContent = `PATCH /api/admin/users/${user.id}/status`;
+
+      document.getElementById('suspend-target-summary').innerHTML = `
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-[#2C1A11]">${user.fullName} (${user.id})</span>
+          <span class="font-mono text-[10.5px] text-[#5E4131]">وضعیت فعلی: ${user.status}</span>
+        </div>
+        <div class="text-[11px] text-[#5E4131]">${user.email} • ${user.phone}</div>
+      `;
+
+      const reasonGroup = document.getElementById('suspend-reason-group');
+      const impactBox = document.getElementById('suspend-impact-box');
+      const confirmBtn = document.getElementById('suspend-confirm-btn');
+
+      if (isSuspending) {
+        reasonGroup.classList.remove('hidden');
+        impactBox.innerHTML = 'با تایید تعلیق، تمام توکن‌های نشست (<span class="font-mono">HttpOnly Session</span>) این کاربر فوراً ابطال شده و ورود مجدد با خطای <span class="font-mono font-bold text-rose-700">HTTP 403 Forbidden</span> مسدود می‌گردد.';
+        confirmBtn.className = 'flex-1 h-11 rounded-[14px] bg-rose-700 hover:bg-rose-800 text-white font-bold text-xs transition-colors cursor-pointer';
+        confirmBtn.textContent = 'تایید تعلیق و ابطال نشست کاربر';
+      } else {
+        reasonGroup.classList.add('hidden');
+        impactBox.innerHTML = 'با فعال‌سازی مجدد حساب، وضعیت کاربر به <span class="font-mono font-bold text-emerald-800">ACTIVE</span> تغییر یافته و امکان ورود و استفاده از پلتفرم برقرار می‌شود.';
+        confirmBtn.className = 'flex-1 h-11 rounded-[14px] bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs transition-colors cursor-pointer';
+        confirmBtn.textContent = 'تایید رفع تعلیق و فعال‌سازی حساب';
+      }
+
+      document.getElementById('suspend-modal-backdrop').classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+    }
+
+    function closeSuspendModal() {
+      pendingSuspendUserId = null;
+      document.getElementById('suspend-modal-backdrop').classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    function executeUserStatusChange() {
+      const user = usersData.find(u => u.id === pendingSuspendUserId);
+      if (!user || user.isAdmin) {
+        closeSuspendModal();
+        return;
+      }
+
+      const wasActive = user.status === 'ACTIVE';
+      user.status = wasActive ? 'SUSPENDED' : 'ACTIVE';
+
+      const selectReason = document.getElementById('suspend-reason-select')?.value || '';
+      const customNote = (document.getElementById('suspend-custom-note')?.value || '').trim();
+      const finalReason = wasActive
+        ? `${selectReason}${customNote ? ` — ${customNote}` : ''} (ابطال نشست فعال)`
+        : 'رفع تعلیق حساب پس از بررسی و تایید مدیر سیستم';
+
+      if (!wasActive) {
+        user.alertFlag = '';
+      }
+
+      auditLogsData.unshift({
+        id: `AUD-${410 + auditLogsData.length}`,
+        actionType: wasActive ? 'USER_SUSPENDED' : 'USER_ACTIVATED',
+        actionLabel: wasActive ? 'تعلیق حساب کاربری' : 'فعال‌سازی مجدد حساب',
+        target: `${user.fullName} (${user.id})`,
+        actor: ADMIN_ACTOR_LABEL,
+        reason: finalReason,
+        timestamp: getCurrentIrstStamp()
+      });
+
+      const customNoteEl = document.getElementById('suspend-custom-note');
+      if (customNoteEl) customNoteEl.value = '';
+
+      closeSuspendModal();
+      renderAdminKPIs();
+      renderUsersView();
+      if (activeAdminTab === 'vetting') renderVettingView();
+
+      showAdminToast(wasActive
+        ? `حساب ${user.fullName} (${user.id}) تعلیق شد و تمام نشست‌های فعال او ابطال گردید.`
+        : `حساب ${user.fullName} (${user.id}) مجدداً به وضعیت ACTIVE بازگشت.`);
+    }
+
+    // Read-Only Booking Dossier Modal (FR-029)
+    function openBookingDossier(bookingId) {
+      const b = bookingsData.find(item => item.id === bookingId);
+      if (!b) return;
+
+      document.getElementById('dossier-badges').innerHTML = `
+        <span class="font-mono text-xs font-black px-3 py-1 rounded-full bg-[#2C1A11] text-[#F2E8DA]">${b.id}</span>
+        ${getBookingStatusBadge(b.bookingStatus)}
+        <span class="px-2.5 py-1 rounded-full bg-white border border-[#DFCFC0] font-mono text-[10.5px] font-bold text-[#5E4131]">Slot ${b.slotId}: ${b.slotStatus}</span>
+      `;
+      document.getElementById('dossier-title').textContent = `پرونده ممیزی رزرو ${b.id} — ${b.menteeName} و ${b.mentorName}`;
+
+      document.getElementById('dossier-meta-grid').innerHTML = `
+        <div class="bg-white border border-[#DFCFC0] rounded-[16px] p-3.5 space-y-1">
+          <span class="text-[11px] text-[#5E4131] block">منتی (درخواست‌کننده)</span>
+          <span class="font-bold text-[#2C1A11]">${b.menteeName}</span>
+        </div>
+        <div class="bg-white border border-[#DFCFC0] rounded-[16px] p-3.5 space-y-1">
+          <span class="text-[11px] text-[#5E4131] block">منتور (ارائه‌دهنده)</span>
+          <span class="font-bold text-[#2C1A11]">${b.mentorName}</span>
+        </div>
+        <div class="bg-white border border-[#DFCFC0] rounded-[16px] p-3.5 space-y-1">
+          <span class="text-[11px] text-[#5E4131] block">موعد برگزاری و مدت</span>
+          <span class="font-bold text-[#2C1A11]">${b.scheduledTime} (${b.duration})</span>
+        </div>
+        <div class="bg-white border border-[#DFCFC0] rounded-[16px] p-3.5 space-y-1">
+          <span class="text-[11px] text-[#5E4131] block">تفکیک مالی (۹۰٪ / ۱۰٪)</span>
+          <span class="font-bold text-[#2C1A11]">${formatToman(b.totalAmount)}</span>
+          <span class="text-[10.5px] text-[#5E4131] block">حق‌الزحمه منتور: ${formatToman(b.mentorFee)} + کارمزد: ${formatToman(b.commission)}</span>
+        </div>
+      `;
+
+      document.getElementById('dossier-agenda-box').innerHTML = `
+        <div class="flex items-center justify-between border-b border-[#DFCFC0]/60 pb-2">
+          <span class="font-extrabold text-[#2C1A11]">دستور کار مدون ثبت‌شده (session_agendas)</span>
+          <span class="text-[10.5px] font-bold text-[#5E4131] bg-[#EFE3D5] px-2 py-0.5 rounded-md">الزامی</span>
+        </div>
+        <div class="space-y-1.5 pt-1">
+          <div><span class="font-bold text-[#2C1A11]">موضوع:</span> <span class="text-[#5E4131]">${b.agenda.topic}</span></div>
+          <div><span class="font-bold text-[#2C1A11]">جزئیات و پرسش‌ها:</span> <span class="text-[#5E4131] leading-[1.8]">${b.agenda.questions}</span></div>
+          <div><span class="font-bold text-[#2C1A11]">ریپازیتوری ضمیمه:</span> <span dir="ltr" class="font-mono text-[11px] text-[#2C1A11]">${b.agenda.repoUrl || 'ثبت نشده (اختیاری)'}</span></div>
+        </div>
+      `;
+
+      const isConfirmed = b.bookingStatus === 'CONFIRMED' && b.meetingUrl;
+      document.getElementById('dossier-meeting-url-box').innerHTML = isConfirmed
+        ? `
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-[#2C1A11]">آدرس اتاق جلسه ویدیویی (meeting_url)</span>
+            <span class="px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-[10.5px] font-bold text-emerald-800">وضعیت CONFIRMED • قابل مشاهده</span>
+          </div>
+          <div dir="ltr" class="font-mono text-xs font-bold text-[#2C1A11] bg-white px-3 py-2 rounded-[12px] border border-[#DFCFC0] text-left">${b.meetingUrl}</div>
+        `
+        : `
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-[#2C1A11]">آدرس اتاق جلسه ویدیویی (meeting_url)</span>
+            <span class="px-2 py-0.5 rounded-full bg-[#EFE3D5] text-[10.5px] font-bold text-[#5E4131]">محافظت‌شده طبق US-07</span>
+          </div>
+          <div class="flex flex-wrap items-center justify-between gap-2 bg-white px-3 py-2 rounded-[12px] border border-[#DFCFC0]">
+            <span class="text-[11.5px] text-[#5E4131]">محافظت‌شده طبق US-07 — لینک فقط در وضعیت CONFIRMED افشا می‌شود</span>
+            <code dir="ltr" class="font-mono text-xs font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-200">null</code>
+          </div>
+        `;
+
+      const linkedTxs = ledgerData.filter(tx => b.txIds.includes(tx.id));
+      document.getElementById('dossier-transactions-box').innerHTML = `
+        <div class="font-extrabold text-[#2C1A11]">تراکنش‌های مالی متصل (payment_transactions)</div>
+        ${linkedTxs.length > 0
+          ? linkedTxs.map(tx => `
+              <div class="bg-[#FBF8F4] border border-[#DFCFC0] rounded-[14px] p-3 flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <span class="font-mono font-bold text-[#2C1A11]">${tx.id}</span>
+                  <span class="text-[11px] text-[#5E4131] mr-2">${tx.transactionType}</span>
+                  ${tx.parentTransactionId ? `<span class="text-[10.5px] font-bold text-[#79551F] mr-2">(والد: ${tx.parentTransactionId})</span>` : ''}
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="font-bold text-[#2C1A11]">${formatToman(tx.totalAmount)}</span>
+                  ${getLedgerStatusBadge(tx.status)}
+                </div>
+              </div>
+            `).join('')
+          : `<div class="bg-[#FBF8F4] border border-[#DFCFC0] rounded-[14px] p-3 text-[11px] text-[#5E4131]">${b.archiveSettlementNote || 'تراکنشی در این چرخه ثبت نشده است.'}</div>`}
+      `;
+
+      document.getElementById('dossier-timeline-list').innerHTML = b.transitions.map(tr => `
+        <div class="bg-white border border-[#DFCFC0] rounded-[14px] p-3 space-y-1">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span dir="ltr" class="font-mono font-bold text-[11px] text-[#2C1A11]">${tr.label}</span>
+            <span class="text-[10.5px] text-[#5E4131]">${tr.time}</span>
+          </div>
+          <p class="text-[11.5px] text-[#5E4131]">${tr.detail}</p>
+        </div>
+      `).join('');
+
+      document.getElementById('booking-dossier-modal-backdrop').classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+    }
+
+    function closeBookingDossierModal() {
+      document.getElementById('booking-dossier-modal-backdrop').classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    function openRbacGuardModal() {
+      document.getElementById('rbac-guard-modal-backdrop').classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+    }
+
+    function closeRbacGuardModal() {
+      document.getElementById('rbac-guard-modal-backdrop').classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    function openLogoutModal() {
+      document.getElementById('logout-modal-backdrop').classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+    }
+
+    function closeLogoutModal() {
+      document.getElementById('logout-modal-backdrop').classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    function confirmAdminLogout() {
+      closeLogoutModal();
+      showAdminToast('نشست مدیر پلتفرم با موفقیت بسته شد. در حال انتقال به صفحه کاوش پیرو...');
+      setTimeout(() => {
+        window.location.href = 'peyroo_figma_landing.html';
+      }, 750);
+    }
+
+    function handleBackdropClose(e, id, closeFn) {
+      if (e.target && e.target.id === id) {
+        closeFn();
+      }
+    }
+
+    // Mobile Floating Island Menu
+    let isMobileMenuOpen = false;
+    function toggleMobileMenu(forceClose = false) {
+      const drawer = document.getElementById('mobile-menu-drawer');
+      const backdrop = document.getElementById('mobile-menu-backdrop');
+      const iconBars = document.getElementById('menu-icon-bars');
+      const iconClose = document.getElementById('menu-icon-close');
+      const navEl = document.querySelector('#main-header nav');
+
+      isMobileMenuOpen = forceClose ? false : !isMobileMenuOpen;
+      if (drawer) drawer.classList.toggle('drawer-visible', isMobileMenuOpen);
+      if (backdrop) backdrop.classList.toggle('backdrop-visible', isMobileMenuOpen);
+      if (iconBars) iconBars.classList.toggle('hidden', isMobileMenuOpen);
+      if (iconClose) iconClose.classList.toggle('hidden', !isMobileMenuOpen);
+      if (navEl) navEl.classList.toggle('menu-open', isMobileMenuOpen);
+      document.body.classList.toggle('overflow-hidden', isMobileMenuOpen);
+    }
+
+    // Keyboard Escape closes open modals or drawer
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeSuspendModal();
+        closeBookingDossierModal();
+        closeRbacGuardModal();
+        closeLogoutModal();
+        if (isMobileMenuOpen) toggleMobileMenu(true);
+      }
+    });
+
+    // Init on load + support ?tab=vetting etc.
+    window.addEventListener('DOMContentLoaded', () => {
+      renderAdminKPIs();
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get('tab');
+      switchAdminTab(tabParam || 'users');
+    });
+  </script>
+</body>
+</html>
