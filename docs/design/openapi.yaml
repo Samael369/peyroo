@@ -1,0 +1,1985 @@
+openapi: 3.0.3
+info:
+  title: Peyroo Mentorship Platform API
+  version: 1.0.0
+  description: |
+    Machine-readable OpenAPI 3.0.3 contract for the **Peyroo (پیرو) Mentorship Platform**,
+    derived from `docs/design/API_DESIGN.md`, `docs/design/DATABASE_DESIGN.md`,
+    `docs/design/SECURITY_DESIGN.md`, and `docs/design/WORKFLOW_AND_TRANSACTION_DESIGN.md`.
+
+    ### Conventions
+    - **Content-Type:** `application/json; charset=utf-8`
+    - **Authentication:** `HttpOnly`, `Secure`, `SameSite=Lax` session cookie (`peyroo_session`) or Bearer JWT.
+    - **CSRF Defense:** State-mutating SPA requests (`POST`, `PUT`, `PATCH`, `DELETE`) include `X-Requested-With: PeyrooApp` and validated `Origin`/`Referer` headers.
+    - **Privacy (`NFR-005`):** External `meetingUrl` values are withheld from public endpoints and disclosed exclusively to confirmed session participants (`booking.status == 'CONFIRMED'`).
+    - **Error Envelope (`NFR-012`):** All `4xx`/`5xx` responses follow the standard `ErrorResponse` schema.
+  contact:
+    name: Peyroo SSAD Team
+
+servers:
+  - url: /
+    description: Relative base URL (paths include /api prefix)
+
+tags:
+  - name: Authentication
+    description: Registration, login, and session termination (`/api/auth`)
+  - name: Users & Capabilities
+    description: Authenticated profile, mentor capability activation, and active mode switching (`/api/users`)
+  - name: Mentor Catalog
+    description: Public mentor discovery, tag filtering, and open availability inspection (`/api/mentors`)
+  - name: Availability Slots
+    description: Mentor slot publishing, soft deletion, and slot listing (`/api/slots`)
+  - name: Bookings
+    description: Concurrency-safe 15-minute reservations, session dashboards, and cancellations (`/api/bookings`)
+  - name: Payments
+    description: Mock Payment Gateway webhook callback and idempotent ledger finalization (`/api/payments`)
+  - name: Reviews
+    description: Verified post-session mentee reviews (`/api/reviews`)
+  - name: Administration
+    description: Governance, user suspension, financial ledger audit, and global bookings (`/api/admin`)
+
+paths:
+  /api/auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register a new user account
+      description: Registers a new user account with default Mentee capability (`isMenteeEnabled=true`, `isMentorEnabled=false`, `isAdmin=false`).
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: User account created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthUserEnvelope'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+
+  /api/auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Authenticate user and issue session cookie
+      description: Verifies credentials and issues an `HttpOnly; Secure; SameSite=Lax` session cookie (`peyroo_session`).
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Authentication succeeded.
+          headers:
+            Set-Cookie:
+              description: Session cookie (`peyroo_session=...; HttpOnly; Secure; SameSite=Lax`)
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthUserEnvelope'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /api/auth/logout:
+    post:
+      tags:
+        - Authentication
+      summary: Invalidate session token and clear authentication cookie
+      operationId: logoutUser
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Logged out successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageSuccessResponse'
+              example:
+                success: true
+                message: Logged out successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/users/me:
+    get:
+      tags:
+        - Users & Capabilities
+      summary: Get current authenticated user profile and capabilities
+      description: Retrieves profile, permissions, active capabilities, and mentor profile summary (if activated) for the authenticated user.
+      operationId: getCurrentUser
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Current user details retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrentUserEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /api/users/me/mentor-profile:
+    post:
+      tags:
+        - Users & Capabilities
+      summary: Activate Mentor capability and configure mentor profile
+      description: Configures mandatory mentor details, sets `isMentorEnabled = true`, and creates the mentor profile. Requires `status == ACTIVE`.
+      operationId: createMentorProfile
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMentorProfileRequest'
+      responses:
+        '200':
+          description: Mentor capability activated and profile saved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MentorProfileEnvelope'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    put:
+      tags:
+        - Users & Capabilities
+      summary: Update existing mentor profile details
+      description: Partially updates headline, biography, expertise tags, base session rate, currency, or default meeting URL. Requires `isMentorEnabled == true`.
+      operationId: updateMentorProfile
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMentorProfileRequest'
+      responses:
+        '200':
+          description: Mentor profile updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MentorProfileEnvelope'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /api/users/me/active-mode:
+    patch:
+      tags:
+        - Users & Capabilities
+      summary: Toggle active client operational mode (Mentee vs. Mentor)
+      description: Switches user operational context between `MENTEE` and `MENTOR` (`FR-004`). Switching to `MENTOR` requires `isMentorEnabled == true`.
+      operationId: switchActiveMode
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActiveModeRequest'
+      responses:
+        '200':
+          description: Active mode updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActiveModeEnvelope'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /api/mentors:
+    get:
+      tags:
+        - Mentor Catalog
+      summary: Browse active mentors with upcoming open slots
+      description: Lists discoverable mentors possessing upcoming open slots, with optional technical tag filtering and pagination.
+      operationId: listMentors
+      parameters:
+        - name: tag
+          in: query
+          required: false
+          description: Optional technical expertise tag filter (e.g., `Backend`).
+          schema:
+            type: string
+            example: Backend
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 12
+      responses:
+        '200':
+          description: Paginated mentor catalog list.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MentorCatalogEnvelope'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /api/mentors/{mentorId}:
+    get:
+      tags:
+        - Mentor Catalog
+      summary: Inspect public mentor profile and upcoming open slots
+      description: Returns public mentor details and upcoming `OPEN` availability slots. Private external meeting URLs are strictly omitted (`NFR-005`).
+      operationId: getMentorById
+      parameters:
+        - name: mentorId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Public mentor profile and open slots.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicMentorDetailEnvelope'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/slots:
+    post:
+      tags:
+        - Availability Slots
+      summary: Publish a new availability slot
+      description: Publishes an `OPEN` slot of 30, 45, or 60 minutes. Database-level exclusion prevents temporal collisions (`FR-008`).
+      operationId: createAvailabilitySlot
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSlotRequest'
+      responses:
+        '201':
+          description: Availability slot published with `OPEN` status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SlotEnvelope'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /api/slots/{slotId}:
+    delete:
+      tags:
+        - Availability Slots
+      summary: Soft-delete/cancel an unbooked availability slot
+      description: Archives an `OPEN` slot (`status -> CANCELLED`). Rejects if the caller is not the slot owner or if the slot is `HELD` or `BOOKED`.
+      operationId: deleteAvailabilitySlot
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      parameters:
+        - name: slotId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Slot soft-deleted (`CANCELLED`).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SlotEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+
+  /api/slots/my-slots:
+    get:
+      tags:
+        - Availability Slots
+      summary: Retrieve availability slots created by the authenticated mentor
+      operationId: getMyAvailabilitySlots
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          required: false
+          description: Optional slot status filter.
+          schema:
+            $ref: '#/components/schemas/SlotStatus'
+      responses:
+        '200':
+          description: Mentor's availability slots with booking indicators.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SlotListEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /api/bookings:
+    post:
+      tags:
+        - Bookings
+      summary: Initiate a 15-minute slot reservation and booking checkout
+      description: |
+        Acquires an exclusive row lock (`SELECT ... FOR UPDATE`) on the target slot, validates self-booking prohibition (`auth.user.id != mentor_profile.user_id`) and minimum 2-hour notice, places the slot in `HELD` status, creates a `PENDING_PAYMENT` booking with a 15-minute TTL, stores the structured agenda, calculates the 10% platform commission, and returns the Mock Payment Gateway redirect URL.
+      operationId: createBooking
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBookingRequest'
+      responses:
+        '201':
+          description: Booking reservation initiated and slot held for 15 minutes.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateBookingEnvelope'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /api/bookings/my-sessions:
+    get:
+      tags:
+        - Bookings
+      summary: Retrieve authenticated user's session bookings
+      description: Lists bookings for the current user filtered by `mentee` or `mentor` mode. Exposes external `meetingUrl` strictly when `status == 'CONFIRMED'`.
+      operationId: getMySessions
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      parameters:
+        - name: mode
+          in: query
+          required: false
+          description: Filter sessions by user role context.
+          schema:
+            type: string
+            enum: [mentee, mentor]
+      responses:
+        '200':
+          description: Session bookings retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingListEnvelope'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /api/bookings/{bookingId}:
+    get:
+      tags:
+        - Bookings
+      summary: Retrieve full details for a specific booking
+      description: Accessible only to the booked mentee, the slot's mentor, or an administrator. Exposes `meetingUrl` strictly when `status == 'CONFIRMED'`.
+      operationId: getBookingById
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      parameters:
+        - name: bookingId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Detailed booking record.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingDetailEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/bookings/{bookingId}/cancel:
+    post:
+      tags:
+        - Bookings
+      summary: Cancel a confirmed booking according to cancellation policy
+      description: |
+        Enforces policy-based cancellation:
+        - Mentee >= 24h before start: `CANCELLED_REFUNDED`, full refund issued, slot reopened if >= 2h remaining.
+        - Mentee < 24h before start: `CANCELLED_NO_REFUND`, no refund, slot archived as `CANCELLED`.
+        - Mentor anytime before start: `CANCELLED_BY_MENTOR`, full refund issued, slot archived as `CANCELLED`.
+      operationId: cancelBooking
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      parameters:
+        - name: bookingId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Booking cancelled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelBookingEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+
+  /api/payments/callback:
+    post:
+      tags:
+        - Payments
+      summary: Asynchronous webhook callback from Mock Payment Gateway
+      description: |
+        Verifies HMAC-SHA256 `X-Gateway-Signature` in constant time, enforces `idempotencyKey`/`externalTxRef` idempotency, and applies Policy Option A (Strict Expiration Precedence): if the 15-minute reservation already expired when a captured `SUCCESS` arrives, the payment is recorded as `COMPLETED` and an immediate linked `CANCELLATION_REFUND` (`REFUNDED`) row is inserted before returning HTTP 400.
+      operationId: handlePaymentCallback
+      security:
+        - webhookSignature: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentCallbackRequest'
+      responses:
+        '200':
+          description: Payment callback processed (or idempotent replay acknowledged).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentCallbackEnvelope'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/reviews:
+    post:
+      tags:
+        - Reviews
+      summary: Submit verified post-session review
+      description: Allows the mentee of a `COMPLETED` booking to submit a single star rating (1–5) and optional comment, recalculating the mentor's aggregate rating atomically.
+      operationId: submitReview
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReviewRequest'
+      responses:
+        '201':
+          description: Review recorded and mentor rating recalculated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewEnvelope'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+
+  /api/admin/users/{userId}/status:
+    patch:
+      tags:
+        - Administration
+      summary: Toggle user account status between ACTIVE and SUSPENDED
+      description: Administrator-only action (`isAdmin == true`). Suspending a user immediately invalidates active session access (`FR-027`).
+      operationId: updateUserStatus
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserStatusRequest'
+      responses:
+        '200':
+          description: User account status updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUserStatusEnvelope'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/admin/financial-ledger:
+    get:
+      tags:
+        - Administration
+      summary: Retrieve itemized financial ledger and commission totals
+      description: Administrator-only endpoint returning itemized payment/refund transactions alongside gross volume, collected 10% commission, and refund totals (`FR-028`).
+      operationId: getAdminFinancialLedger
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Financial ledger summary and itemized transactions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminFinancialLedgerEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /api/admin/bookings:
+    get:
+      tags:
+        - Administration
+      summary: Inspect global bookings in read-only mode
+      description: Administrator-only global booking audit trail (`FR-029`).
+      operationId: getAdminBookings
+      security:
+        - cookieAuth: []
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Global booking audit list.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingListEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: peyroo_session
+      description: HttpOnly, Secure, SameSite=Lax session cookie issued upon login.
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Optional Bearer JWT token authentication.
+    webhookSignature:
+      type: apiKey
+      in: header
+      name: X-Gateway-Signature
+      description: HMAC-SHA256 signature computed over the raw request body using `WEBHOOK_SIGNING_SECRET`.
+
+  responses:
+    BadRequest:
+      description: Invalid request syntax or validation failure.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Authentication required or invalid credentials / webhook signature.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Account suspended, missing capability, or resource ownership violation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Conflict:
+      description: State or uniqueness conflict (e.g., duplicate email, slot overlap, held/booked slot, duplicate review).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    UnprocessableEntity:
+      description: Domain constraint violated (e.g., bio < 20 chars, invalid HTTPS URL, duration not in 30/45/60, booking notice < 2 hours).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+  schemas:
+    # ------------------------------------------------------------------
+    # Common Envelopes & Enums
+    # ------------------------------------------------------------------
+    ResponseMeta:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          example: '2026-11-10T14:30:00Z'
+
+    ErrorDetail:
+      type: object
+      required:
+        - code
+        - message
+        - timestamp
+      properties:
+        code:
+          type: string
+          example: SLOT_COLLISION
+        message:
+          type: string
+          example: Proposed slot collides with an existing availability slot.
+        field:
+          type: string
+          nullable: true
+          example: startTime
+        timestamp:
+          type: string
+          format: date-time
+          example: '2026-11-10T14:30:00Z'
+
+    ErrorResponse:
+      type: object
+      required:
+        - success
+        - error
+      properties:
+        success:
+          type: boolean
+          enum: [false]
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+
+    MessageSuccessResponse:
+      type: object
+      required:
+        - success
+        - message
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        message:
+          type: string
+
+    PaginationMeta:
+      type: object
+      required:
+        - page
+        - limit
+        - totalCount
+      properties:
+        page:
+          type: integer
+          minimum: 1
+          example: 1
+        limit:
+          type: integer
+          minimum: 1
+          example: 12
+        totalCount:
+          type: integer
+          minimum: 0
+          example: 42
+
+    UserStatus:
+      type: string
+      enum: [ACTIVE, SUSPENDED]
+
+    OperationalMode:
+      type: string
+      enum: [MENTEE, MENTOR]
+
+    SlotStatus:
+      type: string
+      enum: [OPEN, HELD, BOOKED, CANCELLED]
+
+    BookingStatus:
+      type: string
+      enum:
+        - INITIATED
+        - PENDING_PAYMENT
+        - CONFIRMED
+        - PAYMENT_FAILED
+        - EXPIRED
+        - CANCELLED_REFUNDED
+        - CANCELLED_NO_REFUND
+        - CANCELLED_BY_MENTOR
+        - COMPLETED
+
+    CancellationBookingStatus:
+      type: string
+      enum:
+        - CANCELLED_REFUNDED
+        - CANCELLED_NO_REFUND
+        - CANCELLED_BY_MENTOR
+
+    TransactionType:
+      type: string
+      enum: [SESSION_PAYMENT, CANCELLATION_REFUND]
+
+    TransactionStatus:
+      type: string
+      enum: [PENDING, COMPLETED, FAILED, REFUNDED]
+
+    # ------------------------------------------------------------------
+    # Authentication & Users
+    # ------------------------------------------------------------------
+    RegisterRequest:
+      type: object
+      required:
+        - email
+        - password
+        - fullName
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 255
+          example: user@example.com
+        password:
+          type: string
+          format: password
+          minLength: 8
+          maxLength: 128
+          example: SecurePassword123!
+        fullName:
+          type: string
+          minLength: 1
+          maxLength: 100
+          example: Amir Hosseini
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 255
+          example: user@example.com
+        password:
+          type: string
+          format: password
+          example: SecurePassword123!
+
+    UserAccount:
+      type: object
+      required:
+        - id
+        - email
+        - fullName
+        - status
+        - isMenteeEnabled
+        - isMentorEnabled
+        - isAdmin
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        email:
+          type: string
+          format: email
+          example: user@example.com
+        fullName:
+          type: string
+          maxLength: 100
+          example: Amir Hosseini
+        status:
+          $ref: '#/components/schemas/UserStatus'
+        isMenteeEnabled:
+          type: boolean
+          example: true
+        isMentorEnabled:
+          type: boolean
+          example: false
+        isAdmin:
+          type: boolean
+          example: false
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    AuthUserEnvelope:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        data:
+          type: object
+          required:
+            - user
+          properties:
+            user:
+              $ref: '#/components/schemas/UserAccount'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+
+    MentorProfile:
+      type: object
+      required:
+        - id
+        - userId
+        - headline
+        - biography
+        - expertiseTags
+        - baseSessionRate
+        - currency
+        - averageRating
+        - totalReviewsCount
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        headline:
+          type: string
+          maxLength: 150
+          example: Senior Backend Engineer @ TechCo
+        biography:
+          type: string
+          minLength: 20
+          example: 10+ years designing distributed systems in Go and PostgreSQL. Passionate about mentoring junior developers.
+        expertiseTags:
+          type: array
+          items:
+            type: string
+          example: [Backend, Go, Distributed Systems, PostgreSQL]
+        baseSessionRate:
+          type: integer
+          minimum: 0
+          example: 500000
+        currency:
+          type: string
+          maxLength: 10
+          default: IRR
+          example: IRR
+        defaultMeetingUrl:
+          type: string
+          format: uri
+          pattern: '^https://.*$'
+          maxLength: 500
+          description: Included only for the owning mentor; omitted on public catalog endpoints.
+          example: https://meet.google.com/abc-defg-hij
+        averageRating:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 5
+          example: 4.9
+        totalReviewsCount:
+          type: integer
+          minimum: 0
+          example: 18
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    CurrentUserEnvelope:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        data:
+          type: object
+          required:
+            - user
+          properties:
+            user:
+              $ref: '#/components/schemas/UserAccount'
+            activeMode:
+              $ref: '#/components/schemas/OperationalMode'
+            mentorProfile:
+              allOf:
+                - $ref: '#/components/schemas/MentorProfile'
+              nullable: true
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+
+    CreateMentorProfileRequest:
+      type: object
+      required:
+        - headline
+        - biography
+        - expertiseTags
+        - baseSessionRate
+        - defaultMeetingUrl
+      properties:
+        headline:
+          type: string
+          minLength: 1
+          maxLength: 150
+          example: Senior Backend Engineer @ TechCo
+        biography:
+          type: string
+          minLength: 20
+          example: 10+ years designing distributed systems in Go and PostgreSQL. Passionate about mentoring junior developers.
+        expertiseTags:
+          type: array
+          minItems: 1
+          items:
+            type: string
+          example: [Backend, Go, Distributed Systems, PostgreSQL]
+        baseSessionRate:
+          type: integer
+          minimum: 0
+          example: 500000
+        currency:
+          type: string
+          maxLength: 10
+          default: IRR
+          example: IRR
+        defaultMeetingUrl:
+          type: string
+          format: uri
+          pattern: '^https://.*$'
+          maxLength: 500
+          example: https://meet.google.com/abc-defg-hij
+
+    UpdateMentorProfileRequest:
+      type: object
+      properties:
+        headline:
+          type: string
+          minLength: 1
+          maxLength: 150
+        biography:
+          type: string
+          minLength: 20
+        expertiseTags:
+          type: array
+          minItems: 1
+          items:
+            type: string
+        baseSessionRate:
+          type: integer
+          minimum: 0
+        currency:
+          type: string
+          maxLength: 10
+        defaultMeetingUrl:
+          type: string
+          format: uri
+          pattern: '^https://.*$'
+          maxLength: 500
+
+    MentorProfileEnvelope:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        data:
+          type: object
+          required:
+            - mentorProfile
+          properties:
+            isMentorEnabled:
+              type: boolean
+              example: true
+            mentorProfile:
+              $ref: '#/components/schemas/MentorProfile'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+
+    ActiveModeRequest:
+      type: object
+      required:
+        - activeMode
+      properties:
+        activeMode:
+          $ref: '#/components/schemas/OperationalMode'
+
+    ActiveModeEnvelope:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        data:
+          type: object
+          required:
+            - activeMode
+          properties:
+            activeMode:
+              $ref: '#/components/schemas/OperationalMode'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+
+    # ------------------------------------------------------------------
+    # Mentor Catalog
+    # ------------------------------------------------------------------
+    MentorCatalogItem:
+      type: object
+      required:
+        - mentorId
+        - fullName
+        - headline
+        - expertiseTags
+        - baseSessionRate
+        - currency
+        - averageRating
+        - totalReviewsCount
+      properties:
+        mentorId:
+          type: string
+          format: uuid
+          example: m1111111-e5f6-7890-abcd-ef1234567890
+        fullName:
+          type: string
+          example: Sara Rad
+        headline:
+          type: string
+          example: Senior Software Engineer
+        expertiseTags:
+          type: array
+          items:
+            type: string
+          example: [Backend, Go, System Design]
+        baseSessionRate:
+          type: integer
+          minimum: 0
+          example: 500000
+        currency:
+          type: string
+          example: IRR
+        averageRating:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 5
+          example: 4.9
+        totalReviewsCount:
+          type: integer
+          minimum: 0
+          example: 18
+        nextAvailableSlot:
+          type: string
+          format: date-time
+          nullable: true
+          example: '2026-11-12T18:00:00Z'
+
+    MentorCatalogEnvelope:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        data:
+          type: object
+          required:
+            - mentors
+            - pagination
+          properties:
+            mentors:
+              type: array
+              items:
+                $ref: '#/components/schemas/MentorCatalogItem'
+            pagination:
+              $ref: '#/components/schemas/PaginationMeta'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+
+    PublicAvailabilitySlot:
+      type: object
+      description: Public view of an upcoming OPEN slot; `meetingUrl` is intentionally omitted (`NFR-005`).
+      required:
+        - id
+        - mentorId
+        - startTime
+        - endTime
+        - durationMinutes
+        - status
+        - sessionRate
+        - currency
+      properties:
+        id:
+          type: string
+          format: uuid
+        mentorId:
+          type: string
+          format: uuid
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        durationMinutes:
+          type: integer
+          enum: [30, 45, 60]
+        status:
+          $ref: '#/components/schemas/SlotStatus'
+        sessionRate:
+          type: integer
+          minimum: 0
+        currency:
+          type: string
+          example: IRR
+
+    PublicMentorDetailEnvelope:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        data:
+          type: object
+          required:
+            - mentorId
+            - fullName
+            - headline
+            - biography
+            - expertiseTags
+            - baseSessionRate
+            - currency
+            - averageRating
+            - totalReviewsCount
+            - openSlots
+          properties:
+            mentorId:
+              type: string
+              format: uuid
+            fullName:
+              type: string
+            headline:
+              type: string
+            biography:
+              type: string
+            expertiseTags:
+              type: array
+              items:
+                type: string
+            baseSessionRate:
+              type: integer
+              minimum: 0
+            currency:
+              type: string
+            averageRating:
+              type: number
+              format: double
+              minimum: 0
+              maximum: 5
+            totalReviewsCount:
+              type: integer
+              minimum: 0
+            openSlots:
+              type: array
+              items:
+                $ref: '#/components/schemas/PublicAvailabilitySlot'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+
+    # ------------------------------------------------------------------
+    # Availability Slots
+    # ------------------------------------------------------------------
+    CreateSlotRequest:
+      type: object
+      required:
+        - startTime
+        - durationMinutes
+      properties:
+        startTime:
+          type: string
+          format: date-time
+          example: '2026-11-15T18:00:00Z'
+        durationMinutes:
+          type: integer
+          enum: [30, 45, 60]
+          example: 45
+        customSessionRate:
+          type: integer
+          minimum: 0
+          nullable: true
+          example: 500000
+        customMeetingUrl:
+          type: string
+          format: uri
+          pattern: '^https://.*$'
+          maxLength: 500
+          nullable: true
+          example: https://meet.google.com/xyz-uvwx-rst
+
+    AvailabilitySlot:
+      type: object
+      required:
+        - id
+        - mentorId
+        - startTime
+        - endTime
+        - durationMinutes
+        - status
+        - sessionRate
+        - currency
+        - meetingUrl
+      properties:
+        id:
+          type: string
+          format: uuid
+        mentorId:
+          type: string
+          format: uuid
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        durationMinutes:
+          type: integer
+          enum: [30, 45, 60]
+        status:
+          $ref: '#/components/schemas/SlotStatus'
+        sessionRate:
+          type: integer
+          minimum: 0
+        currency:
+          type: string
+          example: IRR
+        meetingUrl:
+          type: string
+          format: uri
+          pattern: '^https://.*$'
+        activeBookingId:
+          type: string
+          format: uuid
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    SlotEnvelope:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        data:
+          type: object
+          required:
+            - slot
+          properties:
+            slot:
+              $ref: '#/components/schemas/AvailabilitySlot'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+
+    SlotListEnvelope:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        data:
+          type: object
+          required:
+            - slots
+          properties:
+            slots:
+              type: array
+              items:
+                $ref: '#/components/schemas/AvailabilitySlot'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+
+    # ------------------------------------------------------------------
+    # Bookings & Agendas
+    # ------------------------------------------------------------------
+    SessionAgendaInput:
+      type: object
+      required:
+        - topicObjective
+        - specificQuestions
+      properties:
+        topicObjective:
+          type: string
+          minLength: 10
+          example: Code architecture review of my open-source Go project
+        specificQuestions:
+          type: string
+          minLength: 15
+          example: How should I structure domain repositories and handle concurrency under load?
+        portfolioRepoUrl:
+          type: string
+          format: uri
+          maxLength: 500
+          nullable: true
+          example: https://github.com/student/backend-core
+
+    SessionAgenda:
+      allOf:
+        - $ref: '#/components/schemas/SessionAgendaInput'
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            bookingId:
+              type: string
+              format: uuid
+            createdAt:
+              type: string
+              format: date-time
+
+    PricingBreakdown:
+      type: object
+      required:
+        - mentorFee
+        - platformCommission
+        - totalAmount
+        - currency
+      properties:
+        mentorFee:
+          type: integer
+          minimum: 0
+          example: 500000
+        platformCommission:
+          type: integer
+          minimum: 0
+          description: 10% platform commission (`FR-017`).
+          example: 50000
+        totalAmount:
+          type: integer
+          minimum: 0
+          example: 550000
+        currency:
+          type: string
+          example: IRR
+
+    CreateBookingRequest:
+      type: object
+      required:
+        - slotId
+        - agenda
+      properties:
+        slotId:
+          type: string
+          format: uuid
+          example: s9999999-e5f6-7890-abcd-ef1234567890
+        agenda:
+          $ref: '#/components/schemas/SessionAgendaInput'
+
+    CreateBookingEnvelope:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        data:
+          type: object
+          required:
+            - bookingId
+            - status
+            - expiresAt
+            - pricing
+            - paymentRedirectUrl
+          properties:
+            bookingId:
+              type: string
+              format: uuid
+              example: b8888888-e5f6-7890-abcd-ef1234567890
+            status:
+              $ref: '#/components/schemas/BookingStatus'
+              example: PENDING_PAYMENT
+            expiresAt:
+              type: string
+              format: date-time
+              example: '2026-11-10T14:45:00Z'
+            pricing:
+              $ref: '#/components/schemas/PricingBreakdown'
+            paymentRedirectUrl:
+              type: string
+              example: /mock-gateway/checkout?bookingId=b8888888-e5f6-7890-abcd-ef1234567890
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+
+    BookingSummary:
+      type: object
+      required:
+        - id
+        - slotId
+        - menteeId
+        - mentorId
+        - status
+        - startTime
+        - endTime
+        - durationMinutes
+        - pricing
+      properties:
+        id:
+          type: string
+          format: uuid
+        slotId:
+          type: string
+          format: uuid
+        menteeId:
+          type: string
+          format: uuid
+        menteeFullName:
+          type: string
+        mentorId:
+          type: string
+          format: uuid
+        mentorFullName:
+          type: string
+        mentorHeadline:
+          type: string
+        status:
+          $ref: '#/components/schemas/BookingStatus'
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        durationMinutes:
+          type: integer
+          enum: [30, 45, 60]
+        meetingUrl:
+          type: string
+          format: uri
+          nullable: true
+          description: Disclosed ONLY when `status == 'CONFIRMED'` to authorized session participants (`FR-021`, `NFR-005`).
+        pricing:
+          $ref: '#/components/schemas/PricingBreakdown'
+        expiresAt:
+          type: string
+          format: date-time
+          nullable: true
+        confirmedAt:
+          type: string
+          format: date-time
+          nullable: true
+        completedAt:
+          type: string
+          format: date-time
+          nullable: true
+        hasReview:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    BookingDetail:
+      allOf:
+        - $ref: '#/components/schemas/BookingSummary'
+        - type: object
+          required:
+            - agenda
+          properties:
+            agenda:
+              $ref: '#/components/schemas/SessionAgenda'
+
+    BookingListEnvelope:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        data:
+          type: object
+          required:
+            - bookings
+          properties:
+            bookings:
+              type: array
+              items:
+                $ref: '#/components/schemas/BookingSummary'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+
+    BookingDetailEnvelope:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        data:
+          type: object
+          required:
+            - booking
+          properties:
+            booking:
+              $ref: '#/components/schemas/BookingDetail'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+
+    CancelBookingEnvelope:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        data:
+          type: object
+          required:
+            - status
+            - refundIssued
+          properties:
+            status:
+              $ref: '#/components/schemas/CancellationBookingStatus'
+            refundIssued:
+              type: boolean
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+
+    # ------------------------------------------------------------------
+    # Payments & Financial Ledger
+    # ------------------------------------------------------------------
+    PaymentCallbackRequest:
+      type: object
+      required:
+        - bookingId
+        - externalTxRef
+        - idempotencyKey
+        - status
+        - amountPaid
+        - timestamp
+      properties:
+        bookingId:
+          type: string
+          format: uuid
+          example: b8888888-e5f6-7890-abcd-ef1234567890
+        externalTxRef:
+          type: string
+          maxLength: 100
+          example: MOCK-TX-987654321
+        idempotencyKey:
+          type: string
+          maxLength: 100
+          example: IDEMP-88888888-PAYMENT-1
+        status:
+          type: string
+          enum: [SUCCESS, FAILED]
+          example: SUCCESS
+        amountPaid:
+          type: integer
+          minimum: 0
+          example: 550000
+        timestamp:
+          type: string
+          format: date-time
+          example: '2026-11-10T14:38:00Z'
+
+    PaymentTransaction:
+      type: object
+      required:
+        - id
+        - bookingId
+        - transactionType
+        - status
+        - mentorFee
+        - platformCommission
+        - totalAmount
+        - currency
+      properties:
+        id:
+          type: string
+          format: uuid
+        bookingId:
+          type: string
+          format: uuid
+        parentTransactionId:
+          type: string
+          format: uuid
+          nullable: true
+        externalTxRef:
+          type: string
+          nullable: true
+        idempotencyKey:
+          type: string
+          nullable: true
+        transactionType:
+          $ref: '#/components/schemas/TransactionType'
+        status:
+          $ref: '#/components/schemas/TransactionStatus'
+        mentorFee:
+          type: integer
+          minimum: 0
+        platformCommission:
+          type: integer
+          minimum: 0
+        totalAmount:
+          type: integer
+          minimum: 0
+        currency:
+          type: string
+          example: IRR
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    PaymentCallbackEnvelope:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        data:
+          type: object
+          required:
+            - bookingId
+            - bookingStatus
+            - transactionStatus
+          properties:
+            bookingId:
+              type: string
+              format: uuid
+            bookingStatus:
+              $ref: '#/components/schemas/BookingStatus'
+            transactionStatus:
+              $ref: '#/components/schemas/TransactionStatus'
+            idempotentReplay:
+              type: boolean
+              default: false
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+
+    # ------------------------------------------------------------------
+    # Reviews
+    # ------------------------------------------------------------------
+    CreateReviewRequest:
+      type: object
+      required:
+        - bookingId
+        - starRating
+      properties:
+        bookingId:
+          type: string
+          format: uuid
+          example: b8888888-e5f6-7890-abcd-ef1234567890
+        starRating:
+          type: integer
+          minimum: 1
+          maximum: 5
+          example: 5
+        commentText:
+          type: string
+          maxLength: 1000
+          nullable: true
+          example: Exceptional practical guidance on database indexing.
+
+    Review:
+      type: object
+      required:
+        - id
+        - bookingId
+        - mentorId
+        - menteeId
+        - starRating
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        bookingId:
+          type: string
+          format: uuid
+        mentorId:
+          type: string
+          format: uuid
+        menteeId:
+          type: string
+          format: uuid
+        starRating:
+          type: integer
+          minimum: 1
+          maximum: 5
+        commentText:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+
+    ReviewEnvelope:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        data:
+          type: object
+          required:
+            - review
+            - mentorAverageRating
+            - mentorTotalReviewsCount
+          properties:
+            review:
+              $ref: '#/components/schemas/Review'
+            mentorAverageRating:
+              type: number
+              format: double
+              minimum: 0
+              maximum: 5
+            mentorTotalReviewsCount:
+              type: integer
+              minimum: 1
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+
+    # ------------------------------------------------------------------
+    # Administration & Governance
+    # ------------------------------------------------------------------
+    UpdateUserStatusRequest:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          $ref: '#/components/schemas/UserStatus'
+          example: SUSPENDED
+
+    AdminUserStatusEnvelope:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        data:
+          type: object
+          required:
+            - user
+          properties:
+            user:
+              $ref: '#/components/schemas/UserAccount'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+
+    AdminFinancialLedgerEnvelope:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        data:
+          type: object
+          required:
+            - summary
+            - transactions
+          properties:
+            summary:
+              type: object
+              required:
+                - grossVolume
+                - collectedCommission
+                - totalRefunded
+                - currency
+              properties:
+                grossVolume:
+                  type: integer
+                  minimum: 0
+                collectedCommission:
+                  type: integer
+                  minimum: 0
+                totalRefunded:
+                  type: integer
+                  minimum: 0
+                currency:
+                  type: string
+                  example: IRR
+            transactions:
+              type: array
+              items:
+                $ref: '#/components/schemas/PaymentTransaction'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
